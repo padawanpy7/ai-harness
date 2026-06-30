@@ -2,7 +2,7 @@
 
 > Contrato de trabajo para agentes de IA. Manténlo **lean (~200, máx 500 líneas)**: contexto
 > corto = menos ruido = mejores decisiones. El README es para humanos; esto es para agentes.
-> Lo específico del proyecto va en `project.yml`. **Proyecto grande → dividí por feature**:
+> Lo específico del proyecto va en `project.yml`. **Proyecto grande -> dividí por feature**:
 > un `AGENTS.md` por área, para no cargar todo de una.
 
 ## 1. Proyecto (completar)
@@ -10,7 +10,7 @@
 - **Nombre**: {{PROJECT_NAME}}
 - **Qué es**: {{ONE_LINER}}
 - **Stack**: {{STACK}}
-- **Comandos**: build `{{BUILD}}` · test `{{TEST}}` · run `{{RUN}}` · lint `{{LINT}}`
+- **Comandos**: build `{{BUILD}}` - test `{{TEST}}` - run `{{RUN}}` - lint `{{LINT}}`
 - **Detalle largo**: ver `project.yml` (no lo dupliques acá).
 
 ## 2. Reglas de oro
@@ -18,8 +18,8 @@
 1. **El contexto es caro, los tokens también.** No leas archivos enteros si te alcanza un
    fragmento. **Output cavernícola** (ahorra 25-50%): ejecutá primero y explicá mínimo, sin
    preámbulo ni cierre, sin narrar tools; conclusión primero, oraciones cortas.
-2. **Escribí resultados en archivos, no en el contexto.** Planes, hallazgos, decisiones →
-   `work/<tarea>.md`. Lo que debe sobrevivir entre sesiones → `memory/MEMORY.md`.
+2. **Escribí resultados en archivos, no en el contexto.** Planes, hallazgos, decisiones ->
+   `work/<tarea>.md`. Lo que debe sobrevivir entre sesiones -> `memory/MEMORY.md`.
 3. **Verificá antes de declarar "listo".** Corré build + test + lint. Si algo falla,
    decilo con la salida. No afirmes que funciona si no lo viste funcionar.
 4. **Hacé lo que se pidió, ni más ni menos.** Ante una decisión del dueño, preguntá; ante
@@ -43,7 +43,7 @@
 ## 3. Roles de agente (dividir para conquistar)
 
 Como un equipo real: especialistas por disciplina. Fullstack-por-una-persona tiene más
-riesgo de fallos — un experto de BD normaliza e indexa mejor que un front, un backend sabe
+riesgo de fallos - un experto de BD normaliza e indexa mejor que un front, un backend sabe
 servir y validar datos. Cada rol vive en `.claude/agents/`. Inspirado en el patrón
 orquestador-trabajador de Anthropic y el loop auto-verificante (Ralph Wiggum).
 
@@ -71,24 +71,24 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 ## 4. Flujo de trabajo
 
 ```
-1. lead        → SDD (skill sdd): proposal -> design -> tasks en openspec/changes/<id>/
-2. >>> humano  → revisa el plan ANTES de codear (compuerta) <<<
-3. lead        → manda cada sub-tarea al **especialista** que corresponde
-                 (UI→ui-designer, esquema→database, API→backend, glue→implementer)
-4. especialista→ lee su playbook, implementa con TDD (skill tdd), corre check.sh
-5. verifier    → tests + app en navegador (+ judgment-day si es riesgoso); veredicto (OK/volver)
-6. lead        → integra, archiva la spec, actualiza MEMORY.md y el playbook, reporta
+1. lead        -> SDD (skill sdd): proposal -> design -> tasks en openspec/changes/<id>/
+2. >>> humano  -> revisa el plan ANTES de codear (compuerta) <<<
+3. lead        -> manda cada sub-tarea al **especialista** que corresponde
+                 (UI->ui-designer, esquema->database, API->backend, glue->implementer)
+4. especialista-> lee su playbook, implementa con TDD (skill tdd), corre check.sh
+5. verifier    -> tests + app en navegador (+ judgment-day si es riesgoso); veredicto (OK/volver)
+6. lead        -> integra, archiva la spec, actualiza MEMORY.md y el playbook, reporta
 ```
 
 - Sub-tareas independientes: lanzá especialistas **en paralelo**.
 - Cada agente devuelve **datos/conclusión**, no relata el proceso.
-- Lo que se decide y por qué → `memory/MEMORY.md` (una línea por hecho, ver §6).
+- Lo que se decide y por qué -> `memory/MEMORY.md` (una línea por hecho, ver §6).
 
 ### Modos: escalá la ceremonia a la tarea
 La disciplina cuesta; aplicala según el riesgo/tamaño. El **lead elige el modo** al empezar.
 - **quick** (fix trivial, 1 archivo, sin riesgo): sin SDD ni compuerta. El especialista lo
   hace (TDD si hay lógica), corre `check.sh`, el verifier mira. Reporte corto.
-- **standard** (feature): SDD (proposal→design→tasks) + compuerta humana rápida + TDD +
+- **standard** (feature): SDD (proposal->design->tasks) + compuerta humana rápida + TDD +
   verifier en navegador. **Default.**
 - **critical** (plata, datos, seguridad, decisiones con opciones): standard + `judgment-day`
   + revisión humana firme.
@@ -116,7 +116,7 @@ Una línea por hecho durable: decisión de diseño, gotcha, dato no obvio del pr
 NO guardes lo que el código/git ya dice. Formato:
 
 ```
-- [titulo] (archivo/area) — el hecho en una linea. Por que importa.
+- [titulo] (archivo/area) - el hecho en una linea. Por que importa.
 ```
 
 Antes de guardar, revisá si ya existe algo parecido y actualizalo en vez de duplicar.
@@ -128,31 +128,31 @@ Antes de guardar, revisá si ya existe algo parecido y actualizalo en vez de dup
 
 **Verificación (el verifier, las 3 obligatorias):** opera la app real, ahí aparecen los
 bugs que el build no ve.
-- **chrome-devtools MCP** — recorrer flujos a mano (login, clickear, formularios).
-- **Playwright** — specs e2e deterministas (la regresión que el equipo cura, fija lo conocido).
-- **TestSprite** (MCP) — genera y corre tests con IA: cobertura amplia + exploratorio,
+- **chrome-devtools MCP** - recorrer flujos a mano (login, clickear, formularios).
+- **Playwright** - specs e2e deterministas (la regresión que el equipo cura, fija lo conocido).
+- **TestSprite** (MCP) - genera y corre tests con IA: cobertura amplia + exploratorio,
   descubre casos que no pensaste. Necesita API key (testsprite.com). Setup en `init.sh`.
 
-**Docs de librerías al día:** **Context7** — docs y APIs actualizadas de cada paquete (no
+**Docs de librerías al día:** **Context7** - docs y APIs actualizadas de cada paquete (no
 las que el modelo recuerda, que están viejas). Setup: `npx ctx7 setup --claude`. Usalo al
 trabajar con una librería para no escribir contra una API deprecada.
 
-**Docs externas:** **markitdown** (liviano) — convierte PDF/Word/Excel/PPT/imágenes a
+**Docs externas:** **markitdown** (liviano) - convierte PDF/Word/Excel/PPT/imágenes a
 markdown: `markitdown entrada.pdf > docs/entrada.md`. El agente lee el `.md`, no el binario.
 
 **Scripts del harness** (`scripts/`):
-- `check-dep.sh <npm|pypi|nuget> <pkg>` — última estable + deprecación + vulns (OSV). Antes
+- `check-dep.sh <npm|pypi|nuget> <pkg>` - última estable + deprecación + vulns (OSV). Antes
   de agregar cualquier paquete.
-- `check.sh` — el implementer lo corre **al terminar** cada tarea: format, lint, build,
+- `check.sh` - el implementer lo corre **al terminar** cada tarea: format, lint, build,
   secretos (gitleaks), audit de deps. No atado a ningún commit.
-- `doctor.sh` — audita la salud del harness (placeholders sin llenar, registry desincronizado,
+- `doctor.sh` - audita la salud del harness (placeholders sin llenar, registry desincronizado,
   playbooks vacíos/viejos). Corrélo cada tanto para que los docs no se pudran.
-- `adopt.sh` — autodetecta stack/comandos de un proyecto existente (skill `adopt`).
-- `strip-comments.sh [--check|--write] <dir>` — quita comentarios con AST (.py tokenize,
+- `adopt.sh` - autodetecta stack/comandos de un proyecto existente (skill `adopt`).
+- `strip-comments.sh [--check|--write] <dir>` - quita comentarios con AST (.py tokenize,
   .ts/.tsx compilador TS), preservando docstrings/strings/regex/directivas (skill `migrate`).
-- `skill-sync.sh` — regenera `skills/REGISTRY.md`.
+- `skill-sync.sh` - regenera `skills/REGISTRY.md`.
 
-**Entender el código (obligatorio):** **codebase-memory-mcp** — grafo del código (símbolos,
+**Entender el código (obligatorio):** **codebase-memory-mcp** - grafo del código (símbolos,
 llamadas, impacto, rutas HTTP), 120x menos tokens que grep/read masivo. Es la forma
 **por defecto** de explorar antes de tocar. Trae 14 tools, pero **no satura**: Claude Code
 las deja **diferidas** (no entran en el contexto de cada turno; el agente busca la que
@@ -173,9 +173,9 @@ más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
 
 ## 8. Convenciones del proyecto
 
-- {{CONVENTION_1}}  (ej: ASCII en código; sin comentarios; estilo de commits…)
+- {{CONVENTION_1}}  (ej: ASCII en código; sin comentarios; estilo de commits...)
 - {{CONVENTION_2}}
-- Mirá `project.yml` → `conventions` para la lista completa.
+- Mirá `project.yml` -> `conventions` para la lista completa.
 
 ## 9. Seguridad (guardrails, no opcional)
 
@@ -189,7 +189,7 @@ más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
 
 ## 10. Antes de cerrar una tarea (checklist del verifier)
 
-- [ ] build OK · [ ] test OK · [ ] lint OK
+- [ ] build OK - [ ] test OK - [ ] lint OK
 - [ ] **probado en el navegador** (chrome/Playwright) el flujo real, si hay UI
 - [ ] endpoint/API probado con datos reales, si hay backend
 - [ ] hace exactamente lo pedido (ni de más ni de menos)

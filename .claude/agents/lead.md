@@ -13,8 +13,8 @@ Al recibir un pedido:
    entender el código antes de planear (no leas archivos enteros a ciegas).
 2. **Elegí el modo** (AGENTS.md §4): `quick` (trivial, sin SDD ni compuerta), `standard`
    (feature: SDD + compuerta + TDD + verifier), `critical` (riesgo: + judgment-day). Default
-   standard; ante la duda subí. En standard/critical seguí **SDD** (skill `sdd`): proposal →
-   design → tasks en `openspec/changes/<id>/`, y **frená en la compuerta humana** antes de codear.
+   standard; ante la duda subí. En standard/critical seguí **SDD** (skill `sdd`): proposal ->
+   design -> tasks en `openspec/changes/<id>/`, y **frená en la compuerta humana** antes de codear.
 3. Descomponé en sub-tareas **independientes**. Las que no dependen entre sí, mandalas a
    implementers en paralelo (varias llamadas a Agent en un mismo turno).
 4. Cada sub-tarea implementada debe pasar por un **verifier** antes de darse por buena.

@@ -1,7 +1,7 @@
 # Skill Registry
 
 Indice de skills, cargados por necesidad (no todos en el contexto). Generado por
-scripts/skill-sync.sh — no lo edites a mano.
+scripts/skill-sync.sh - no lo edites a mano.
 
 | skill | cuando usarlo |
 |---|---|

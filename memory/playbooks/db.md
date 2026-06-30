@@ -15,7 +15,7 @@ proyectos reales (Postgres multi-tenant + RLS).
 - Solo indices que respaldan un query real; cuestan en escritura. Anota el query al lado.
 - (sembrar con los del proyecto)
 
-## Seguridad (no negociable — leccion cara)
+## Seguridad (no negociable - leccion cara)
 - **NUNCA publicar puertos de la DB al host.** Un Postgres con el puerto publicado + pass
   debil (`postgres`/`app`) = RCE + cryptominer en horas (nos paso). Regla: nada publica
   puertos salvo el proxy; los servicios hablan por **red interna**; sin credenciales default;

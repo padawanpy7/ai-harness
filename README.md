@@ -35,8 +35,8 @@ scripts/skill-sync.sh Regenera skills/REGISTRY.md al agregar/editar una skill.
 ## Filosofía: loop controlado, no "goal mode"
 
 La IA es probabilística: una cadena larga de "andá y hacé todo" deriva. El harness trabaja
-en **fases con compuertas** (SDD: proposal → design → tasks → revisión humana → apply con TDD
-→ verify → archive). Concedés autonomía acotada, no un cheque en blanco. Más barato, más
+en **fases con compuertas** (SDD: proposal -> design -> tasks -> revisión humana -> apply con TDD
+-> verify -> archive). Concedés autonomía acotada, no un cheque en blanco. Más barato, más
 predecible, menos alucinación.
 
 ## Cómo usarlo en un proyecto nuevo
@@ -82,8 +82,8 @@ trivial es rápido y lo riesgoso va con todo. `scripts/doctor.sh` mantiene los d
 
 ```
             ┌─────────┐   plan + sub-tareas    ┌──────────────┐
-  pedido →  │  LEAD   │ ─────────────────────→ │ IMPLEMENTER  │  codea, build+lint OK
-            │ planea  │ ←───── integra ─────── │  (x N en ∥)  │
+  pedido ->  │  LEAD   │ ─────────────────────-> │ IMPLEMENTER  │  codea, build+lint OK
+            │ planea  │ <-───── integra ─────── │  (x N en ∥)  │
             └─────────┘        veredicto OK     └──────┬───────┘
                  ↑                                     │ entrega
                  │            VOLVER (con feedback)    ▼
@@ -95,11 +95,11 @@ trivial es rápido y lo riesgoso va con todo. `scripts/doctor.sh` mantiene los d
 
 ## Herramientas
 
-- **codebase-memory-mcp** (obligatorio) — grafo del código para entender antes de tocar.
-- **Context7** — docs de librerías al día (no las viejas que recuerda el modelo).
-- **markitdown** — convierte PDF/Office/imágenes a markdown para que los agentes los lean.
-- **chrome-devtools MCP / Playwright** — el verifier opera la app real para encontrar bugs.
-- **scripts/check-dep.sh** y **scripts/check.sh** — versiones/vulns y verificación post-tarea.
+- **codebase-memory-mcp** (obligatorio) - grafo del código para entender antes de tocar.
+- **Context7** - docs de librerías al día (no las viejas que recuerda el modelo).
+- **markitdown** - convierte PDF/Office/imágenes a markdown para que los agentes los lean.
+- **chrome-devtools MCP / Playwright** - el verifier opera la app real para encontrar bugs.
+- **scripts/check-dep.sh** y **scripts/check.sh** - versiones/vulns y verificación post-tarea.
 
 Ver `AGENTS.md` para el detalle de cómo se usan y por qué (incluye Seguridad y las reglas
 de no-comentarios y versiones).
