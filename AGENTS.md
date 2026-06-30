@@ -84,6 +84,18 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 - Cada agente devuelve **datos/conclusión**, no relata el proceso.
 - Lo que se decide y por qué → `memory/MEMORY.md` (una línea por hecho, ver §6).
 
+### Modos: escalá la ceremonia a la tarea
+La disciplina cuesta; aplicala según el riesgo/tamaño. El **lead elige el modo** al empezar.
+- **quick** (fix trivial, 1 archivo, sin riesgo): sin SDD ni compuerta. El especialista lo
+  hace (TDD si hay lógica), corre `check.sh`, el verifier mira. Reporte corto.
+- **standard** (feature): SDD (proposal→design→tasks) + compuerta humana rápida + TDD +
+  verifier en navegador. **Default.**
+- **critical** (plata, datos, seguridad, decisiones con opciones): standard + `judgment-day`
+  + revisión humana firme.
+
+Ante la duda, subí un escalón, no bajes. Así lo trivial no paga ceremonia y lo riesgoso no
+queda corto: la sobre-ingeniería y el overhead dejan de ser un problema.
+
 ## 5. Dónde vive cada cosa
 
 | Carpeta | Qué |
@@ -129,10 +141,14 @@ trabajar con una librería para no escribir contra una API deprecada.
 markdown: `markitdown entrada.pdf > docs/entrada.md`. El agente lee el `.md`, no el binario.
 
 **Scripts del harness** (`scripts/`):
-- `check-dep.sh <npm|pypi|nuget> <pkg>` — última versión estable + deprecación + vulns
-  (OSV). Corrélo **antes de agregar** cualquier paquete.
+- `check-dep.sh <npm|pypi|nuget> <pkg>` — última estable + deprecación + vulns (OSV). Antes
+  de agregar cualquier paquete.
 - `check.sh` — el implementer lo corre **al terminar** cada tarea: format, lint, build,
-  escaneo de secretos (gitleaks) y audit de dependencias. No está atado a ningún commit.
+  secretos (gitleaks), audit de deps. No atado a ningún commit.
+- `doctor.sh` — audita la salud del harness (placeholders sin llenar, registry desincronizado,
+  playbooks vacíos/viejos). Corrélo cada tanto para que los docs no se pudran.
+- `adopt.sh` — autodetecta stack/comandos de un proyecto existente (skill `adopt`).
+- `skill-sync.sh` — regenera `skills/REGISTRY.md`.
 
 **Entender el código (obligatorio):** **codebase-memory-mcp** — grafo del código (símbolos,
 llamadas, impacto, rutas HTTP), 120x menos tokens que grep/read masivo. Es la forma

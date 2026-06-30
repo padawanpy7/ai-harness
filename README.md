@@ -54,6 +54,28 @@ git clone https://github.com/TU_USUARIO/ai-harness.git   # o copialo dentro del 
 # 4. Abrí el repo con tu agente (Claude Code) y pedile que arranque por el rol 'lead'.
 ```
 
+## Adoptar el harness en un proyecto YA existente (brownfield)
+
+Para un proyecto andando (ej. un ERP en producción):
+
+```bash
+# copiá el harness dentro del repo, despues:
+bash scripts/adopt.sh           # autodetecta stack y comandos -> project.yml
+# y al agente:
+"revisá el proyecto y completá el harness para seguir el desarrollo (skill adopt)"
+```
+
+El agente detecta stack/comandos, infiere convenciones, **seedea los playbooks desde el
+código real** (sistema de diseño, forma de la API, esquema de BD) y reverse-engineea las
+capabilities a `openspec/specs/`. Después corré `scripts/doctor.sh` para confirmar que quedó
+sano, y validás el resumen.
+
+## Escalá la ceremonia (modos)
+
+No todo paga el mismo proceso. El lead elige: **quick** (fix trivial, sin SDD ni compuerta),
+**standard** (feature: SDD + TDD + verifier), **critical** (riesgo: + judgment-day). Así lo
+trivial es rápido y lo riesgoso va con todo. `scripts/doctor.sh` mantiene los docs sin pudrir.
+
 ## El flujo en una imagen
 
 ```
