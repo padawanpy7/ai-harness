@@ -9,10 +9,10 @@ mkdir -p memory work docs .claude/agents
 
 PIP="$(command -v pip3 || command -v pip || true)"
 if [ -n "$PIP" ]; then
-  echo "==> Instalando markitdown ..."
-  "$PIP" install -q --user "markitdown[all]" markitdown-mcp 2>/dev/null \
-    || "$PIP" install -q --break-system-packages "markitdown[all]" markitdown-mcp 2>/dev/null \
-    || echo "   ! Instala manual: pip install 'markitdown[all]' markitdown-mcp"
+  echo "==> Instalando markitdown + pip-audit ..."
+  "$PIP" install -q --user "markitdown[all]" markitdown-mcp pip-audit 2>/dev/null \
+    || "$PIP" install -q --break-system-packages "markitdown[all]" markitdown-mcp pip-audit 2>/dev/null \
+    || echo "   ! Instala manual: pip install 'markitdown[all]' markitdown-mcp pip-audit"
 else
   echo "==> pip no encontrado; instala markitdown cuando puedas."
 fi
@@ -32,9 +32,13 @@ else
     || echo "   ! Comando exacto en: https://github.com/DeusData/codebase-memory-mcp"
 fi
 
+if command -v gitleaks >/dev/null 2>&1; then echo "==> gitleaks: ya instalado."
+else echo "==> gitleaks (escaneo de secretos): instalalo -> https://github.com/gitleaks/gitleaks/releases"; fi
+
 echo ""
+echo "==> Context7 (docs de librerias al dia): npx ctx7 setup --claude"
 echo "==> Verificacion: chrome-devtools MCP ya viene con Claude Code."
 echo "    Para specs e2e: npm i -D @playwright/test && npx playwright install chromium"
 echo ""
 echo "==> PENDIENTE: completar project.yml y los {{PLACEHOLDERS}} de AGENTS.md (1 y 8)."
-echo "==> Listo. Empeza por el rol 'lead'."
+echo "==> Listo. Empeza por el rol 'lead'. Probas las tools con: scripts/check-dep.sh y scripts/check.sh"

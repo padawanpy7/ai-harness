@@ -21,6 +21,8 @@ init.sh              Instala las herramientas y prepara las carpetas.
 memory/MEMORY.md     Memoria persistente entre sesiones (una linea por hecho durable).
 work/                Salida de cada tarea: plan, hallazgos, veredictos.
 docs/                Docs externas convertidas a markdown (markitdown).
+scripts/check-dep.sh Verifica ultima version estable + deprecacion + vulns antes de agregar un paquete.
+scripts/check.sh     El implementer lo corre al terminar: format, lint, build, secretos, audit.
 .mcp.json            Servidores MCP (markitdown).
 ```
 
@@ -57,7 +59,10 @@ git clone https://github.com/TU_USUARIO/ai-harness.git   # o copialo dentro del 
 ## Herramientas
 
 - **codebase-memory-mcp** (obligatorio) — grafo del código para entender antes de tocar.
+- **Context7** — docs de librerías al día (no las viejas que recuerda el modelo).
 - **markitdown** — convierte PDF/Office/imágenes a markdown para que los agentes los lean.
 - **chrome-devtools MCP / Playwright** — el verifier opera la app real para encontrar bugs.
+- **scripts/check-dep.sh** y **scripts/check.sh** — versiones/vulns y verificación post-tarea.
 
-Ver `AGENTS.md` para el detalle de cómo se usan y por qué.
+Ver `AGENTS.md` para el detalle de cómo se usan y por qué (incluye Seguridad y las reglas
+de no-comentarios y versiones).

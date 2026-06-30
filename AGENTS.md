@@ -28,6 +28,12 @@
    (lección de Vercel con su agente: la superficie de tools degrada el razonamiento). Cada
    rol carga **solo lo que necesita** (mirá su frontmatter). Las herramientas nicho van
    **diferidas** o en un subagente dedicado, no en el contexto de todos.
+7. **Sin comentarios.** El código vive en un repo con historia; los comentarios son ruido
+   que se desactualiza y miente. Nombres claros > comentarios. Única excepción: una línea
+   que explique un *por qué* no obvio (un workaround raro). Nunca comentes el *qué*.
+8. **Versiones: solo última estable, sin deprecados ni vulnerabilidades.** Antes de agregar
+   un paquete, corré `scripts/check-dep.sh <eco> <pkg>` (§7). Fijá versiones (lockfile), no
+   rangos abiertos. Al terminar una tarea, corré `scripts/check.sh`.
 
 ## 3. Roles de agente (dividir para conquistar)
 
@@ -92,8 +98,18 @@ Antes de guardar, revisá si ya existe algo parecido y actualizalo en vez de dup
 **Verificación (el verifier):** **chrome-devtools MCP + Playwright** para operar la app en
 el navegador (e2e). Es donde aparecen los bugs reales. Solo el verifier las carga.
 
+**Docs de librerías al día:** **Context7** — docs y APIs actualizadas de cada paquete (no
+las que el modelo recuerda, que están viejas). Setup: `npx ctx7 setup --claude`. Usalo al
+trabajar con una librería para no escribir contra una API deprecada.
+
 **Docs externas:** **markitdown** (liviano) — convierte PDF/Word/Excel/PPT/imágenes a
 markdown: `markitdown entrada.pdf > docs/entrada.md`. El agente lee el `.md`, no el binario.
+
+**Scripts del harness** (`scripts/`):
+- `check-dep.sh <npm|pypi|nuget> <pkg>` — última versión estable + deprecación + vulns
+  (OSV). Corrélo **antes de agregar** cualquier paquete.
+- `check.sh` — el implementer lo corre **al terminar** cada tarea: format, lint, build,
+  escaneo de secretos (gitleaks) y audit de dependencias. No está atado a ningún commit.
 
 **Entender el código (obligatorio):** **codebase-memory-mcp** — grafo del código (símbolos,
 llamadas, impacto, rutas HTTP), 120x menos tokens que grep/read masivo. Es la forma
@@ -108,7 +124,17 @@ inflar la superficie de tools (Regla 6). Lo instala `init.sh`.
 - {{CONVENTION_2}}
 - Mirá `project.yml` → `conventions` para la lista completa.
 
-## 9. Antes de cerrar una tarea (checklist del verifier)
+## 9. Seguridad (guardrails, no opcional)
+
+- **Secretos:** nunca en código ni en git. Van en `.env` (fuera de git). `check.sh` escanea
+  con gitleaks; si salta, parás.
+- **Infra mínima:** least privilege. Nada publica puertos al host salvo el proxy/gateway;
+  los servicios hablan por red interna. Sin credenciales por defecto. Rotá si se filtró.
+- **Dependencias:** solo las que necesitás, en su última estable, sin deprecados ni vulns
+  (Regla 8 + `check-dep.sh`). Auditá el árbol cada tanto (`check.sh` lo hace).
+- **Entradas no confiables:** validá/sanitizá. No ejecutes ni interpoles input crudo.
+
+## 10. Antes de cerrar una tarea (checklist del verifier)
 
 - [ ] build OK · [ ] test OK · [ ] lint OK
 - [ ] **probado en el navegador** (chrome/Playwright) el flujo real, si hay UI
