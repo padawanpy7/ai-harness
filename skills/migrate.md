@@ -28,7 +28,9 @@ es una **migración**: limpiar y documentar **sin cambiar el comportamiento**.
 ## Pasos por proyecto (modo critical)
 1. **Baseline**: build OK + el verifier **opera la app en el navegador** y confirma que anda.
    Commit del estado actual = punto de **rollback**.
-2. **Indexar**: codebase-memory indexa el proyecto (entender antes de tocar).
+2. **Setup de tools + indexar**: copiá `init.sh` al proyecto y corrélo (`./init.sh`) — instala
+   y configura codebase-memory, markitdown y los MCP, y crea `.mcp.json`. **Sin esto,
+   codebase-memory NO queda cargado.** Después codebase-memory indexa el proyecto.
 3. **Adopt** (skill `adopt`): llená AGENTS.md/project.yml/playbooks/specs desde el código real.
 4. **Migrar docs**: el contenido útil del viejo `CLAUDE.md` → AGENTS.md/project.yml/playbooks.
    `CLAUDE.md` queda como puntero a AGENTS.md. El README se **refresca** (es para humanos), no

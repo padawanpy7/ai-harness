@@ -63,6 +63,8 @@ Para un proyecto andando (ej. un ERP en producción):
 bash scripts/adopt.sh           # autodetecta stack y comandos -> project.yml
 # y al agente:
 "revisá el proyecto y completá el harness para seguir el desarrollo (skill adopt)"
+# al final, para dejar las tools operativas (codebase-memory, markitdown, MCPs):
+./init.sh
 ```
 
 El agente detecta stack/comandos, infiere convenciones, **seedea los playbooks desde el

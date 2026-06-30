@@ -24,7 +24,9 @@ desde el código que YA existe, no desde cero. Lo hace el rol **lead**.
    `openspec/specs/<cap>/spec.md` (Purpose + Requirements SHALL + Scenarios) describiendo lo
    que el sistema YA hace. Empezá por las 3-5 capabilities centrales, no todo de una.
 5. **AGENTS.md**: completá secciones 1 y 8 (proyecto + convenciones). Mantenelo lean.
-6. **Entrega**: corré `scripts/doctor.sh` (debe quedar sano) y pasale al humano un resumen de
+6. **Tools**: corré `./init.sh` — instala/configura codebase-memory, markitdown y los MCP, y
+   crea `.mcp.json`. Sin esto el harness queda documentado pero **sin codebase-memory cargado**.
+7. **Entrega**: corré `scripts/doctor.sh` (debe quedar sano) y pasale al humano un resumen de
    lo que detectaste para que valide antes de seguir el desarrollo.
 
 Reglas: documentá lo que el código dice HOY, no lo ideal. Si algo está mal en el proyecto,
