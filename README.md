@@ -1,8 +1,10 @@
 # ai-harness
 
 Un **harness** mínimo y reutilizable para trabajar con agentes de IA en cualquier proyecto.
-La idea: clonás esto, completás 2 archivos, y arrancás con un flujo de agentes ordenado
-(lead → implementer → verifier) en vez de un solo agente haciendo todo y yéndose de las manos.
+La idea: clonás esto, completás 2 archivos, y arrancás con un **equipo de agentes
+especialistas** (lead, ui-designer, database, backend, implementer, verifier) en vez de un
+solo agente haciendo todo y yéndose de las manos. Cada especialista acumula best practices
+en su playbook, así el próximo proyecto arranca mejor.
 
 ## ¿Qué es un harness?
 
@@ -17,8 +19,9 @@ AGENTS.md            Contrato de trabajo (<200 lineas). Como trabajamos. Portabl
 CLAUDE.md            Puntero a AGENTS.md (para que Claude Code lo lea).
 project.yml          Datos del proyecto: stack, comandos, convenciones. LO COMPLETAS VOS.
 init.sh              Instala las herramientas y prepara las carpetas.
-.claude/agents/      Los 3 roles: lead (planifica), implementer (codea), verifier (rompe).
+.claude/agents/      Roles especialistas: lead, ui-designer, database, backend, implementer, verifier.
 memory/MEMORY.md     Memoria persistente entre sesiones (una linea por hecho durable).
+memory/playbooks/    Best practices por disciplina (ui/backend/db) que se acumulan con el uso.
 work/                Salida de cada tarea: plan, hallazgos, veredictos.
 docs/                Docs externas convertidas a markdown (markitdown).
 scripts/check-dep.sh Verifica ultima version estable + deprecacion + vulns antes de agregar un paquete.

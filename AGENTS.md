@@ -37,14 +37,23 @@
 
 ## 3. Roles de agente (dividir para conquistar)
 
-Tareas no triviales se dividen en 3 roles (ver `.claude/agents/`). Inspirado en el
-patrón orquestador-trabajador de Anthropic y el loop auto-verificante (Ralph Wiggum).
+Como un equipo real: especialistas por disciplina. Fullstack-por-una-persona tiene más
+riesgo de fallos — un experto de BD normaliza e indexa mejor que un front, un backend sabe
+servir y validar datos. Cada rol vive en `.claude/agents/`. Inspirado en el patrón
+orquestador-trabajador de Anthropic y el loop auto-verificante (Ralph Wiggum).
 
 | Rol | Para qué | Herramientas |
 |---|---|---|
-| **lead** | Entiende el pedido, lo descompone, delega y sintetiza. NO escribe código. | lectura + planificación |
-| **implementer** | Ejecuta un sub-trabajo acotado: escribe código y lo deja compilando. | todas |
-| **verifier** | Revisa adversarialmente el trabajo del implementer (corre tests, intenta refutarlo). | lectura + correr tests |
+| **lead** | Entiende, descompone, **elige al especialista** y sintetiza. No codea. | lectura + planificación |
+| **ui-designer** | UI/UX con **Claude Design** (loop con feedback humano + playbook). | diseño + escribir |
+| **database** | Esquema: normalización, tipos, claves, índices, relaciones, migraciones. | escribir + SQL |
+| **backend** | API: trae datos de la BD al front y **valida** lo que llega del front. | escribir |
+| **implementer** | Glue y tareas sin especialista claro. | todas |
+| **verifier** | Revisa adversarialmente: corre tests **y opera la app en el navegador**. | lectura + tests + navegador |
+
+Cada especialista trabaja desde su **playbook** (`memory/playbooks/{ui,backend,db}.md`):
+lo lee antes de empezar y lo actualiza con lo aprobado. Así el próximo proyecto arranca con
+las mejores prácticas ya acumuladas, no de cero.
 
 **Regla:** ningún cambio se da por bueno sin pasar por **verifier**. Si el verifier
 rechaza, vuelve al implementer. Loop hasta verde (máx. N rondas, después escalá al humano).
@@ -59,12 +68,14 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 ```
 1. lead        → lee el pedido + project.yml, arma un plan corto en work/<tarea>.md
 2. lead        → descompone en sub-tareas independientes (paralelizables si no dependen)
-3. implementer → toma una sub-tarea, la implementa, build+lint OK, escribe lo hecho
-4. verifier    → corre tests/checks, intenta romperlo; escribe veredicto (OK / volver a 3)
-5. lead        → integra lo verificado, actualiza memory/MEMORY.md, reporta al humano
+3. lead        → manda cada sub-tarea al **especialista** que corresponde
+                 (UI→ui-designer, esquema→database, API→backend, glue→implementer)
+4. especialista→ lee su playbook, implementa, corre scripts/check.sh, escribe lo hecho
+5. verifier    → corre tests + opera la app en el navegador; veredicto (OK / volver a 4)
+6. lead        → integra, actualiza memory/MEMORY.md y el playbook, reporta al humano
 ```
 
-- Sub-tareas independientes: lanzá implementers **en paralelo**.
+- Sub-tareas independientes: lanzá especialistas **en paralelo**.
 - Cada agente devuelve **datos/conclusión**, no relata el proceso.
 - Lo que se decide y por qué → `memory/MEMORY.md` (una línea por hecho, ver §6).
 
@@ -77,6 +88,7 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 | `.claude/agents/` | definición de los roles (lead/implementer/verifier). |
 | `work/` | salida de cada tarea: plan, hallazgos, veredictos. Efímero pero versionado. |
 | `memory/MEMORY.md` | memoria persistente entre sesiones. Índice de hechos durables. |
+| `memory/playbooks/` | best practices por disciplina (ui/backend/db). Crecen con el uso. |
 | `docs/` | docs externas convertidas a markdown (markitdown). |
 
 ## 6. Memoria (`memory/MEMORY.md`)
