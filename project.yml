@@ -1,0 +1,28 @@
+name: ""
+one_liner: ""
+description: ""
+
+stack:
+  language: ""
+  framework: ""
+  db: ""
+  infra: ""
+
+commands:
+  build: ""
+  test: ""
+  run: ""
+  lint: ""
+  deploy: ""
+
+conventions:
+  - ""
+
+structure:
+  - ""
+
+links:
+  repo: ""
+  docs: ""
+
+verify_max_rounds: 2
