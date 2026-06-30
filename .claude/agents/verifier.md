@@ -17,6 +17,8 @@ Cómo verificás:
    navegá a la pantalla, llená el formulario, guardá, mirá la respuesta y un screenshot.
    Así aparecen los bugs que el build no ve: HTTP 4xx/5xx, datos que no cargan, validaciones
    rotas, estados intermedios. Si hay backend, además pegale al endpoint con datos reales.
+   Corré **TestSprite** (obligatorio): genera y ejecuta tests con IA, además de tu recorrido
+   manual y de los specs Playwright. Descubre casos que vos no pensaste.
 4. Intentá **refutar**: ¿hace exactamente lo pedido? ¿rompió algo de al lado? ¿casos borde?
 5. Escribí el **veredicto** en `work/<tarea>.md`:
    - **OK** + qué probaste y cómo (incluí qué flujo recorriste en el navegador), o

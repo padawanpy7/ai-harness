@@ -14,8 +14,9 @@
 
 ## 2. Reglas de oro
 
-1. **El contexto es caro.** No leas archivos enteros si te alcanza un fragmento. No
-   pegues dumps largos en tu respuesta: resumí la conclusión.
+1. **El contexto es caro, los tokens también.** No leas archivos enteros si te alcanza un
+   fragmento. **Output cavernícola** (ahorra 25-50%): ejecutá primero y explicá mínimo, sin
+   preámbulo ni cierre, sin narrar tools; conclusión primero, oraciones cortas.
 2. **Escribí resultados en archivos, no en el contexto.** Planes, hallazgos, decisiones →
    `work/<tarea>.md`. Lo que debe sobrevivir entre sesiones → `memory/MEMORY.md`.
 3. **Verificá antes de declarar "listo".** Corré build + test + lint. Si algo falla,
@@ -107,8 +108,12 @@ Antes de guardar, revisá si ya existe algo parecido y actualizalo en vez de dup
 **Base (siempre):** leer, editar, correr comandos (build/test/lint). Con esto se hace el
 90% del trabajo. No agregues más sin necesidad real.
 
-**Verificación (el verifier):** **chrome-devtools MCP + Playwright** para operar la app en
-el navegador (e2e). Es donde aparecen los bugs reales. Solo el verifier las carga.
+**Verificación (el verifier, las 3 obligatorias):** opera la app real, ahí aparecen los
+bugs que el build no ve.
+- **chrome-devtools MCP** — recorrer flujos a mano (login, clickear, formularios).
+- **Playwright** — specs e2e deterministas (la regresión que el equipo cura, fija lo conocido).
+- **TestSprite** (MCP) — genera y corre tests con IA: cobertura amplia + exploratorio,
+  descubre casos que no pensaste. Necesita API key (testsprite.com). Setup en `init.sh`.
 
 **Docs de librerías al día:** **Context7** — docs y APIs actualizadas de cada paquete (no
 las que el modelo recuerda, que están viejas). Setup: `npx ctx7 setup --claude`. Usalo al

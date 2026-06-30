@@ -37,8 +37,10 @@ else echo "==> gitleaks (escaneo de secretos): instalalo -> https://github.com/g
 
 echo ""
 echo "==> Context7 (docs de librerias al dia): npx ctx7 setup --claude"
-echo "==> Verificacion: chrome-devtools MCP ya viene con Claude Code."
-echo "    Para specs e2e: npm i -D @playwright/test && npx playwright install chromium"
+echo "==> Verificacion del verifier (las 3):"
+echo "    - chrome-devtools MCP: ya viene con Claude Code."
+echo "    - Playwright: npm i -D @playwright/test && npx playwright install chromium"
+echo "    - TestSprite (obligatorio): export TESTSPRITE_API_KEY=... ; claude mcp add testsprite -- npx @testsprite/testsprite-mcp@latest"
 echo ""
 echo "==> PENDIENTE: completar project.yml y los {{PLACEHOLDERS}} de AGENTS.md (1 y 8)."
 echo "==> Listo. Empeza por el rol 'lead'. Probas las tools con: scripts/check-dep.sh y scripts/check.sh"
