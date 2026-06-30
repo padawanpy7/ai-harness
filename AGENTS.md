@@ -148,6 +148,8 @@ markdown: `markitdown entrada.pdf > docs/entrada.md`. El agente lee el `.md`, no
 - `doctor.sh` — audita la salud del harness (placeholders sin llenar, registry desincronizado,
   playbooks vacíos/viejos). Corrélo cada tanto para que los docs no se pudran.
 - `adopt.sh` — autodetecta stack/comandos de un proyecto existente (skill `adopt`).
+- `strip-comments.sh [--check|--write] <dir>` — quita comentarios con AST (.py tokenize,
+  .ts/.tsx compilador TS), preservando docstrings/strings/regex/directivas (skill `migrate`).
 - `skill-sync.sh` — regenera `skills/REGISTRY.md`.
 
 **Entender el código (obligatorio):** **codebase-memory-mcp** — grafo del código (símbolos,

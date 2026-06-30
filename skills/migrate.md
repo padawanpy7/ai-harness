@@ -33,9 +33,13 @@ es una **migración**: limpiar y documentar **sin cambiar el comportamiento**.
 4. **Migrar docs**: el contenido útil del viejo `CLAUDE.md` → AGENTS.md/project.yml/playbooks.
    `CLAUDE.md` queda como puntero a AGENTS.md. El README se **refresca** (es para humanos), no
    se tira su contenido útil.
-5. **Limpiar comentarios**: por tipo de archivo, con **AST, no regex** (.cs → stripper Roslyn;
-   ts/tsx → el del proyecto). En **lotes chicos**; build después de cada lote. No toques
-   comentarios que importan (JSON de contracts, configs, licencias).
+5. **Limpiar comentarios**: `scripts/strip-comments.sh --write <dir>` (AST, no regex):
+   `.py` con tokenize, `.ts/.tsx` con el compilador TS. Preserva docstrings, strings, regex,
+   JSX y directivas (noqa/type:/@ts-ignore/eslint-disable/prettier-ignore). Para `.cs`, stripper
+   Roslyn AST aparte. **Lección: el scanner lineal de TS se desincroniza en JSX/templates → hay
+   que usar el AST** (createSourceFile + comment ranges + JsxExpression vacios `{/* */}`). En
+   lotes; **después de cada lote**: format+lint del proyecto + `tsc --noEmit` (mismo nº de
+   errores que antes = sin daño) + tests. NO toques JSON de contracts, configs ni licencias.
 6. **Checks**: `check.sh` (lint/format/secretos/audit). `check-dep.sh` por paquete deprecado o
    vulnerable → anotalo, no lo cambies ahora.
 7. **Verify**: build + e2e en navegador. Debe comportarse **igual** que el baseline. Si difiere,
