@@ -1,16 +1,16 @@
 # ai-harness
 
-Un **harness** minimo y reutilizable para trabajar con agentes de IA en cualquier proyecto.
+Un **harness** mínimo y reutilizable para trabajar con agentes de IA en cualquier proyecto.
 Clonas esto, completas 2 archivos (o lo adoptas en un repo existente), y arrancas con un
-**equipo de agentes especialistas** en vez de un solo agente haciendo todo y yendose de las
+**equipo de agentes especialistas** en vez de un solo agente haciendo todo y yéndose de las
 manos. Cada especialista acumula best practices en su playbook, asi el proximo proyecto
 arranca mejor.
 
 ## Que es un harness
 
-El "codigo" alrededor del modelo: las reglas, la memoria, los roles, las herramientas y el
-loop de verificacion que hacen que un agente trabaje bien y de forma repetible. El modelo es
-el motor; el harness es el chasis, la direccion y los frenos.
+El "código" alrededor del modelo: las reglas, la memoria, los roles, las herramientas y el
+loop de verificación que hacen que un agente trabaje bien y de forma repetible. El modelo es
+el motor; el harness es el chasis, la dirección y los frenos.
 
 ## El flujo
 
@@ -18,10 +18,10 @@ el motor; el harness es el chasis, la direccion y los frenos.
 
 > Version animada (anime.js): abri [`docs/flow.html`](docs/flow.html) en el navegador.
 
-**Loop controlado, no "goal mode".** La IA es probabilistica: una cadena larga de "anda y
+**Loop controlado, no "goal mode".** La IA es probabilística: una cadena larga de "anda y
 hace todo" deriva. El harness trabaja en **fases con compuertas** (SDD: proposal -> design ->
-tasks -> revision humana -> apply con TDD -> verify -> archive). Autonomia acotada, no un
-cheque en blanco. Mas barato, mas predecible, menos alucinacion.
+tasks -> revision humana -> apply con TDD -> verify -> archive). Autonomía acotada, no un
+cheque en blanco. Mas barato, mas predecible, menos alucinación.
 
 ## Que trae
 
@@ -68,7 +68,7 @@ git clone https://github.com/padawanpy7/ai-harness.git   # o copialo dentro del 
 ## Adoptar el harness en un proyecto YA existente (brownfield)
 
 ```bash
-# copias el harness dentro del repo, despues:
+# copias el harness dentro del repo, después:
 bash scripts/adopt.sh              # autodetecta stack y comandos -> project.yml
 # y al agente:
 "revisa el proyecto y completa el harness para seguir el desarrollo (skill adopt)"
@@ -76,8 +76,8 @@ bash scripts/adopt.sh              # autodetecta stack y comandos -> project.yml
 bash scripts/doctor.sh             # confirma que quedo sano
 ```
 
-El agente infiere convenciones, **seedea los playbooks desde el codigo real** (sistema de
-diseno, forma de la API, esquema de BD) y reverse-engineea las capabilities a
+El agente infiere convenciones, **carga los playbooks desde el código real** (sistema de
+diseño, forma de la API, esquema de BD) y reverse-engineea las capabilities a
 `openspec/specs/`. Para un proyecto vivo con limpieza de por medio (quitar comentarios,
 checks), usa el skill `migrate` (baseline -> adopt -> limpiar -> verify, sin romper).
 
@@ -89,7 +89,7 @@ trivial es rapido y lo riesgoso va con todo. `scripts/doctor.sh` mantiene los do
 
 ## Herramientas externas
 
-- **codebase-memory-mcp** (obligatorio) - grafo del codigo para entender antes de tocar.
+- **codebase-memory-mcp** (obligatorio) - grafo del código para entender antes de tocar.
 - **Context7** - docs de librerias al dia (no las viejas que recuerda el modelo).
 - **markitdown** - convierte PDF/Office/imagenes a markdown.
 - **chrome-devtools MCP / Playwright / TestSprite** - el verifier opera la app real.

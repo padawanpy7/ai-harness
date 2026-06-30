@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Este proyecto usa **`AGENTS.md`** como contrato único de trabajo. Leelo primero.
+Este proyecto usa **`AGENTS.md`** como contrato único de trabajo. Léelo primero.
 
 Los datos específicos del proyecto (stack, comandos, convenciones) están en `project.yml`.
 Los roles de agente (lead / implementer / verifier) están en `.claude/agents/`.

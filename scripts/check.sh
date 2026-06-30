@@ -20,10 +20,10 @@ if [ -f requirements.txt ] && command -v pip-audit >/dev/null 2>&1; then echo "=
 
 if [ -f scripts/spell.sh ] && [ -f cspell.json ]; then
   echo "==> ortografia es,en"
-  issues="$(bash scripts/spell.sh "**/*.md" 2>/dev/null | grep -c 'Unknown word' || true)"
+  issues="$(bash scripts/spell.sh 2>/dev/null | grep -c 'Unknown word' || true)"
   if [ "${issues:-0}" -gt 0 ]; then
-    echo "   $issues palabra(s) sin whitelistear. Cada una: fixea el typo, O si es valida agregala a cspell.json (words)."
-    echo "   Verlas: scripts/spell.sh '**/*.md'"
+    echo "   $issues palabra(s). Cada una: fixea el typo; si el dict no la trae usa un sinonimo; solo si no hay, a cspell.json (words)."
+    echo "   Verlas: scripts/spell.sh"
     fail=1
   else echo "   OK"; fi
 fi

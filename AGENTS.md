@@ -1,6 +1,6 @@
 # AGENTS.md
 
-> Contrato de trabajo para agentes de IA. Manténlo **lean (~200, máx 500 líneas)**: contexto
+> Contrato de trabajo para agentes de IA. Mantenlo **lean (~200, máx 500 líneas)**: contexto
 > corto = menos ruido = mejores decisiones. El README es para humanos; esto es para agentes.
 > Lo específico del proyecto va en `project.yml`. **Proyecto grande -> dividí por feature**:
 > un `AGENTS.md` por área, para no cargar todo de una.
@@ -16,28 +16,28 @@
 ## 2. Reglas de oro
 
 1. **El contexto es caro, los tokens también.** No leas archivos enteros si te alcanza un
-   fragmento. **Output cavernícola** (ahorra 25-50%): ejecutá primero y explicá mínimo, sin
+   fragmento. **Output cavernícola** (ahorra 25-50%): ejecuta primero y explica mínimo, sin
    preámbulo ni cierre, sin narrar tools; conclusión primero, oraciones cortas.
-2. **Escribí resultados en archivos, no en el contexto.** Planes, hallazgos, decisiones ->
+2. **Escribe resultados en archivos, no en el contexto.** Planes, hallazgos, decisiones ->
    `work/<tarea>.md`. Lo que debe sobrevivir entre sesiones -> `memory/MEMORY.md`.
-3. **Verificá antes de declarar "listo".** Corré build + test + lint. Si algo falla,
-   decilo con la salida. No afirmes que funciona si no lo viste funcionar.
-4. **Hacé lo que se pidió, ni más ni menos.** Ante una decisión del dueño, preguntá; ante
-   un default razonable, elegí y seguí.
-5. **Buscá antes de escribir.** Entendé el código antes de tocarlo con
+3. **Verifica antes de declarar "listo".** Corre build + test + lint. Si algo falla,
+   dilo con la salida. No afirmes que funciona si no lo viste funcionar.
+4. **Haz lo que se pidió, ni más ni menos.** Ante una decisión del dueño, pregunta; ante
+   un default razonable, elegí y sigue.
+5. **Busca antes de escribir.** Entiende el código antes de tocarlo con
    `codebase-memory-mcp` (§7): una query al grafo reemplaza decenas de grep/read.
 6. **Pocas herramientas, afiladas.** Un agente con 30 tools elige peor que uno con 8
    (lección de Vercel con su agente: la superficie de tools degrada el razonamiento). Cada
-   rol carga **solo lo que necesita** (mirá su frontmatter). Las herramientas nicho van
+   rol carga **solo lo que necesita** (mira su frontmatter). Las herramientas nicho van
    **diferidas** o en un subagente dedicado, no en el contexto de todos.
 7. **Sin comentarios.** El código vive en un repo con historia; los comentarios son ruido
    que se desactualiza y miente. Nombres claros > comentarios. Única excepción: una línea
    que explique un *por qué* no obvio (un workaround raro). Nunca comentes el *qué*.
 8. **Versiones: solo última estable, sin deprecados ni vulnerabilidades.** Antes de agregar
-   un paquete, corré `scripts/check-dep.sh <eco> <pkg>` (§7). Fijá versiones (lockfile), no
-   rangos abiertos. Al terminar una tarea, corré `scripts/check.sh`.
-9. **Loop controlado, no "goal mode".** No "andá y hacé todo" en una cadena larga: la IA es
-   probabilística y deriva. Trabajá en fases con compuertas (SDD) y revisión humana entre
+   un paquete, corre `scripts/check-dep.sh <eco> <pkg>` (§7). Fija versiones (lockfile), no
+   rangos abiertos. Al terminar una tarea, corre `scripts/check.sh`.
+9. **Loop controlado, no "goal mode".** No "anda y haz todo" en una cadena larga: la IA es
+   probabilística y deriva. Trabaja en fases con compuertas (SDD) y revisión humana entre
    ellas. Spec primero, TDD al implementar. Ver skills `sdd` y `tdd`.
 
 ## 3. Roles de agente (dividir para conquistar)
@@ -61,10 +61,10 @@ lo lee antes de empezar y lo actualiza con lo aprobado. Así el próximo proyect
 las mejores prácticas ya acumuladas, no de cero.
 
 **Regla:** ningún cambio se da por bueno sin pasar por **verifier**. Si el verifier
-rechaza, vuelve al implementer. Loop hasta verde (máx. N rondas, después escalá al humano).
+rechaza, vuelve al implementer. Loop hasta verde (máx. N rondas, después escala al humano).
 
 **El verifier prueba en serio, no solo compila.** Para apps con UI, el verifier **opera la
-app real en el navegador** (chrome-devtools MCP + Playwright): hace login, clickea, llena
+app real en el navegador** (chrome-devtools MCP + Playwright): hace login, pulsa, llena
 formularios, mira la respuesta. Así se encuentran los bugs que el build no ve (errores de
 red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el endpoint.
 
@@ -84,7 +84,7 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 - Cada agente devuelve **datos/conclusión**, no relata el proceso.
 - Lo que se decide y por qué -> `memory/MEMORY.md` (una línea por hecho, ver §6).
 
-### Modos: escalá la ceremonia a la tarea
+### Modos: escala la ceremonia a la tarea
 La disciplina cuesta; aplicala según el riesgo/tamaño. El **lead elige el modo** al empezar.
 - **quick** (fix trivial, 1 archivo, sin riesgo): sin SDD ni compuerta. El especialista lo
   hace (TDD si hay lógica), corre `check.sh`, el verifier mira. Reporte corto.
@@ -119,7 +119,7 @@ NO guardes lo que el código/git ya dice. Formato:
 - [titulo] (archivo/area) - el hecho en una linea. Por que importa.
 ```
 
-Antes de guardar, revisá si ya existe algo parecido y actualizalo en vez de duplicar.
+Antes de guardar, revisa si ya existe algo parecido y actualízalo en vez de duplicar.
 
 ## 7. Herramientas (según el rol, no todas para todos)
 
@@ -128,7 +128,7 @@ Antes de guardar, revisá si ya existe algo parecido y actualizalo en vez de dup
 
 **Verificación (el verifier, las 3 obligatorias):** opera la app real, ahí aparecen los
 bugs que el build no ve.
-- **chrome-devtools MCP** - recorrer flujos a mano (login, clickear, formularios).
+- **chrome-devtools MCP** - recorrer flujos a mano (login, pulsar, formularios).
 - **Playwright** - specs e2e deterministas (la regresión que el equipo cura, fija lo conocido).
 - **TestSprite** (MCP) - genera y corre tests con IA: cobertura amplia + exploratorio,
   descubre casos que no pensaste. Necesita API key (testsprite.com). Setup en `init.sh`.
@@ -146,7 +146,7 @@ markdown: `markitdown entrada.pdf > docs/entrada.md`. El agente lee el `.md`, no
 - `check.sh` - el implementer lo corre **al terminar** cada tarea: format, lint, build,
   secretos (gitleaks), audit de deps y **ortografía** (spell, informativo). No atado a ningún commit.
 - `doctor.sh` - audita la salud del harness (placeholders sin llenar, registry desincronizado,
-  playbooks vacíos/viejos). Corrélo cada tanto para que los docs no se pudran.
+  playbooks vacíos/viejos). Córrelo cada tanto para que los docs no se pudran.
 - `adopt.sh` - autodetecta stack/comandos de un proyecto existente (skill `adopt`).
 - `strip-comments.sh [--check|--write] <dir>` - quita comentarios con AST (.py tokenize,
   .ts/.tsx compilador TS), preservando docstrings/strings/regex/directivas (skill `migrate`).
@@ -177,7 +177,7 @@ más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
 
 - {{CONVENTION_1}}  (ej: ASCII en código; sin comentarios; estilo de commits...)
 - {{CONVENTION_2}}
-- Mirá `project.yml` -> `conventions` para la lista completa.
+- Mira `project.yml` -> `conventions` para la lista completa.
 
 ## 9. Seguridad (guardrails, no opcional)
 
@@ -187,7 +187,7 @@ más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
   los servicios hablan por red interna. Sin credenciales por defecto. Rotá si se filtró.
 - **Dependencias:** solo las que necesitás, en su última estable, sin deprecados ni vulns
   (Regla 8 + `check-dep.sh`). Auditá el árbol cada tanto (`check.sh` lo hace).
-- **Entradas no confiables:** validá/sanitizá. No ejecutes ni interpoles input crudo.
+- **Entradas no confiables:** valida/sanitizá. No ejecutes ni interpoles input crudo.
 
 ## 10. Antes de cerrar una tarea (checklist del verifier)
 
