@@ -19,9 +19,13 @@ if [ -f package-lock.json ] && command -v npm >/dev/null 2>&1; then echo "==> np
 if [ -f requirements.txt ] && command -v pip-audit >/dev/null 2>&1; then echo "==> pip-audit"; pip-audit -r requirements.txt || fail=1; fi
 
 if [ -f scripts/spell.sh ] && [ -f cspell.json ]; then
-  echo "==> ortografia es,en (informativo, no bloquea)"
+  echo "==> ortografia es,en"
   issues="$(bash scripts/spell.sh "**/*.md" 2>/dev/null | grep -c 'Unknown word' || true)"
-  if [ "${issues:-0}" -gt 0 ]; then echo "   $issues palabras a revisar -> corré: scripts/spell.sh '**/*.md'"; else echo "   OK"; fi
+  if [ "${issues:-0}" -gt 0 ]; then
+    echo "   $issues palabra(s) sin whitelistear. Cada una: fixea el typo, O si es valida agregala a cspell.json (words)."
+    echo "   Verlas: scripts/spell.sh '**/*.md'"
+    fail=1
+  else echo "   OK"; fi
 fi
 
 echo ""
