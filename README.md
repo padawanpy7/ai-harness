@@ -1,105 +1,97 @@
 # ai-harness
 
-Un **harness** mínimo y reutilizable para trabajar con agentes de IA en cualquier proyecto.
-La idea: clonás esto, completás 2 archivos, y arrancás con un **equipo de agentes
-especialistas** (lead, ui-designer, database, backend, implementer, verifier) en vez de un
-solo agente haciendo todo y yéndose de las manos. Cada especialista acumula best practices
-en su playbook, así el próximo proyecto arranca mejor.
+Un **harness** minimo y reutilizable para trabajar con agentes de IA en cualquier proyecto.
+Clonas esto, completas 2 archivos (o lo adoptas en un repo existente), y arrancas con un
+**equipo de agentes especialistas** en vez de un solo agente haciendo todo y yendose de las
+manos. Cada especialista acumula best practices en su playbook, asi el proximo proyecto
+arranca mejor.
 
-## ¿Qué es un harness?
+## Que es un harness
 
-El "código" alrededor del modelo: las reglas, la memoria, los roles, las herramientas y el
-loop de verificación que hacen que un agente trabaje bien y de forma repetible. El modelo
-es el motor; el harness es el chasis, la dirección y los frenos.
+El "codigo" alrededor del modelo: las reglas, la memoria, los roles, las herramientas y el
+loop de verificacion que hacen que un agente trabaje bien y de forma repetible. El modelo es
+el motor; el harness es el chasis, la direccion y los frenos.
 
-## Qué trae
+## El flujo
+
+![flujo del harness](docs/flow.svg)
+
+> Version animada (anime.js): abri [`docs/flow.html`](docs/flow.html) en el navegador.
+
+**Loop controlado, no "goal mode".** La IA es probabilistica: una cadena larga de "anda y
+hace todo" deriva. El harness trabaja en **fases con compuertas** (SDD: proposal -> design ->
+tasks -> revision humana -> apply con TDD -> verify -> archive). Autonomia acotada, no un
+cheque en blanco. Mas barato, mas predecible, menos alucinacion.
+
+## Que trae
 
 ```
-AGENTS.md            Contrato de trabajo (<200 lineas). Como trabajamos. Portable.
-CLAUDE.md            Puntero a AGENTS.md (para que Claude Code lo lea).
-project.yml          Datos del proyecto: stack, comandos, convenciones. LO COMPLETAS VOS.
-init.sh              Instala las herramientas y prepara las carpetas.
-.claude/agents/      Roles especialistas: lead, ui-designer, database, backend, implementer, verifier.
-memory/MEMORY.md     Memoria persistente entre sesiones (una linea por hecho durable).
-memory/playbooks/    Best practices por disciplina (ui/backend/db) que se acumulan con el uso.
-work/                Salida de cada tarea: plan, hallazgos, veredictos.
-docs/                Docs externas convertidas a markdown (markitdown).
-skills/              Skills cargadas por necesidad (sdd, tdd, judgment-day) + REGISTRY.md.
-openspec/            Specs vivientes (specs/) y cambios (changes/<id>/) del flujo SDD.
-scripts/check-dep.sh Verifica ultima version estable + deprecacion + vulns antes de agregar un paquete.
-scripts/check.sh     El implementer lo corre al terminar: format, lint, build, secretos, audit.
-scripts/skill-sync.sh Regenera skills/REGISTRY.md al agregar/editar una skill.
-.mcp.json            Servidores MCP (markitdown).
+AGENTS.md             Contrato de trabajo (lean, max 500 lineas). Como trabajamos. Portable.
+CLAUDE.md             Puntero a AGENTS.md.
+project.yml           Datos del proyecto: stack, comandos, convenciones. Lo completas vos.
+init.sh               Instala tools (codebase-memory, markitdown, MCPs) y prepara carpetas.
+.claude/agents/       Roles: lead, ui-designer, database, backend, implementer, verifier.
+.claude/settings.json Hook que mantiene el skill registry sincronizado.
+memory/MEMORY.md      Memoria persistente entre sesiones.
+memory/playbooks/     Best practices por disciplina (ui/backend/db/lead). Crecen con el uso.
+skills/               Skills cargadas por necesidad + REGISTRY.md.
+openspec/             Specs vivientes (specs/) y cambios (changes/<id>/) del flujo SDD.
+work/                 Salida de cada tarea: plan, hallazgos, veredictos.
+docs/                 flow.svg / flow.html + docs externas (markitdown).
+scripts/              Las herramientas (ver abajo).
+.mcp.json             Servidores MCP (lo crea init.sh).
 ```
 
-## Filosofía: loop controlado, no "goal mode"
+### Skills (en `skills/`, cargadas por necesidad)
+`sdd` (loop controlado) - `tdd` (test primero) - `judgment-day` (dos jueces para lo riesgoso)
+- `adopt` (onboarding brownfield) - `migrate` (adoptar + limpiar un proyecto vivo).
 
-La IA es probabilística: una cadena larga de "andá y hacé todo" deriva. El harness trabaja
-en **fases con compuertas** (SDD: proposal -> design -> tasks -> revisión humana -> apply con TDD
--> verify -> archive). Concedés autonomía acotada, no un cheque en blanco. Más barato, más
-predecible, menos alucinación.
+### Scripts (en `scripts/`)
+- `check-dep.sh` - ultima version estable + deprecacion + vulnerabilidades (OSV) antes de un paquete.
+- `check.sh` - el implementer lo corre al terminar: format, lint, build, secretos, audit.
+- `doctor.sh` - audita la salud del harness (placeholders, registry, playbooks viejos).
+- `adopt.sh` - autodetecta stack/comandos de un proyecto existente.
+- `strip-comments.sh` - quita comentarios con AST (.py tokenize, .ts/.tsx compilador TS).
+- `ascii.sh` - pasa la prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
+- `skill-sync.sh` - regenera `skills/REGISTRY.md`.
 
-## Cómo usarlo en un proyecto nuevo
+## Como usarlo en un proyecto nuevo
 
 ```bash
-# 1. Traé el harness a tu repo
-git clone https://github.com/TU_USUARIO/ai-harness.git   # o copialo dentro del repo
-
-# 2. Instalá las herramientas + prepará carpetas
-./init.sh
-
-# 3. Completá project.yml (nombre, stack, comandos, convenciones)
-#    y reemplazá los {{PLACEHOLDERS}} de AGENTS.md (secciones 1 y 8).
-
-# 4. Abrí el repo con tu agente (Claude Code) y pedile que arranque por el rol 'lead'.
+git clone https://github.com/padawanpy7/ai-harness.git   # o copialo dentro del repo
+./init.sh                                                 # tools + carpetas (+ rellena project.yml si es interactivo)
+# completas project.yml + los {{PLACEHOLDERS}} de AGENTS.md (1 y 8)
+# abris el repo con Claude Code y pedis: "arranca como lead"
 ```
 
 ## Adoptar el harness en un proyecto YA existente (brownfield)
 
-Para un proyecto andando (ej. un ERP en producción):
-
 ```bash
-# copiá el harness dentro del repo, despues:
-bash scripts/adopt.sh           # autodetecta stack y comandos -> project.yml
+# copias el harness dentro del repo, despues:
+bash scripts/adopt.sh              # autodetecta stack y comandos -> project.yml
 # y al agente:
-"revisá el proyecto y completá el harness para seguir el desarrollo (skill adopt)"
-# al final, para dejar las tools operativas (codebase-memory, markitdown, MCPs):
-./init.sh
+"revisa el proyecto y completa el harness para seguir el desarrollo (skill adopt)"
+./init.sh                          # deja las tools operativas (codebase-memory, markitdown, MCPs)
+bash scripts/doctor.sh             # confirma que quedo sano
 ```
 
-El agente detecta stack/comandos, infiere convenciones, **seedea los playbooks desde el
-código real** (sistema de diseño, forma de la API, esquema de BD) y reverse-engineea las
-capabilities a `openspec/specs/`. Después corré `scripts/doctor.sh` para confirmar que quedó
-sano, y validás el resumen.
+El agente infiere convenciones, **seedea los playbooks desde el codigo real** (sistema de
+diseno, forma de la API, esquema de BD) y reverse-engineea las capabilities a
+`openspec/specs/`. Para un proyecto vivo con limpieza de por medio (quitar comentarios,
+checks), usa el skill `migrate` (baseline -> adopt -> limpiar -> verify, sin romper).
 
-## Escalá la ceremonia (modos)
+## Escala la ceremonia (modos)
 
 No todo paga el mismo proceso. El lead elige: **quick** (fix trivial, sin SDD ni compuerta),
-**standard** (feature: SDD + TDD + verifier), **critical** (riesgo: + judgment-day). Así lo
-trivial es rápido y lo riesgoso va con todo. `scripts/doctor.sh` mantiene los docs sin pudrir.
+**standard** (feature: SDD + TDD + verifier), **critical** (riesgo: + judgment-day). Asi lo
+trivial es rapido y lo riesgoso va con todo. `scripts/doctor.sh` mantiene los docs sin pudrir.
 
-## El flujo en una imagen
+## Herramientas externas
 
-```
-            ┌─────────┐   plan + sub-tareas    ┌──────────────┐
-  pedido ->  │  LEAD   │ ─────────────────────-> │ IMPLEMENTER  │  codea, build+lint OK
-            │ planea  │ <-───── integra ─────── │  (x N en ∥)  │
-            └─────────┘        veredicto OK     └──────┬───────┘
-                 ↑                                     │ entrega
-                 │            VOLVER (con feedback)    ▼
-                 │                              ┌──────────────┐
-                 └───────────────────────────  │  VERIFIER    │  corre tests + opera la
-                                                │  desconfia   │  app en el navegador
-                                                └──────────────┘
-```
+- **codebase-memory-mcp** (obligatorio) - grafo del codigo para entender antes de tocar.
+- **Context7** - docs de librerias al dia (no las viejas que recuerda el modelo).
+- **markitdown** - convierte PDF/Office/imagenes a markdown.
+- **chrome-devtools MCP / Playwright / TestSprite** - el verifier opera la app real.
 
-## Herramientas
-
-- **codebase-memory-mcp** (obligatorio) - grafo del código para entender antes de tocar.
-- **Context7** - docs de librerías al día (no las viejas que recuerda el modelo).
-- **markitdown** - convierte PDF/Office/imágenes a markdown para que los agentes los lean.
-- **chrome-devtools MCP / Playwright** - el verifier opera la app real para encontrar bugs.
-- **scripts/check-dep.sh** y **scripts/check.sh** - versiones/vulns y verificación post-tarea.
-
-Ver `AGENTS.md` para el detalle de cómo se usan y por qué (incluye Seguridad y las reglas
-de no-comentarios y versiones).
+Ver `AGENTS.md` para el detalle de como se usan y por que (incluye Seguridad y las reglas
+de no-comentarios, versiones y ASCII).
