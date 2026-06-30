@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 730" font-family="Georgia, 'Times New Roman', serif">
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b9ab97"/></marker>
+    <marker id="aa" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#c4502f"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="730" fill="#f4efe6"/>
+
+  <!-- connectors -->
+  <g fill="none" stroke="#d9cdba" stroke-width="2">
+    <path d="M380,68 L380,104"/>
+    <path d="M380,168 L380,206"/>
+    <path d="M380,270 L380,308"/>
+    <path d="M380,356 L150,402"/><path d="M380,356 L380,402"/><path d="M380,356 L610,402"/>
+    <path d="M150,498 L380,544"/><path d="M380,498 L380,544"/><path d="M610,498 L380,544"/>
+    <path d="M380,610 L380,648" marker-end="url(#a)"/>
+  </g>
+  <path d="M512,576 C700,556 712,150 470,138" fill="none" stroke="#c4502f" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aa)"/>
+  <text x="726" y="350" fill="#c4502f" font-size="11" font-weight="600" text-anchor="middle" transform="rotate(90 726 350)" font-family="sans-serif">VOLVER (con feedback)</text>
+
+  <!-- pedido -->
+  <rect x="312" y="28" width="136" height="40" rx="20" fill="#efe6d6" stroke="#d9cdba"/>
+  <text x="380" y="53" text-anchor="middle" font-size="13" fill="#2b2622" font-family="sans-serif">pedido</text>
+
+  <!-- LEAD -->
+  <rect x="248" y="104" width="264" height="64" rx="14" fill="#fbf8f2" stroke="#c4502f" stroke-width="2"/>
+  <text x="268" y="131" font-size="17" font-weight="600" fill="#2b2622">LEAD</text>
+  <text x="268" y="150" font-size="11.5" fill="#8a7f72" font-family="sans-serif">planifica - SDD - elige modo (quick/standard/critical)</text>
+
+  <!-- gate -->
+  <rect x="276" y="206" width="208" height="64" rx="32" fill="#fff4ef" stroke="#c4502f" stroke-dasharray="4 3"/>
+  <text x="380" y="234" text-anchor="middle" font-size="12.5" font-weight="600" fill="#9a3c22" font-family="sans-serif">compuerta humana</text>
+  <text x="380" y="252" text-anchor="middle" font-size="11" fill="#8a7f72" font-family="sans-serif">revisa el plan ANTES de codear</text>
+
+  <!-- specialists -->
+  <rect x="40" y="402" width="220" height="96" rx="14" fill="#fbf8f2" stroke="#d9cdba"/>
+  <text x="60" y="430" font-size="15" font-weight="600" fill="#2b2622">ui-designer</text>
+  <text x="60" y="448" font-size="11" fill="#8a7f72" font-family="sans-serif">Claude Design + playbook</text>
+  <text x="60" y="474" font-size="15" font-weight="600" fill="#2b2622">database</text>
+  <text x="60" y="492" font-size="11" fill="#8a7f72" font-family="sans-serif">normaliza, indices, migra</text>
+
+  <rect x="280" y="402" width="200" height="96" rx="14" fill="#fbf8f2" stroke="#d9cdba"/>
+  <text x="300" y="430" font-size="15" font-weight="600" fill="#2b2622">backend</text>
+  <text x="300" y="448" font-size="11" fill="#8a7f72" font-family="sans-serif">datos + valida la entrada</text>
+  <text x="300" y="474" font-size="15" font-weight="600" fill="#2b2622">implementer</text>
+  <text x="300" y="492" font-size="11" fill="#8a7f72" font-family="sans-serif">glue, TDD, check.sh</text>
+
+  <rect x="500" y="402" width="220" height="96" rx="14" fill="#fbf8f2" stroke="#d9cdba"/>
+  <text x="520" y="430" font-size="15" font-weight="600" fill="#2b2622">especialistas</text>
+  <text x="520" y="450" font-size="11" fill="#8a7f72" font-family="sans-serif">en paralelo si no</text>
+  <text x="520" y="466" font-size="11" fill="#8a7f72" font-family="sans-serif">dependen entre si</text>
+  <text x="520" y="490" font-size="11" fill="#c4502f" font-family="sans-serif">cada uno: TDD + check.sh</text>
+
+  <!-- verifier -->
+  <rect x="248" y="544" width="264" height="66" rx="14" fill="#fbf8f2" stroke="#3f7d57" stroke-width="2"/>
+  <text x="268" y="570" font-size="17" font-weight="600" fill="#2b2622">VERIFIER</text>
+  <text x="268" y="588" font-size="11" fill="#8a7f72" font-family="sans-serif">tests + navegador (chrome/Playwright/TestSprite)</text>
+  <text x="268" y="603" font-size="11" fill="#3f7d57" font-family="sans-serif">+ judgment-day si es riesgoso</text>
+
+  <!-- done -->
+  <rect x="232" y="648" width="296" height="60" rx="14" fill="#fbf8f2" stroke="#c4502f" stroke-width="2"/>
+  <text x="252" y="674" font-size="16" font-weight="600" fill="#2b2622">LEAD integra</text>
+  <text x="252" y="692" font-size="11" fill="#8a7f72" font-family="sans-serif">archiva la spec - actualiza MEMORY.md + playbook</text>
+</svg>

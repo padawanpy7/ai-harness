@@ -48,12 +48,14 @@ scripts/              Las herramientas (ver abajo).
 
 ### Scripts (en `scripts/`)
 - `check-dep.sh` - ultima version estable + deprecacion + vulnerabilidades (OSV) antes de un paquete.
-- `check.sh` - el implementer lo corre al terminar: format, lint, build, secretos, audit.
+- `check.sh` - el implementer lo corre al terminar: format, lint, build, secretos, audit y ortografia. Bloqueante.
 - `doctor.sh` - audita la salud del harness (placeholders, registry, playbooks viejos).
 - `adopt.sh` - autodetecta stack/comandos de un proyecto existente.
 - `strip-comments.sh` - quita comentarios con AST (.py tokenize, .ts/.tsx compilador TS).
 - `ascii.sh` - pasa la prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
-- `spell.sh` - ortografia espaniol+ingles (cspell + dict es-es). Corre al final de `check.sh`.
+- `spell.sh` - ortografia es+en (cspell + dict es-es de Espana), sobre la prosa. Corre al
+  final de `check.sh` (bloqueante). Por cada palabra: fixea el typo; si el dict no la trae,
+  usa un sinonimo; solo si no hay (nombre propio/jerga) va a `cspell.json (words)`.
 - `skill-sync.sh` - regenera `skills/REGISTRY.md`.
 
 ## Como usarlo en un proyecto nuevo

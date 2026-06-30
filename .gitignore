@@ -2,3 +2,5 @@ work/*
 !work/.gitkeep
 docs/*
 !docs/.gitkeep
+!docs/flow.svg
+!docs/flow.html

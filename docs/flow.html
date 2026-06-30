@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ai-harness - flujo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Schibsted+Grotesk:wght@400;500;600&display=swap');
+  :root{
+    --bg:#f4efe6; --ink:#2b2622; --muted:#8a7f72; --line:#d9cdba;
+    --accent:#c4502f; --accent-deep:#9a3c22; --ok:#3f7d57; --surface:#fbf8f2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(1200px 600px at 80% -10%, #efe6d6 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);font-family:'Schibsted Grotesk',system-ui,sans-serif;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:48px 20px 80px}
+  header{text-align:center;margin-bottom:8px}
+  header h1{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(28px,5vw,46px);
+    letter-spacing:-.02em;margin:0}
+  header .accent{color:var(--accent)}
+  header p{color:var(--muted);margin:6px 0 0;font-size:15px}
+  .stage{width:100%;max-width:760px}
+  svg{width:100%;height:auto;display:block;overflow:visible}
+  .card{fill:var(--surface);stroke:var(--line);stroke-width:1.5;rx:14}
+  .card.lead{stroke:var(--accent);stroke-width:2}
+  .card.verify{stroke:var(--ok);stroke-width:2}
+  .t-title{font-family:'Fraunces',serif;font-weight:600;font-size:16px;fill:var(--ink)}
+  .t-sub{font-family:'Schibsted Grotesk';font-size:11.5px;fill:var(--muted)}
+  .pill{fill:#efe6d6;stroke:var(--line);stroke-width:1.2}
+  .pill-text{font-size:12px;fill:var(--ink);font-weight:500}
+  .gate{fill:#fff4ef;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3}
+  .gate-text{font-size:12px;fill:var(--accent-deep);font-weight:600}
+  .conn{fill:none;stroke:var(--line);stroke-width:2}
+  .conn-label{font-size:10.5px;fill:var(--muted)}
+  .loop{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:5 4}
+  .loop-text{font-size:11px;fill:var(--accent);font-weight:600}
+  .token{fill:var(--accent)}
+  .legend{max-width:760px;margin-top:26px;color:var(--muted);font-size:13px;line-height:1.6}
+  .legend b{color:var(--ink);font-weight:600}
+  .reveal{opacity:0}
+</style>
+</head>
+<body>
+  <header>
+    <h1>ai-harness <span class="accent">/</span> flujo</h1>
+    <p>loop controlado: spec -> compuerta humana -> especialistas (TDD) -> verifier</p>
+  </header>
+
+  <div class="stage">
+  <svg viewBox="0 0 760 880" role="img" aria-label="Flujo del harness">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#b9ab97"/>
+      </marker>
+      <marker id="arrow-a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#c4502f"/>
+      </marker>
+    </defs>
+
+    <!-- connectors (drawn by anime) -->
+    <path class="conn draw" d="M380,70 L380,108"/>
+    <path class="conn draw" d="M380,170 L380,210"/>
+    <path class="conn draw" d="M380,272 L380,312"/>
+    <path class="conn draw" d="M380,360 L150,406"/>
+    <path class="conn draw" d="M380,360 L370,406"/>
+    <path class="conn draw" d="M380,360 L590,406"/>
+    <path class="conn draw" d="M150,500 L380,548"/>
+    <path class="conn draw" d="M370,500 L380,548"/>
+    <path class="conn draw" d="M590,500 L380,548"/>
+    <path class="conn draw" d="M380,612 L380,652" marker-end="url(#arrow)"/>
+    <!-- loop verify -> lead -->
+    <path class="loop draw" d="M512,580 C690,560 700,150 470,140" marker-end="url(#arrow-a)"/>
+    <text class="loop-text reveal" x="700" y="360" text-anchor="middle" transform="rotate(90 700 360)">VOLVER (con feedback)</text>
+
+    <!-- PEDIDO -->
+    <g class="reveal node">
+      <rect class="pill" x="312" y="30" width="136" height="40" rx="20"/>
+      <text class="pill-text" x="380" y="55" text-anchor="middle">pedido</text>
+    </g>
+
+    <!-- LEAD -->
+    <g class="reveal node">
+      <rect class="card lead" x="250" y="108" width="260" height="62" rx="14"/>
+      <text class="t-title" x="270" y="134">LEAD</text>
+      <text class="t-sub" x="270" y="152">planifica - SDD - elige modo (quick/standard/critical)</text>
+    </g>
+
+    <!-- GATE -->
+    <g class="reveal node">
+      <rect class="gate" x="276" y="210" width="208" height="62" rx="31"/>
+      <text class="gate-text" x="380" y="238" text-anchor="middle">compuerta humana</text>
+      <text class="t-sub" x="380" y="256" text-anchor="middle">revisa el plan ANTES de codear</text>
+    </g>
+
+    <!-- specialists -->
+    <g class="reveal node">
+      <rect class="card" x="40" y="406" width="220" height="94" rx="14"/>
+      <text class="t-title" x="60" y="434">ui-designer</text>
+      <text class="t-sub" x="60" y="453">Claude Design + playbook</text>
+      <text class="t-title" x="60" y="478" style="font-size:14px">database</text>
+      <text class="t-sub" x="60" y="494">normaliza, indices, migra</text>
+    </g>
+    <g class="reveal node">
+      <rect class="card" x="280" y="406" width="200" height="94" rx="14"/>
+      <text class="t-title" x="300" y="434">backend</text>
+      <text class="t-sub" x="300" y="453">datos + valida lo que entra</text>
+      <text class="t-title" x="300" y="478" style="font-size:14px">implementer</text>
+      <text class="t-sub" x="300" y="494">glue, TDD, check.sh</text>
+    </g>
+    <g class="reveal node">
+      <rect class="card" x="500" y="406" width="220" height="94" rx="14"/>
+      <text class="t-title" x="520" y="434">especialistas</text>
+      <text class="t-sub" x="520" y="453">en paralelo si no</text>
+      <text class="t-sub" x="520" y="468">dependen entre si</text>
+      <text class="t-sub" x="520" y="490" style="fill:#c4502f">cada uno: TDD + check.sh</text>
+    </g>
+
+    <!-- VERIFIER -->
+    <g class="reveal node">
+      <rect class="card verify" x="248" y="548" width="264" height="64" rx="14"/>
+      <text class="t-title" x="268" y="574">VERIFIER</text>
+      <text class="t-sub" x="268" y="593">tests + navegador (chrome/Playwright/TestSprite)</text>
+      <text class="t-sub" x="268" y="607" style="fill:#3f7d57">+ judgment-day si es riesgoso</text>
+    </g>
+
+    <!-- DONE -->
+    <g class="reveal node">
+      <rect class="card lead" x="232" y="652" width="296" height="60" rx="14"/>
+      <text class="t-title" x="252" y="678">LEAD integra</text>
+      <text class="t-sub" x="252" y="696">archiva la spec - actualiza MEMORY.md + playbook</text>
+    </g>
+
+    <!-- token -->
+    <circle class="token" r="5" cx="380" cy="50" opacity="0"/>
+  </svg>
+  </div>
+
+  <p class="legend">
+    <b>Loop controlado, no "goal mode".</b> Cada fase es una compuerta: la IA es probabilistica,
+    una cadena larga deriva. Spec primero (SDD), revision humana, especialistas que codean con
+    TDD, y un verifier que <b>opera la app de verdad</b> antes de dar algo por bueno. Si el
+    verifier rechaza, <b style="color:#c4502f">vuelve</b> al especialista.
+  </p>
+
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script>
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.draw').forEach(p=>{
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = len; p.style.strokeDashoffset = reduce?0:len;
+    });
+    if(reduce){
+      document.querySelectorAll('.reveal').forEach(e=>e.style.opacity=1);
+    } else {
+      const tl = anime.timeline({easing:'easeOutCubic'});
+      tl.add({targets:'.node', opacity:[0,1], translateY:[14,0], delay:anime.stagger(110), duration:560})
+        .add({targets:'.draw', strokeDashoffset:[anime.setDashoffset,0], delay:anime.stagger(60), duration:520}, '-=600')
+        .add({targets:'.loop-text, .loop', opacity:[0,1], duration:500}, '-=200');
+      // token recorre el camino principal
+      const path = anime.path('svg .conn:nth-child(1)');
+      anime({targets:'.token', opacity:[0,1,1,0],
+        translateX:[{value:0},{value:0}], duration:1600, delay:1400, loop:true,
+        easing:'linear',
+        keyframes:[
+          {cx:380,cy:50},{cx:380,cy:140},{cx:380,cy:241},{cx:380,cy:452},{cx:380,cy:580},{cx:380,cy:682}
+        ]});
+    }
+  </script>
+</body>
+</html>
