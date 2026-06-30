@@ -1,8 +1,9 @@
 # AGENTS.md
 
-> Contrato de trabajo para agentes de IA en este repo. Manténlo **bajo 200 líneas**:
-> contexto corto = menos ruido = mejores decisiones. Lo específico del proyecto va en
-> `project.yml`; acá va el **cómo trabajamos**, que no cambia entre proyectos.
+> Contrato de trabajo para agentes de IA. Manténlo **lean (~200, máx 500 líneas)**: contexto
+> corto = menos ruido = mejores decisiones. El README es para humanos; esto es para agentes.
+> Lo específico del proyecto va en `project.yml`. **Proyecto grande → dividí por feature**:
+> un `AGENTS.md` por área, para no cargar todo de una.
 
 ## 1. Proyecto (completar)
 
@@ -35,6 +36,9 @@
 8. **Versiones: solo última estable, sin deprecados ni vulnerabilidades.** Antes de agregar
    un paquete, corré `scripts/check-dep.sh <eco> <pkg>` (§7). Fijá versiones (lockfile), no
    rangos abiertos. Al terminar una tarea, corré `scripts/check.sh`.
+9. **Loop controlado, no "goal mode".** No "andá y hacé todo" en una cadena larga: la IA es
+   probabilística y deriva. Trabajá en fases con compuertas (SDD) y revisión humana entre
+   ellas. Spec primero, TDD al implementar. Ver skills `sdd` y `tdd`.
 
 ## 3. Roles de agente (dividir para conquistar)
 
@@ -67,13 +71,13 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 ## 4. Flujo de trabajo
 
 ```
-1. lead        → lee el pedido + project.yml, arma un plan corto en work/<tarea>.md
-2. lead        → descompone en sub-tareas independientes (paralelizables si no dependen)
+1. lead        → SDD (skill sdd): proposal -> design -> tasks en openspec/changes/<id>/
+2. >>> humano  → revisa el plan ANTES de codear (compuerta) <<<
 3. lead        → manda cada sub-tarea al **especialista** que corresponde
                  (UI→ui-designer, esquema→database, API→backend, glue→implementer)
-4. especialista→ lee su playbook, implementa, corre scripts/check.sh, escribe lo hecho
-5. verifier    → corre tests + opera la app en el navegador; veredicto (OK / volver a 4)
-6. lead        → integra, actualiza memory/MEMORY.md y el playbook, reporta al humano
+4. especialista→ lee su playbook, implementa con TDD (skill tdd), corre check.sh
+5. verifier    → tests + app en navegador (+ judgment-day si es riesgoso); veredicto (OK/volver)
+6. lead        → integra, archiva la spec, actualiza MEMORY.md y el playbook, reporta
 ```
 
 - Sub-tareas independientes: lanzá especialistas **en paralelo**.
@@ -89,7 +93,9 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 | `.claude/agents/` | definición de los roles (lead/implementer/verifier). |
 | `work/` | salida de cada tarea: plan, hallazgos, veredictos. Efímero pero versionado. |
 | `memory/MEMORY.md` | memoria persistente entre sesiones. Índice de hechos durables. |
-| `memory/playbooks/` | best practices por disciplina (ui/backend/db). Crecen con el uso. |
+| `memory/playbooks/` | best practices por disciplina (ui/backend/db/lead). Crecen con el uso. |
+| `skills/` | skills cargadas por necesidad + `REGISTRY.md` (sdd, tdd, judgment-day). |
+| `openspec/` | specs vivientes (`specs/`) y cambios (`changes/<id>/`) del flujo SDD. |
 | `docs/` | docs externas convertidas a markdown (markitdown). |
 
 ## 6. Memoria (`memory/MEMORY.md`)
@@ -134,6 +140,18 @@ llamadas, impacto, rutas HTTP), 120x menos tokens que grep/read masivo. Es la fo
 las deja **diferidas** (no entran en el contexto de cada turno; el agente busca la que
 necesita y recién ahí carga su schema). Mandatory + deferred = código entendido sin
 inflar la superficie de tools (Regla 6). Lo instala `init.sh`.
+
+**Skills** (`skills/`): conocimiento que se carga **por necesidad**, no siempre. Índice en
+`skills/REGISTRY.md` (lo regenera `scripts/skill-sync.sh`). Base: `sdd` (loop controlado),
+`tdd` (test primero), `judgment-day` (dos jueces + orquestador para lo riesgoso). Agregá las
+tuyas como `skills/<nombre>.md` con frontmatter `name:` y `when:`.
+
+**Multi-model** (ahorra 50-70%): el modelo justo por fase. Barato (Sonnet/Codex/Gemini) para
+implementar/boilerplate; fuerte (Opus) para diseño, juicio y el lead. Está en el `model:` de
+cada rol.
+
+**Memoria entre sesiones/agentes:** `memory/MEMORY.md` + playbooks. Para memoria compartida
+más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
 
 ## 8. Convenciones del proyecto
 

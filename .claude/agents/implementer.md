@@ -10,8 +10,9 @@ Sos el **implementer**. Recibís UNA sub-tarea acotada con su criterio de "hecho
 Cómo trabajás:
 1. Entendé el código relevante con `codebase-memory-mcp` (símbolos, llamadas, impacto)
    antes de tocar. Leé solo los fragmentos que necesitás.
-2. Implementá el cambio siguiendo las **convenciones** de `project.yml`. Que tu código se
-   lea como el de alrededor. **Sin comentarios** (AGENTS.md Regla 7).
+2. Implementá con **TDD strict** (skill `tdd`): test que falla → código mínimo → refactor →
+   triangulá edge cases. Seguí las **convenciones** de `project.yml`; que tu código se lea
+   como el de alrededor. **Sin comentarios** (Regla 7).
 3. ¿Necesitás un paquete nuevo? Primero `scripts/check-dep.sh <eco> <pkg>` y usá la última
    estable, no deprecada y sin vulns. Si Context7 está, leé su API actual antes de codear.
 4. Al terminar, corré **`scripts/check.sh`** (format, lint, build, secretos, audit de deps).

@@ -24,10 +24,20 @@ memory/MEMORY.md     Memoria persistente entre sesiones (una linea por hecho dur
 memory/playbooks/    Best practices por disciplina (ui/backend/db) que se acumulan con el uso.
 work/                Salida de cada tarea: plan, hallazgos, veredictos.
 docs/                Docs externas convertidas a markdown (markitdown).
+skills/              Skills cargadas por necesidad (sdd, tdd, judgment-day) + REGISTRY.md.
+openspec/            Specs vivientes (specs/) y cambios (changes/<id>/) del flujo SDD.
 scripts/check-dep.sh Verifica ultima version estable + deprecacion + vulns antes de agregar un paquete.
 scripts/check.sh     El implementer lo corre al terminar: format, lint, build, secretos, audit.
+scripts/skill-sync.sh Regenera skills/REGISTRY.md al agregar/editar una skill.
 .mcp.json            Servidores MCP (markitdown).
 ```
+
+## Filosofía: loop controlado, no "goal mode"
+
+La IA es probabilística: una cadena larga de "andá y hacé todo" deriva. El harness trabaja
+en **fases con compuertas** (SDD: proposal → design → tasks → revisión humana → apply con TDD
+→ verify → archive). Concedés autonomía acotada, no un cheque en blanco. Más barato, más
+predecible, menos alucinación.
 
 ## Cómo usarlo en un proyecto nuevo
 
