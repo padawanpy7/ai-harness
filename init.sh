@@ -63,7 +63,7 @@ if command -v cbm >/dev/null 2>&1 || [ -x "$HOME/.local/bin/cbm" ]; then
   echo "==> codebase-memory-mcp: ya instalado."
 else
   echo "==> Instalando codebase-memory-mcp ..."
-  curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | sh \
+  curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash \
     || echo "   ! Comando exacto en: https://github.com/DeusData/codebase-memory-mcp"
 fi
 
@@ -77,5 +77,7 @@ echo "    - chrome-devtools MCP: ya viene con Claude Code."
 echo "    - Playwright: npm i -D @playwright/test && npx playwright install chromium"
 echo "    - TestSprite (obligatorio): export TESTSPRITE_API_KEY=... ; claude mcp add testsprite -- npx @testsprite/testsprite-mcp@latest"
 echo ""
-echo "==> PENDIENTE: completar project.yml y los {{PLACEHOLDERS}} de AGENTS.md (1 y 8)."
+if grep -q '{{' AGENTS.md 2>/dev/null || grep -q '^name: ""' project.yml 2>/dev/null; then
+  echo "==> PENDIENTE: completar project.yml y los {{PLACEHOLDERS}} de AGENTS.md (1 y 8)."
+fi
 echo "==> Listo. Empeza por el rol 'lead'. Probas las tools con: scripts/check-dep.sh y scripts/check.sh"
