@@ -53,6 +53,7 @@ scripts/              Las herramientas (ver abajo).
 - `adopt.sh` - autodetecta stack/comandos de un proyecto existente.
 - `strip-comments.sh` - quita comentarios con AST (.py tokenize, .ts/.tsx compilador TS).
 - `ascii.sh` - pasa la prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
+- `spell.sh` - ortografia espaniol+ingles (cspell + dict es-es). Corre al final de `check.sh`.
 - `skill-sync.sh` - regenera `skills/REGISTRY.md`.
 
 ## Como usarlo en un proyecto nuevo

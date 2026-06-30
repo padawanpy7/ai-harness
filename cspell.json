@@ -1,0 +1,8 @@
+{
+  "version": "0.2",
+  "language": "en,es",
+  "import": ["@cspell/dict-es-es/cspell-ext.json"],
+  "ignorePaths": ["node_modules/**", "dist/**", "build/**", "bin/**", "obj/**", "*.svg", "*.lock", "package-lock.json", "*.min.*", ".git/**", "work/**", "*.json"],
+  "ignoreRegExpList": ["/`[^`]+`/", "/```[\\s\\S]*?```/", "/https?:\\/\\/\\S+/", "/\\b[a-zA-Z]+_[a-zA-Z_]+\\b/"],
+  "words": ["alilaurisys","ianmrc","terracota","Fraunces","Schibsted","openspec","OpenSpec","playbook","playbooks","markitdown","codebase","SIFEN","Bancard","Keycloak","Postgres","Redpanda","uvicorn","FastAPI","Dapper","QuestPDF","ClosedXML","padawanpy","devops","gdrive","rclone","tokenize","noqa","AutoForm","AutoNumeric","imask","cavernicola","Azimutt","vPOS","DNIT","kude","harness","subagente","subagentes","anime","Cloudflare","TestSprite","gitleaks","Roslyn","frontmatter","sucursal","arqueo","cobro","devengado","hacé","fijate","corré","proponé","escribí","empezá","mirá","mantené","seedea","seedeá","commitea","commiteá","arrancá","verificá","stagear","pushear","mergear","clonás","completás"]
+}

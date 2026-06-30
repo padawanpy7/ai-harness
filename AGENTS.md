@@ -144,12 +144,14 @@ markdown: `markitdown entrada.pdf > docs/entrada.md`. El agente lee el `.md`, no
 - `check-dep.sh <npm|pypi|nuget> <pkg>` - última estable + deprecación + vulns (OSV). Antes
   de agregar cualquier paquete.
 - `check.sh` - el implementer lo corre **al terminar** cada tarea: format, lint, build,
-  secretos (gitleaks), audit de deps. No atado a ningún commit.
+  secretos (gitleaks), audit de deps y **ortografía** (spell, informativo). No atado a ningún commit.
 - `doctor.sh` - audita la salud del harness (placeholders sin llenar, registry desincronizado,
   playbooks vacíos/viejos). Corrélo cada tanto para que los docs no se pudran.
 - `adopt.sh` - autodetecta stack/comandos de un proyecto existente (skill `adopt`).
 - `strip-comments.sh [--check|--write] <dir>` - quita comentarios con AST (.py tokenize,
   .ts/.tsx compilador TS), preservando docstrings/strings/regex/directivas (skill `migrate`).
+- `ascii.sh [--check|--fix] <dir>` - prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
+- `spell.sh [globs]` - ortografía es+en (cspell + dict es-es de Espania). Jerga/voseo en `cspell.json`.
 - `skill-sync.sh` - regenera `skills/REGISTRY.md`.
 
 **Entender el código (obligatorio):** **codebase-memory-mcp** - grafo del código (símbolos,

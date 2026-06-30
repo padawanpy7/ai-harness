@@ -18,5 +18,11 @@ else echo "· secretos: gitleaks no instalado (init.sh lo instala)"; fi
 if [ -f package-lock.json ] && command -v npm >/dev/null 2>&1; then echo "==> npm audit"; npm audit --omit=dev || fail=1; fi
 if [ -f requirements.txt ] && command -v pip-audit >/dev/null 2>&1; then echo "==> pip-audit"; pip-audit -r requirements.txt || fail=1; fi
 
+if [ -f scripts/spell.sh ] && [ -f cspell.json ]; then
+  echo "==> ortografia es,en (informativo, no bloquea)"
+  issues="$(bash scripts/spell.sh "**/*.md" 2>/dev/null | grep -c 'Unknown word' || true)"
+  if [ "${issues:-0}" -gt 0 ]; then echo "   $issues palabras a revisar -> corré: scripts/spell.sh '**/*.md'"; else echo "   OK"; fi
+fi
+
 echo ""
 if [ $fail -eq 0 ]; then echo "OK check.sh: todo verde"; else echo "FALLO check.sh: revisa lo de arriba"; exit 1; fi
