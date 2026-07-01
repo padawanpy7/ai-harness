@@ -129,10 +129,12 @@ necesitar el chat vivo. Trabajá **una feature a la vez**, nunca "todo de una".
 - Dejá el repo main-ready (sin bugs conocidos).
 
 **`FEATURES.json` = ledger del build** (evita "declarar victoria antes de tiempo" y permite
-retomar sin el chat vivo): features `{id, categoria, descripcion, pasos[], passes}`, todo arranca
-en `passes:false`. El implementer/verifier SOLO cambian `passes`; NUNCA borran ni editan
-descripción/pasos (el ledger es el contrato de "qué falta"). El SDD (`openspec/changes/<id>/`) es
-el diseño de cada cambio; el ledger es el estado global del build.
+retomar sin el chat vivo): cada feature con `id`, categoría, descripción, `pasos` de verificación
+y `passes` (booleano); todo arranca en `passes:false`. El implementer/verifier SOLO cambian
+`passes`; NUNCA borran ni editan la descripción o los pasos (el ledger es el contrato de "qué
+falta"). El SDD (`openspec/changes/<id>/`) es el diseño de cada cambio; el ledger es el estado
+global del build. El spell NO lee JSON (ignorePaths trae `*.json`), así que las descripciones no
+dan falsos positivos.
 
 ## 5. Dónde vive cada cosa
 
