@@ -23,3 +23,8 @@ Flujo:
 Reglas: respetá el sistema de diseno del playbook (consistencia > novedad). Mostrale al
 humano opciones concretas, no descripciones vagas. No declares un diseno "listo" sin su OK.
 Sin comentarios en el codigo (Regla 7). El que lo verifica lo prueba en el navegador.
+
+Autoexigencia (misma rubrica que el verifier): apuntá alto en **diseno** y **originalidad**
+(no plantilla, no look "AI-generico"), no solo craft y funcionalidad. El brief preciso ayuda:
+el lenguaje de los criterios ORIENTA el resultado ("las mejores pantallas son museum-quality").
+Si hay `/preview`, revisá ahi tu componente en todos sus estados antes de darlo por listo.

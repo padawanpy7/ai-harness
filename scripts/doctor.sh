@@ -24,5 +24,9 @@ done
 old="$(find memory/playbooks openspec/specs -name '*.md' -mtime +45 2>/dev/null || true)"
 [ -n "$old" ] && echo "  ! sin actualizar hace >45d (revisar que no mientan): $(echo "$old" | tr '\n' ' ')"
 
+[ -f scripts/smoke.sh ] || { echo "  ! falta scripts/smoke.sh (protocolo de sesion: app viva al arrancar)"; warn=1; }
+[ -f work/PROGRESO.md ] && echo "  ok work/PROGRESO.md" || echo "  i sin work/PROGRESO.md (el puente entre sesiones; empezalo al cerrar)"
+echo "  i Regla 10: al salir un modelo nuevo, re-examina el harness y desmonta andamiaje viejo"
+
 echo ""
 if [ $warn -eq 0 ]; then echo "OK doctor: harness sano"; else echo "doctor: hay cosas para completar/actualizar (ver arriba)"; fi

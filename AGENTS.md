@@ -39,6 +39,10 @@
 9. **Loop controlado, no "goal mode".** No "anda y haz todo" en una cadena larga: la IA es
    probabilística y deriva. Trabaja en fases con compuertas (SDD) y revisión humana entre
    ellas. Spec primero, TDD al implementar. Ver skills `sdd` y `tdd`.
+10. **Desmonta andamiaje viejo, no sumes de más.** Cada componente del harness codifica un
+    supuesto de lo que el modelo NO podía solo; esos supuestos caducan al mejorar los modelos.
+    Conviene probarlo: saca un componente, observa si el resultado empeora y conserva solo lo
+    que carga peso. Al salir un modelo nuevo, revisa el harness apuntando a MENOS scaffolding.
 
 ## 3. Roles de agente (dividir para conquistar)
 
@@ -101,6 +105,29 @@ La disciplina cuesta; aplicala según el riesgo/tamaño. El **lead elige el modo
 
 Ante la duda, subí un escalón, no bajes. Así lo trivial no paga ceremonia y lo riesgoso no
 queda corto: la sobre-ingeniería y el overhead dejan de ser un problema.
+
+### Protocolo de sesión y progreso (continuidad entre contextos)
+
+El estado durable vive en ARCHIVOS, no en la sesión: un agente nuevo retoma leyéndolos.
+
+**Al arrancar** una tarea no trivial (checklist del lead):
+
+1. `pwd` + `git log -5` (qué se hizo).
+2. Leé `work/PROGRESO.md` (estado, próximo paso, gotchas) y `memory/MEMORY.md`.
+3. Corré `scripts/smoke.sh` (app viva + flujo mínimo). Si falla, arreglá el entorno primero.
+4. Recién ahí empezás.
+
+**Al cerrar:**
+
+- Actualizá `work/PROGRESO.md`: qué cambió, cómo se verificó, qué queda, gotchas. SIEMPRE
+  (aunque no commitees; nuestra política es commit/push solo cuando el dueño lo pide).
+- Dejá el repo main-ready (sin bugs conocidos, ordenado).
+- Lo durable no obvio -> `memory/MEMORY.md`.
+
+**Feature-list chequeable** (cambios grandes; evita "declarar victoria antes de tiempo"): en
+`openspec/changes/<id>/tasks.md`, cada feature como `[ ]`/`[x]` con sus pasos de verificación.
+El implementer SOLO marca `[x]` cuando el verifier la probó de punta a punta; NO borra ni edita
+features (la lista es el contrato de "qué falta", no un borrador).
 
 ## 5. Dónde vive cada cosa
 

@@ -1,5 +1,6 @@
 work/*
 !work/.gitkeep
+!work/PROGRESO.md
 # screenshots/artefactos efimeros del verifier (tambien cuando corre con cwd de un subdir)
 **/work/shots/
 docs/*
