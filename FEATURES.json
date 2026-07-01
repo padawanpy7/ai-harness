@@ -1,0 +1,16 @@
+{
+  "proyecto": "",
+  "nota": "Ledger del build (AGENTS.md). Solo se cambia 'passes'; NO se borra ni edita descripcion/pasos. El verifier marca passes:true tras probar E2E. Reemplaza las features de ejemplo por las reales.",
+  "features": [
+    {
+      "id": "F001",
+      "categoria": "ejemplo",
+      "descripcion": "Feature de ejemplo: reemplazar por las reales del proyecto.",
+      "pasos": [
+        "Paso de verificacion 1 (lo que hace el verifier en el navegador para confirmar).",
+        "Paso 2."
+      ],
+      "passes": false
+    }
+  ]
+}

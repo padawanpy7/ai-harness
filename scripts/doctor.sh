@@ -25,7 +25,9 @@ old="$(find memory/playbooks openspec/specs -name '*.md' -mtime +45 2>/dev/null 
 [ -n "$old" ] && echo "  ! sin actualizar hace >45d (revisar que no mientan): $(echo "$old" | tr '\n' ' ')"
 
 [ -f scripts/smoke.sh ] || { echo "  ! falta scripts/smoke.sh (protocolo de sesion: app viva al arrancar)"; warn=1; }
+[ -f scripts/features.sh ] || { echo "  ! falta scripts/features.sh (ledger del build)"; warn=1; }
 [ -f work/PROGRESO.md ] && echo "  ok work/PROGRESO.md" || echo "  i sin work/PROGRESO.md (el puente entre sesiones; empezalo al cerrar)"
+[ -f FEATURES.json ] && echo "  ok FEATURES.json" || echo "  i sin FEATURES.json (ledger del build; crealo en builds largos)"
 echo "  i Regla 10: al salir un modelo nuevo, re-examina el harness y desmonta andamiaje viejo"
 
 echo ""
