@@ -76,7 +76,13 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 3. lead        -> manda cada sub-tarea al **especialista** que corresponde
                  (UI->ui-designer, esquema->database, API->backend, glue->implementer)
 4. especialista-> lee su playbook, implementa con TDD (skill tdd), corre check.sh
-5. verifier    -> tests + app en navegador (+ judgment-day si es riesgoso); veredicto (OK/volver)
+4b. LIVE GATE  -> el cambio TIENE que estar SERVIDO antes de verificar. Dev con HOT RELOAD
+                 (mount de codigo + --reload/next dev) sirve el cambio solo; deps/Dockerfile/
+                 schema piden rebuild/deploy. El verifier hace freshness gate (lo servido ==
+                 working tree) ANTES de tocar el navegador. Probar una imagen vieja = tokens al
+                 pedo (lección cara: asegurá hot-reload real en dev, no un build de prod).
+5. verifier    -> freshness gate + tests + app en navegador (+ judgment-day si es riesgoso);
+                 veredicto (OK/volver)
 6. lead        -> integra, archiva la spec, actualiza MEMORY.md y el playbook, reporta
 ```
 
