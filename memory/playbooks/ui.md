@@ -11,6 +11,16 @@ aprobarse algo. Sembrado con lo aprendido en proyectos reales.
   Evitar Inter/Arial/Roboto por defecto.
 - Inputs h-9/h-11 redondeados, borde `--line`, focus en `--accent`. Consistencia > novedad.
 
+## Preview (revisión visual barata)
+- **Ruta `/preview`**: una página que dibuja el sistema de diseño en todos sus estados
+  (muestras de tokens, logo/íconos, botones, campos, chips, indicadores de estado) y un toggle
+  claro/oscuro propio. Sin datos ni sesión. Sirve para revisar diseño (colores, un ícono nuevo,
+  un widget) al instante, en vez de tener que iniciar sesión con el usuario justo y buscar el
+  estado real. El verifier/lead saca un screenshot a archivo de ahí.
+- **Componentes con datos = separar presentación de la carga.** Un `XView({estado, ...props})`
+  puro (que se ve en `/preview`) + un `X()` que trae los datos y dibuja el View. Así todos los
+  estados (vacío, cargando, error, cada variante) se ven sin montar el backend.
+
 ## Componentes (no reinventar)
 - **Prohibir `<input>/<select>/<table>` crudos en las pantallas** (eslint rule). Usar los
   componentes del sistema: Campo/CampoTexto/CampoNumero/Select/AutoForm. Asi todo valida y

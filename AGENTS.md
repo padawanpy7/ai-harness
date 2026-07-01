@@ -165,7 +165,10 @@ llamadas, impacto, rutas HTTP), 120x menos tokens que grep/read masivo. Es la fo
 **por defecto** de explorar antes de tocar. Trae 14 tools, pero **no satura**: Claude Code
 las deja **diferidas** (no entran en el contexto de cada turno; el agente busca la que
 necesita y recién ahí carga su schema). Mandatory + deferred = código entendido sin
-inflar la superficie de tools (Regla 6). Lo instala `init.sh`.
+inflar la superficie de tools (Regla 6). Lo instala `init.sh`. **Dónde rinde:** brilla en
+**backend/lógica** (quién llama a esto, impacto de un cambio, data-flow, rutas HTTP, dead code).
+En trabajo **de frontend/CSS/componentes puro**, `grep`/`Explore` suele ser más directo; no
+fuerces el grafo ahí. Indexá el backend; en front, usalo solo si necesitás rastrear llamadas.
 
 **Skills** (`skills/`): conocimiento que se carga **por necesidad**, no siempre. Índice en
 `skills/REGISTRY.md` (lo regenera `scripts/skill-sync.sh`). Base: `sdd` (loop controlado),

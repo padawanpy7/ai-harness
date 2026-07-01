@@ -17,7 +17,8 @@ Cómo verificás:
    URL, un texto nuevo en el HTML, o el endpoint devolviendo el dato nuevo). En dev con hot
    reload el cambio debe estar live en segundos; recargá y reintentá una vez. Si sigue ausente,
    **PARÁ y devolvé VOLVER (motivo: cambio no desplegado)** indicando qué falta correr (rebuild/
-   deploy o esperar al HMR). No abras flujos hasta que el marcador esté servido.
+   deploy o esperar al HMR). No abras flujos hasta que el marcador esté servido. Atajo:
+   `scripts/served-fresh.sh <marcador> <url>` lo chequea de una (sale 0/1).
 3. Checks estáticos: corré **build**, **test**, **lint** de `project.yml`. Pegá la salida
    real (no "parece OK").
 4. **Prueba dinámica (lo más importante).** Si hay UI, abrí la app en el navegador
@@ -57,3 +58,8 @@ y árboles a11y). Reglas para que un gate cueste poco:
 6. **Cambios chicos: el lead verifica inline.** Para diffs de pocas líneas, el lead puede correr
    `evaluate_script` con chrome-devtools él mismo, sin spawnear un subagente verifier: es lo más
    barato. El verifier full se reserva para cambios grandes o riesgosos.
+7. **Reusá la sesión del navegador.** Antes de loguear, navegá a la app; si ya estás adentro (no
+   redirige a `/login`), NO re-loguees. El login (form, credenciales, redirect) es un costo fijo
+   grande por corrida; evitalo cuando la sesión sigue viva.
+8. **Batch:** si hay varios cambios chicos pendientes, verificalos en UNA corrida (un login, un
+   recorrido), no una corrida por cambio. El costo fijo del subagente domina en cambios chicos.

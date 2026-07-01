@@ -1,5 +1,7 @@
 work/*
 !work/.gitkeep
+# screenshots/artefactos efimeros del verifier (tambien cuando corre con cwd de un subdir)
+**/work/shots/
 docs/*
 !docs/.gitkeep
 !docs/flow.svg
