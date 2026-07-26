@@ -7,3 +7,13 @@ docs/*
 !docs/.gitkeep
 !docs/flow.svg
 !docs/flow.html
+
+# Adjuntos de tickets: convertir PDF/docx a md y NO versionar el binario (re-descargable
+# del tracker). Los binarios pesados inflan el git; el md es lo que se lee y diffea.
+openspec/changes/**/docs/*.pdf
+openspec/changes/**/docs/*.docx
+openspec/changes/**/docs/*.xlsx
+openspec/changes/**/docs/*.pptx
+openspec/changes/**/docs/*.zip
+openspec/changes/**/docs/*.rar
+openspec/changes/**/docs/*.7z

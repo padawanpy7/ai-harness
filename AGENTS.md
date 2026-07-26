@@ -94,6 +94,38 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 - Cada agente devuelve **datos/conclusión**, no relata el proceso.
 - Lo que se decide y por qué -> `memory/MEMORY.md` (una línea por hecho, ver §6).
 
+### Como cierra el lead cada tanda (formato obligatorio)
+
+El cuerpo del reporte es prosa: qué pasó, qué se encontró, qué se decidió. Pero **al final, SIEMPRE
+estos bloques, en este orden, legibles sin leer el resto**. Sin ellos, el dueño relee todo para
+saber si le preguntaron algo, qué decidiste solo, o qué quedó colgando.
+
+```
+## Decisiones            (defaults que tomé sin preguntar; si no decís nada, quedan)
+- <qué decidí> - <el default y por qué, media línea>
+
+## Preguntas            ("ninguna" si no hay; nunca omitas el bloque)
+1. [bloquea | no bloquea] <la pregunta>. Default: <lo que hago salvo aviso>.
+
+## Proximas tareas       (cabos DE ESTA TANDA, con dueño)
+- [yo] <lo que hago yo (agente)>
+- [vos] <lo que depende del dueño>
+Build: `scripts/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
+```
+
+Reglas:
+- **Decisiones**: los defaults que tomaste solo (Regla 4). Se listan para que el dueño pueda
+  revertir; **silencio = quedan**. Si no tomaste ninguno no trivial, omití el bloque.
+- **Preguntas**: solo lo que necesita una decisión del dueño (producto, riesgo, plata,
+  autorización). Cada una marcada **[bloquea]** (frena el avance) o **[no bloquea]** (seguí con el
+  Default). Ante un default razonable NO la conviertas en pregunta: decidila, ponela en Decisiones y
+  seguí. Una pregunta ya respondida **no reaparece**; una que sigue viva se marca **(sigue abierta)**.
+- **Proximas tareas**: los cabos de **esta tanda**, cada uno con dueño **[yo]** (lo hace el agente) o
+  **[vos]** (depende del dueño). NO es `FEATURES.json` (estado global del build): cerrá con un
+  puntero de una línea, no lo re-listes. Lo que deba sobrevivir la sesión va a `work/PROGRESO.md`.
+- **Silencio = procedo** con los defaults (Decisiones) y las tareas **[yo]**.
+- Los bloques van **al final**, después de la prosa.
+
 ### Modos: escala la ceremonia a la tarea
 La disciplina cuesta; aplicala según el riesgo/tamaño. El **lead elige el modo** al empezar.
 - **quick** (fix trivial, 1 archivo, sin riesgo): sin SDD ni compuerta. El especialista lo
