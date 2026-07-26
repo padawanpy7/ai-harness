@@ -138,6 +138,19 @@ La disciplina cuesta; aplicala según el riesgo/tamaño. El **lead elige el modo
 Ante la duda, subí un escalón, no bajes. Así lo trivial no paga ceremonia y lo riesgoso no
 queda corto: la sobre-ingeniería y el overhead dejan de ser un problema.
 
+### Ramas y worktrees (trabajo aislado y en paralelo)
+
+- **Una tarea = una rama**, siempre **desde `main`** (no derivar una tarea de otra). El merge a
+  `main` declara la tarea terminada; commit + push inicial para respaldar antes de tocar nada.
+- **Dos tareas a la vez** -> `git worktree` persistente hermano (comparte el `.git`; no dupliques el
+  repo con un `clone`). Al crearlo, llevá lo gitignoreado que las tools necesitan: `.env` y
+  `node_modules` (symlink al del worktree principal). `../tools` y repos hermanos resuelven solos si
+  el worktree es hermano.
+- **Promover tooling a `main` o crear una rama sin tocar el árbol activo** (que puede tener trabajo
+  sin commitear) -> worktree **temporal**: `git worktree add ../wt <rama>`, editás/commiteás/pusheás
+  ahí, `git worktree remove ../wt`. La rama y sus commits persisten; el árbol activo no se toca.
+- Cerrá el worktree cuando termines (`git worktree remove`); se auto-limpia si no cambió nada.
+
 ### Protocolo de sesión y progreso (builds largos multi-sesión)
 
 El estado durable vive en ARCHIVOS, no en la sesión: un agente nuevo retoma leyéndolos, sin
