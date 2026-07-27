@@ -107,9 +107,11 @@ saber si le preguntaron algo, qué decidiste solo, o qué quedó colgando.
 ## Preguntas            ("ninguna" si no hay; nunca omitas el bloque)
 1. [bloquea | no bloquea] <la pregunta>. Default: <lo que hago salvo aviso>.
 
-## Proximas tareas       (cabos DE ESTA TANDA, con dueño)
-- [yo] <lo que hago yo (agente)>
-- [vos] <lo que depende del dueño>
+## Proximas tareas       (cabos DE ESTA TANDA, en dos subgrupos)
+### Tareas tuyas
+- <lo que depende del dueño>
+### Tareas IA
+- <lo que hago yo (agente)>
 Build: `scripts/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
 ```
 
@@ -120,10 +122,11 @@ Reglas:
   autorización). Cada una marcada **[bloquea]** (frena el avance) o **[no bloquea]** (seguí con el
   Default). Ante un default razonable NO la conviertas en pregunta: decidila, ponela en Decisiones y
   seguí. Una pregunta ya respondida **no reaparece**; una que sigue viva se marca **(sigue abierta)**.
-- **Proximas tareas**: los cabos de **esta tanda**, cada uno con dueño **[yo]** (lo hace el agente) o
-  **[vos]** (depende del dueño). NO es `FEATURES.json` (estado global del build): cerrá con un
+- **Proximas tareas**: los cabos de **esta tanda**, en **dos subgrupos** para ver de un golpe quien
+  hace que: **`### Tareas tuyas`** (lo que depende del dueño) y **`### Tareas IA`** (lo que hago yo).
+  Un subgrupo vacio se omite. NO es `FEATURES.json` (estado global del build): cerrá con un
   puntero de una línea, no lo re-listes. Lo que deba sobrevivir la sesión va a `work/PROGRESO.md`.
-- **Silencio = procedo** con los defaults (Decisiones) y las tareas **[yo]**.
+- **Silencio = procedo** con los defaults (Decisiones) y las **Tareas IA**.
 - Los bloques van **al final**, después de la prosa.
 
 ### Modos: escala la ceremonia a la tarea
