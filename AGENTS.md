@@ -263,6 +263,12 @@ más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
 
 ## 8. Convenciones del proyecto
 
+- **Marca autoria al modificar un artefacto existente cuyo round-trip borra el "quien lo toco".**
+  Cuando exportar/importar o regenerar un artefacto pisa el metadato de "ultimo modificado por"
+  (tipico en herramientas low-code como paginas APEX, o en config generada), deja un **comentario de
+  autoria** en cada componente que agregues o cambies (comentario inline, o el campo `comment` del
+  componente). Sin eso, el siguiente export/regen borra el rastro de que el cambio fue tuyo. Es el
+  mismo principio que marcar con un comentario las lineas que tocas de un objeto que no creaste.
 - {{CONVENTION_1}}  (ej: ASCII en código; sin comentarios; estilo de commits...)
 - {{CONVENTION_2}}
 - Mira `project.yml` -> `conventions` para la lista completa.
