@@ -266,9 +266,12 @@ más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
 - **Marca autoria al modificar un artefacto existente cuyo round-trip borra el "quien lo toco".**
   Cuando exportar/importar o regenerar un artefacto pisa el metadato de "ultimo modificado por"
   (tipico en herramientas low-code como paginas APEX, o en config generada), deja un **comentario de
-  autoria** en cada componente que agregues o cambies (comentario inline, o el campo `comment` del
-  componente). Sin eso, el siguiente export/regen borra el rastro de que el cambio fue tuyo. Es el
-  mismo principio que marcar con un comentario las lineas que tocas de un objeto que no creaste.
+  autoria** en cada componente que agregues o cambies. Preferi el **campo comment propio del
+  componente** cuando exista (muchas herramientas dan uno por tipo, ej. APEX: `p_process_comment`,
+  `p_button_comment`, `p_branch_comment`): sobrevive al round-trip y no ensucia el codigo. Cae al
+  comentario inline solo cuando el cambio vive dentro de un blob sin comment propio. Sin esto, el
+  siguiente export/regen borra el rastro de que el cambio fue tuyo. Mismo principio que marcar con un
+  comentario las lineas que tocas de un objeto que no creaste.
 - {{CONVENTION_1}}  (ej: ASCII en código; sin comentarios; estilo de commits...)
 - {{CONVENTION_2}}
 - Mira `project.yml` -> `conventions` para la lista completa.
