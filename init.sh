@@ -80,4 +80,4 @@ echo ""
 if grep -q '{{' AGENTS.md 2>/dev/null || grep -q '^name: ""' project.yml 2>/dev/null; then
   echo "==> PENDIENTE: completar project.yml y los {{PLACEHOLDERS}} de AGENTS.md (1 y 8)."
 fi
-echo "==> Listo. Empeza por el rol 'lead'. Probas las tools con: scripts/check-dep.sh y scripts/check.sh"
+echo "==> Listo. Empeza por el rol 'lead'. Probas las tools con: scripts/calidad/check-dep.sh y scripts/calidad/check.sh"

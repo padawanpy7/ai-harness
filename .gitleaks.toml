@@ -1,0 +1,22 @@
+# Config de gitleaks. Hereda TODAS las reglas por defecto; el allowlist arranca vacio a proposito.
+#
+# Por que existe igual estando vacio: para que exista el lugar donde poner la excepcion cuando
+# aparezca, y que quede documentada. Un gate que grita en falso es un gate que nadie mira, pero
+# silenciar la regla entera para callar un archivo es peor: se pierde la deteccion real.
+#
+# Regla al agregar una excepcion: siempre POR ARCHIVO (paths), nunca por regla global. El caso
+# tipico es una libreria minificada de terceros que versionas y que adentro tiene cosas como
+# `{key:"..."}` -un nombre de propiedad, no una credencial-. Cualquier hallazgo en codigo propio
+# -o en un .env que se escape- tiene que seguir frenando el check.
+#
+# Ojo: gitleaks escanea el HISTORIAL, no el arbol de trabajo. Un secreto ya commiteado sigue
+# apareciendo aunque lo borres: hay que rotarlo, y reescribir la historia si corresponde.
+
+[extend]
+useDefault = true
+
+# [[allowlists]]
+# description = "Ejemplo: libreria minificada de terceros, los `key:` son propiedades de JS"
+# paths = [
+#   '''vendor/[a-z-]+(\.min)?\.js''',
+# ]

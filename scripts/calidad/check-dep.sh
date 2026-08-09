@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+bash "$(dirname "$0")/../_count.sh" "$(basename "$0" .sh)" 2>/dev/null || true
 set -uo pipefail
 
 eco="${1:-}"; pkg="${2:-}"

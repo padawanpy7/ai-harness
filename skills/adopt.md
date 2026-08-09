@@ -26,7 +26,7 @@ desde el código que YA existe, no desde cero. Lo hace el rol **lead**.
 5. **AGENTS.md**: completa secciones 1 y 8 (proyecto + convenciones). Mantenlo lean.
 6. **Tools**: corre `./init.sh` - instala/configura codebase-memory, markitdown y los MCP, y
    crea `.mcp.json`. Sin esto el harness queda documentado pero **sin codebase-memory cargado**.
-7. **Entrega**: corre `scripts/doctor.sh` (debe quedar sano) y pásale al humano un resumen de
+7. **Entrega**: corre `scripts/calidad/doctor.sh` (debe quedar sano) y pásale al humano un resumen de
    lo que detectaste para que valide antes de seguir el desarrollo.
 
 Reglas: documenta lo que el código dice HOY, no lo ideal. Si algo está mal en el proyecto,

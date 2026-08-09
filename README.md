@@ -38,25 +38,39 @@ skills/               Skills cargadas por necesidad + REGISTRY.md.
 openspec/             Specs vivientes (specs/) y cambios (changes/<id>/) del flujo SDD.
 work/                 Salida de cada tarea: plan, hallazgos, veredictos.
 docs/                 flow.svg / flow.html + docs externas (markitdown).
-scripts/              Las herramientas (ver abajo).
+scripts/              Las herramientas, agrupadas por uso (ver abajo y scripts/README.md).
+metrics/              Salida de las metricas: costo por tarea y contador de uso de tools.
+.gitleaks.toml        Deteccion de secretos: reglas por defecto + allowlist documentado.
 .mcp.json             Servidores MCP (lo crea init.sh).
 ```
 
 ### Skills (en `skills/`, cargadas por necesidad)
 `sdd` (loop controlado) - `tdd` (test primero) - `judgment-day` (dos jueces para lo riesgoso)
-- `adopt` (onboarding brownfield) - `migrate` (adoptar + limpiar un proyecto vivo).
+- `adopt` (onboarding brownfield) - `migrate` (adoptar + limpiar un proyecto vivo) -
+`manual-entrega` (el paquete que se le da a quien recibe la tarea).
 
-### Scripts (en `scripts/`)
+### Scripts (agrupados por uso, detalle en [`scripts/README.md`](scripts/README.md))
+
+**`calidad/`** - lo que se corre al terminar:
+- `check.sh` - el paraguas: format, lint, build, secretos, audit y ortografia. Bloqueante.
 - `check-dep.sh` - ultima version estable + deprecacion + vulnerabilidades (OSV) antes de un paquete.
-- `check.sh` - el implementer lo corre al terminar: format, lint, build, secretos, audit y ortografia. Bloqueante.
 - `doctor.sh` - audita la salud del harness (placeholders, registry, playbooks viejos).
-- `adopt.sh` - autodetecta stack/comandos de un proyecto existente.
-- `strip-comments.sh` - quita comentarios con AST (.py tokenize, .ts/.tsx compilador TS).
 - `ascii.sh` - pasa la prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
-- `spell.sh` - ortografia es+en (cspell + dict es-es de Espana), sobre la prosa. Corre al
-  final de `check.sh` (bloqueante). Por cada palabra: fixea el typo; si el dict no la trae,
-  usa un sinonimo; solo si no hay (nombre propio/jerga) va a `cspell.json (words)`.
+- `spell.sh` - ortografia es+en (cspell + dict es-es). Por cada palabra: fixea el typo; si el
+  dict no la trae, usa un sinonimo; solo si no hay (nombre propio/jerga) va a `cspell.json (words)`.
+
+**`harness/`** - el harness mirandose a si mismo:
+- `features.sh` - avance del ledger `FEATURES.json`.
+- `metricas.sh` - **cuanto costo cada tarea**: tiempo y tokens, leidos de los transcripts que
+  Claude Code ya escribe. Responde "que tarea tomo demasiado y por que" (ranking de herramientas)
+  y "hubo mucho a mano?" (tokens por llamada: si es alto, quiza merece ser una tool).
+- `tool-usage.sh` - que tools se usan y cuales nunca. Sirve para mantener el harness liviano.
 - `skill-sync.sh` - regenera `skills/REGISTRY.md`.
+
+**`docs/`** - `md-a-pdf.sh`: pasa un `.md` a PDF para mandarselo a alguien de afuera.
+
+**raiz** - `adopt.sh` (autodetecta stack/comandos), `smoke.sh`, `served-fresh.sh`,
+`strip-comments.sh` (quita comentarios con AST: .py tokenize, .ts/.tsx compilador TS).
 
 ## Como usarlo en un proyecto nuevo
 
@@ -75,7 +89,7 @@ bash scripts/adopt.sh              # autodetecta stack y comandos -> project.yml
 # y al agente:
 "revisa el proyecto y completa el harness para seguir el desarrollo (skill adopt)"
 ./init.sh                          # deja las tools operativas (codebase-memory, markitdown, MCPs)
-bash scripts/doctor.sh             # confirma que quedo sano
+bash scripts/calidad/doctor.sh             # confirma que quedo sano
 ```
 
 El agente infiere convenciones, **carga los playbooks desde el código real** (sistema de
@@ -87,7 +101,7 @@ checks), usa el skill `migrate` (baseline -> adopt -> limpiar -> verify, sin rom
 
 No todo paga el mismo proceso. El lead elige: **quick** (fix trivial, sin SDD ni compuerta),
 **standard** (feature: SDD + TDD + verifier), **critical** (riesgo: + judgment-day). Asi lo
-trivial es rapido y lo riesgoso va con todo. `scripts/doctor.sh` mantiene los docs sin pudrir.
+trivial es rapido y lo riesgoso va con todo. `scripts/calidad/doctor.sh` mantiene los docs sin pudrir.
 
 ## Herramientas externas
 

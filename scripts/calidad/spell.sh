@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+bash "$(dirname "$0")/../_count.sh" "$(basename "$0" .sh)" 2>/dev/null || true
 set -uo pipefail
-here="$(cd "$(dirname "$0")/.." && pwd)"; cd "$here"
+here="$(cd "$(dirname "$0")/../.." && pwd)"; cd "$here"
 cfg="cspell.json"; [ -f "$cfg" ] || cfg="$here/scripts/cspell.json"
 targets=("$@"); [ ${#targets[@]} -eq 0 ] && targets=(AGENTS.md CLAUDE.md README.md "memory/**/*.md" "openspec/**/*.md" "skills/**/*.md" "docs/**/*.md")
 echo "==> spell (es,en): ${targets[*]}"

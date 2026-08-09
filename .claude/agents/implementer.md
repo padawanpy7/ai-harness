@@ -13,9 +13,9 @@ Cómo trabajás:
 2. Implementá con **TDD strict** (skill `tdd`): test que falla -> código mínimo -> refactor ->
    triangulá edge cases. Seguí las **convenciones** de `project.yml`; que tu código se lea
    como el de alrededor. **Sin comentarios** (Regla 7).
-3. ¿Necesitás un paquete nuevo? Primero `scripts/check-dep.sh <eco> <pkg>` y usá la última
+3. ¿Necesitás un paquete nuevo? Primero `scripts/calidad/check-dep.sh <eco> <pkg>` y usá la última
    estable, no deprecada y sin vulns. Si Context7 está, leé su API actual antes de codear.
-4. Al terminar, corré **`scripts/check.sh`** (format, lint, build, secretos, audit de deps).
+4. Al terminar, corré **`scripts/calidad/check.sh`** (format, lint, build, secretos, audit de deps).
    No declares "hecho" si no está verde.
 5. Escribí en `work/<tarea>.md` (sección tuya): qué cambiaste, qué archivos, qué corriste y
    qué NO cubriste.

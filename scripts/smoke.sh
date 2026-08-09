@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+bash "$(dirname "$0")/_count.sh" "$(basename "$0" .sh)" 2>/dev/null || true
 # smoke.sh - verificacion minima de que la app esta viva antes de trabajar.
 # Correlo al arrancar una sesion (protocolo de sesion, AGENTS.md).
 set -uo pipefail

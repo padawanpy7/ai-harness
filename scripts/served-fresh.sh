@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+bash "$(dirname "$0")/_count.sh" "$(basename "$0" .sh)" 2>/dev/null || true
 # served-fresh.sh <marcador> <url> [recurso...]
 # Freshness gate deterministico: sale 0 si <marcador> aparece en lo SERVIDO por <url>
 # (el HTML y los .css/.js que linkea) o en cualquier <recurso> extra. Sale 1 si no.

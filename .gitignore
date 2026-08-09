@@ -17,3 +17,12 @@ openspec/changes/**/docs/*.pptx
 openspec/changes/**/docs/*.zip
 openspec/changes/**/docs/*.rar
 openspec/changes/**/docs/*.7z
+
+# El log del contador de uso es estado de runtime, no codigo (ver scripts/README.md).
+metrics/tool-usage.log
+metrics/por-ticket.json
+metrics/por-ticket.md
+
+# Paquete de entrega: los .md se versionan, lo generado no (ver skills/manual-entrega.md).
+openspec/changes/**/entrega/*.pdf
+openspec/changes/**/entrega/capturas/

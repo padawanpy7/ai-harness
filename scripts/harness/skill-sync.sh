@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
+bash "$(dirname "$0")/../_count.sh" "$(basename "$0" .sh)" 2>/dev/null || true
 set -euo pipefail
 
-here="$(cd "$(dirname "$0")/.." && pwd)"; cd "$here"
+here="$(cd "$(dirname "$0")/../.." && pwd)"; cd "$here"
 out="skills/REGISTRY.md"
 {
   echo "# Skill Registry"
   echo ""
   echo "Indice de skills, cargados por necesidad (no todos en el contexto). Generado por"
-  echo "scripts/skill-sync.sh — no lo edites a mano."
+  echo "scripts/harness/skill-sync.sh — no lo edites a mano."
   echo ""
   echo "| skill | cuando usarlo |"
   echo "|---|---|"

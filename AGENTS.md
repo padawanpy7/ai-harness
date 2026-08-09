@@ -34,8 +34,8 @@
    que se desactualiza y miente. Nombres claros > comentarios. Única excepción: una línea
    que explique un *por qué* no obvio (un workaround raro). Nunca comentes el *qué*.
 8. **Versiones: solo última estable, sin deprecados ni vulnerabilidades.** Antes de agregar
-   un paquete, corre `scripts/check-dep.sh <eco> <pkg>` (§7). Fija versiones (lockfile), no
-   rangos abiertos. Al terminar una tarea, corre `scripts/check.sh`.
+   un paquete, corre `scripts/calidad/check-dep.sh <eco> <pkg>` (§7). Fija versiones (lockfile), no
+   rangos abiertos. Al terminar una tarea, corre `scripts/calidad/check.sh`.
 9. **Loop controlado, no "goal mode".** No "anda y haz todo" en una cadena larga: la IA es
    probabilística y deriva. Trabaja en fases con compuertas (SDD) y revisión humana entre
    ellas. Spec primero, TDD al implementar. Ver skills `sdd` y `tdd`.
@@ -112,7 +112,7 @@ saber si le preguntaron algo, qué decidiste solo, o qué quedó colgando.
 - <lo que depende del dueño>
 ### Tareas IA
 - <lo que hago yo (agente)>
-Build: `scripts/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
+Build: `scripts/harness/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
 ```
 
 Reglas:
@@ -163,7 +163,7 @@ necesitar el chat vivo. Trabajá **una feature a la vez**, nunca "todo de una".
 
 1. `pwd` + `git log -5` (qué se hizo).
 2. Leé `work/PROGRESO.md` y `memory/MEMORY.md` (estado, próximo paso, gotchas).
-3. `scripts/features.sh` (avance del ledger); elegí la feature de mayor prioridad INCOMPLETA.
+3. `scripts/harness/features.sh` (avance del ledger); elegí la feature de mayor prioridad INCOMPLETA.
 4. `scripts/smoke.sh` (app viva + flujo mínimo). Si falla, arreglá el entorno primero.
 5. Recién ahí empezás, con esa única feature.
 
@@ -197,6 +197,8 @@ dan falsos positivos.
 | `skills/` | skills cargadas por necesidad + `REGISTRY.md` (sdd, tdd, judgment-day). |
 | `openspec/` | specs vivientes (`specs/`) y cambios (`changes/<id>/`) del flujo SDD. |
 | `docs/` | docs externas convertidas a markdown (markitdown). |
+| `scripts/` | las herramientas, agrupadas por uso (`calidad/`, `harness/`, `docs/`, `lib/`). Ver `scripts/README.md`. |
+| `metrics/` | costo por tarea (`metricas.sh`) y contador de uso de tools. Salida, no fuente. |
 
 ## 6. Memoria (`memory/MEMORY.md`)
 
@@ -253,7 +255,7 @@ En trabajo **de frontend/CSS/componentes puro**, `grep`/`Explore` suele ser más
 fuerces el grafo ahí. Indexá el backend; en front, usalo solo si necesitás rastrear llamadas.
 
 **Skills** (`skills/`): conocimiento que se carga **por necesidad**, no siempre. Índice en
-`skills/REGISTRY.md` (lo regenera `scripts/skill-sync.sh`). Base: `sdd` (loop controlado),
+`skills/REGISTRY.md` (lo regenera `scripts/harness/skill-sync.sh`). Base: `sdd` (loop controlado),
 `tdd` (test primero), `judgment-day` (dos jueces + orquestador para lo riesgoso). Agregá las
 tuyas como `skills/<nombre>.md` con frontmatter `name:` y `when:`.
 

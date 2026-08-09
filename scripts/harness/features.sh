@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+bash "$(dirname "$0")/../_count.sh" "$(basename "$0" .sh)" 2>/dev/null || true
 # features.sh - estado del ledger FEATURES.json (avance + proximas incompletas).
 # El lead lo corre al arrancar una sesion (protocolo de sesion, AGENTS.md).
 set -uo pipefail
-cd "$(cd "$(dirname "$0")/.." && pwd)"
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 
 f="${1:-FEATURES.json}"
 [ -f "$f" ] || {
