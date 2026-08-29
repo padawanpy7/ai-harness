@@ -1,7 +1,7 @@
 # Skill Registry
 
 Indice de skills, cargados por necesidad (no todos en el contexto). Generado por
-scripts/harness/skill-sync.sh — no lo edites a mano.
+scripts/harness/skill-sync.js. No lo edites a mano.
 
 | skill | cuando usarlo |
 |---|---|

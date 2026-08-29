@@ -1,6 +1,6 @@
 const { test } = require('node:test')
 const assert = require('node:assert')
-const { agregar, reporte, duracion } = require('./metricas-core')
+const { agregar, reporte, duracion, familiaDeComando } = require('./metricas-core')
 
 const EVENTOS = [
   { tipo: 'uso', ts: '2026-08-04T10:00:00.000Z', ticket: 'GMCC-261', sesion: 's1',
@@ -80,4 +80,73 @@ test('la duracion se lee en humano', () => {
   assert.strictEqual(duracion(5000), '5s')
   assert.strictEqual(duracion(65000), '1m 5s')
   assert.strictEqual(duracion(3720000), '1h 2m')
+})
+
+// --- Agentes: el lanzamiento no es el trabajo ---------------------------------------------------
+// Un agente ASINCRONO devuelve su tool_result en un par de segundos con el texto "Async agent
+// launched successfully" -es el acuse del lanzamiento- y el trabajo real llega despues, por
+// notificacion. Contar eso como duracion da una tabla que miente. Un agente BLOQUEANTE en cambio
+// devuelve su informe y esa duracion es real (wall-clock, con la espera humana adentro).
+const AGENTES = [
+  { tipo: 'tool', ts: '2026-08-18T10:00:00.000Z', ticket: 'HARNESS', sesion: 's1', tool: 'Agent', id: 'g1', agente: 'implementer' },
+  { tipo: 'result', ts: '2026-08-18T10:00:02.000Z', ticket: 'HARNESS', sesion: 's1', id: 'g1',
+    resultado: 'Async agent launched successfully. (This tool result is internal metadata ...)' },
+  { tipo: 'tool', ts: '2026-08-18T10:01:00.000Z', ticket: 'HARNESS', sesion: 's1', tool: 'Agent', id: 'g2', agente: 'verifier' },
+  { tipo: 'result', ts: '2026-08-18T10:06:00.000Z', ticket: 'HARNESS', sesion: 's1', id: 'g2',
+    resultado: 'VEREDICTO: OK.' },
+]
+
+test('el acuse de un agente asincrono no cuenta como tiempo de trabajo', () => {
+  const d = agregar(AGENTES).HARNESS
+  const agent = d.tools.find((t) => t.nombre === 'Agent')
+  assert.strictEqual(agent.usos, 2)
+  // Solo los 5 minutos del bloqueante: los 2 s del acuse no son trabajo de nadie.
+  assert.strictEqual(agent.ms, 5 * 60 * 1000)
+})
+
+test('los agentes se cuentan por tipo, separando lanzados de bloqueantes', () => {
+  const d = agregar(AGENTES).HARNESS
+  assert.deepStrictEqual(d.agentes.map((a) => a.tipo).sort(), ['implementer', 'verifier'])
+  const impl = d.agentes.find((a) => a.tipo === 'implementer')
+  const ver = d.agentes.find((a) => a.tipo === 'verifier')
+  assert.strictEqual(impl.lanzados, 1)
+  assert.strictEqual(impl.bloqueantes, 0)
+  assert.strictEqual(impl.ms, 0)
+  assert.strictEqual(ver.bloqueantes, 1)
+  assert.strictEqual(ver.lanzados, 0)
+  assert.strictEqual(ver.ms, 5 * 60 * 1000)
+})
+
+test('el reporte tiene una seccion de agentes que dice que NO se puede medir un lanzado', () => {
+  const md = reporte(agregar(AGENTES))
+  assert.match(md, /## Agentes/)
+  assert.match(md, /implementer/)
+  assert.match(md, /lanzad/i)
+})
+
+// --- Que se ejecuta en la terminal --------------------------------------------------------------
+test('familiaDeComando agrupa por la FORMA del comando, no por su texto', () => {
+  assert.strictEqual(familiaDeComando('cd /home/ianmrc/harness && node harness.js check --todos'), 'node harness.js check')
+  assert.strictEqual(familiaDeComando('node harness.js check 2>&1 | tail -3'), 'node harness.js check')
+  assert.strictEqual(familiaDeComando('bash scripts/sistema/salud.sh'), 'bash salud.sh')
+  assert.strictEqual(familiaDeComando('git add -A scripts/'), 'git add')
+  assert.strictEqual(familiaDeComando('grep -n "foo" archivo.js | head -5'), 'grep')
+  // Un VAR=valor adelante es entorno, no el comando.
+  assert.strictEqual(familiaDeComando('HARNESS_DEBUG=1 node harness.js check'), 'node harness.js check')
+  assert.strictEqual(familiaDeComando(''), null)
+})
+
+test('las familias se cuentan por LLAMADAS: cada una es un viaje al modelo', () => {
+  const eventos = [
+    { tipo: 'tool', ts: '2026-08-18T10:00:00.000Z', ticket: 'HARNESS', sesion: 's', tool: 'Bash', id: 'c1', comando: 'node harness.js check' },
+    { tipo: 'result', ts: '2026-08-18T10:00:10.000Z', ticket: 'HARNESS', sesion: 's', id: 'c1' },
+    { tipo: 'tool', ts: '2026-08-18T10:01:00.000Z', ticket: 'HARNESS', sesion: 's', tool: 'Bash', id: 'c2', comando: 'node harness.js check --todos' },
+    { tipo: 'result', ts: '2026-08-18T10:01:20.000Z', ticket: 'HARNESS', sesion: 's', id: 'c2' },
+    { tipo: 'tool', ts: '2026-08-18T10:02:00.000Z', ticket: 'HARNESS', sesion: 's', tool: 'Bash', id: 'c3', comando: 'git status --short' },
+    { tipo: 'result', ts: '2026-08-18T10:02:05.000Z', ticket: 'HARNESS', sesion: 's', id: 'c3' },
+  ]
+  const d = agregar(eventos).HARNESS
+  assert.strictEqual(d.comandos[0].familia, 'node harness.js check')
+  assert.strictEqual(d.comandos[0].llamadas, 2)
+  assert.strictEqual(d.comandos[1].llamadas, 1)
 })

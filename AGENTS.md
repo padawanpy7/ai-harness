@@ -18,38 +18,34 @@
 1. **El contexto es caro, los tokens también.** No leas archivos enteros si te alcanza un
    fragmento. **Output cavernícola** (ahorra 25-50%): ejecuta primero y explica mínimo, sin
    preámbulo ni cierre, sin narrar tools; conclusión primero, oraciones cortas.
-2. **Escribe resultados en archivos, no en el contexto.** Planes, hallazgos, decisiones ->
-   `work/<tarea>.md`. Lo que debe sobrevivir entre sesiones -> `memory/MEMORY.md`.
+2. **Escribe resultados en archivos, no en el contexto.** Planes, hallazgos y decisiones ->
+   `work/<tarea>.md`. Lo que debe sobrevivir entre sesiones -> `memory/hechos/` (S6).
 3. **Verifica antes de declarar "listo".** Corre build + test + lint. Si algo falla,
    dilo con la salida. No afirmes que funciona si no lo viste funcionar.
 4. **Haz lo que se pidió, ni más ni menos.** Ante una decisión del dueño, pregunta; ante
    un default razonable, elegí y sigue.
-5. **Busca antes de escribir.** Entiende el código antes de tocarlo con
-   `codebase-memory-mcp` (§7): una query al grafo reemplaza decenas de grep/read.
-6. **Pocas herramientas, afiladas.** Un agente con 30 tools elige peor que uno con 8
-   (lección de Vercel con su agente: la superficie de tools degrada el razonamiento). Cada
-   rol carga **solo lo que necesita** (mira su frontmatter). Las herramientas nicho van
-   **diferidas** o en un subagente dedicado, no en el contexto de todos.
-7. **Sin comentarios.** El código vive en un repo con historia; los comentarios son ruido
-   que se desactualiza y miente. Nombres claros > comentarios. Única excepción: una línea
-   que explique un *por qué* no obvio (un workaround raro). Nunca comentes el *qué*.
-8. **Versiones: solo última estable, sin deprecados ni vulnerabilidades.** Antes de agregar
-   un paquete, corre `scripts/calidad/check-dep.sh <eco> <pkg>` (§7). Fija versiones (lockfile), no
-   rangos abiertos. Al terminar una tarea, corre `scripts/calidad/check.sh`.
+5. **Busca antes de escribir.** Entiende el codigo antes de tocarlo: una query al grafo
+   (`docs/herramientas.md`) reemplaza decenas de grep/read.
+6. **Pocas herramientas, afiladas.** Un agente con 30 tools elige peor que uno con 8: la
+   superficie de tools degrada el razonamiento. Cada rol carga solo lo suyo; las nicho van
+   diferidas o en un subagente, no en el contexto de todos.
+7. **Sin comentarios de relleno.** Nombres claros > comentarios. La excepcion es el *por que*
+   no obvio -un workaround raro, el motivo de un orden-: eso SI se escribe, porque en seis meses
+   nadie lo recuerda. Nunca comentes el *que*.
+8. **Versiones: solo ultima estable, sin deprecados ni vulnerabilidades.** Antes de sumar un
+   paquete, `node harness.js check-dep <eco> <pkg>`. Fija versiones (lockfile), no rangos
+   abiertos. Al terminar una tarea, `node harness.js check`.
 9. **Loop controlado, no "goal mode".** No "anda y haz todo" en una cadena larga: la IA es
    probabilística y deriva. Trabaja en fases con compuertas (SDD) y revisión humana entre
    ellas. Spec primero, TDD al implementar. Ver skills `sdd` y `tdd`.
-10. **Desmonta andamiaje viejo, no sumes de más.** Cada componente del harness codifica un
-    supuesto de lo que el modelo NO podía solo; esos supuestos caducan al mejorar los modelos.
-    Conviene probarlo: saca un componente, observa si el resultado empeora y conserva solo lo
-    que carga peso. Al salir un modelo nuevo, revisa el harness apuntando a MENOS scaffolding.
+10. **Desmonta andamiaje viejo.** Cada pieza del harness codifica algo que el modelo no podia
+    solo, y esos supuestos caducan. Sacala, mira si el resultado empeora y conserva solo lo que
+    carga peso. Al salir un modelo nuevo, revisa apuntando a MENOS scaffolding.
 
 ## 3. Roles de agente (dividir para conquistar)
 
-Como un equipo real: especialistas por disciplina. Fullstack-por-una-persona tiene más
-riesgo de fallos - un experto de BD normaliza e indexa mejor que un front, un backend sabe
-servir y validar datos. Cada rol vive en `.claude/agents/`. Inspirado en el patrón
-orquestador-trabajador de Anthropic y el loop auto-verificante (Ralph Wiggum).
+Como un equipo real: especialistas por disciplina, porque un experto de BD normaliza e indexa
+mejor que un front. Cada rol vive en `.claude/agents/`.
 
 | Rol | Para qué | Herramientas |
 |---|---|---|
@@ -60,17 +56,15 @@ orquestador-trabajador de Anthropic y el loop auto-verificante (Ralph Wiggum).
 | **implementer** | Glue y tareas sin especialista claro. | todas |
 | **verifier** | Revisa adversarialmente: corre tests **y opera la app en el navegador**. | lectura + tests + navegador |
 
-Cada especialista trabaja desde su **playbook** (`memory/playbooks/{ui,backend,db}.md`):
-lo lee antes de empezar y lo actualiza con lo aprobado. Así el próximo proyecto arranca con
-las mejores prácticas ya acumuladas, no de cero.
+Cada especialista trabaja desde su **playbook** (`memory/playbooks/`): lo lee antes de empezar y
+lo actualiza con lo aprendido, para que el proximo proyecto no arranque de cero.
 
 **Regla:** ningún cambio se da por bueno sin pasar por **verifier**. Si el verifier
 rechaza, vuelve al implementer. Loop hasta verde (máx. N rondas, después escala al humano).
 
-**El verifier prueba en serio, no solo compila.** Para apps con UI, el verifier **opera la
-app real en el navegador** (chrome-devtools MCP + Playwright): hace login, pulsa, llena
-formularios, mira la respuesta. Así se encuentran los bugs que el build no ve (errores de
-red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el endpoint.
+**El verifier prueba en serio, no solo compila.** En apps con UI opera la app real en el navegador
+-login, pulsar, llenar formularios, mirar la respuesta-, que es donde aparecen los bugs que el
+build no ve: errores de red, datos que no llegan, flujos rotos. Si hay API, prueba el endpoint.
 
 ## 4. Flujo de trabajo
 
@@ -79,26 +73,21 @@ red, datos que no aparecen, flujos rotos). Si hay backend/API, además prueba el
 2. >>> humano  -> revisa el plan ANTES de codear (compuerta) <<<
 3. lead        -> manda cada sub-tarea al **especialista** que corresponde
                  (UI->ui-designer, esquema->database, API->backend, glue->implementer)
-4. especialista-> lee su playbook, implementa con TDD (skill tdd), corre check.sh
-4b. LIVE GATE  -> el cambio TIENE que estar SERVIDO antes de verificar. Dev con HOT RELOAD
-                 (mount de codigo + --reload/next dev) sirve el cambio solo; deps/Dockerfile/
-                 schema piden rebuild/deploy. El verifier hace freshness gate (lo servido ==
-                 working tree) ANTES de tocar el navegador. Probar una imagen vieja = tokens al
-                 pedo (lección cara: asegurá hot-reload real en dev, no un build de prod).
-5. verifier    -> freshness gate + tests + app en navegador (+ judgment-day si es riesgoso);
-                 veredicto (OK/volver)
-6. lead        -> integra, archiva la spec, actualiza MEMORY.md y el playbook, reporta
+4. especialista-> lee su playbook, implementa con TDD (skill tdd), corre node harness.js check
+4b. LIVE GATE  -> lo SERVIDO tiene que ser el working tree antes de verificar. Con hot reload el
+                 cambio se sirve solo; deps, Dockerfile o schema piden rebuild. Probar una imagen
+                 vieja es gastar tokens en un bug que ya no existe.
+5. verifier    -> freshness gate + tests + app en navegador (+ judgment-day si es riesgoso)
+6. lead        -> integra, archiva la spec, node harness.js cierre, y reporta
 ```
 
-- Sub-tareas independientes: lanzá especialistas **en paralelo**.
-- Cada agente devuelve **datos/conclusión**, no relata el proceso.
-- Lo que se decide y por qué -> `memory/MEMORY.md` (una línea por hecho, ver §6).
+- Sub-tareas independientes: lanza especialistas **en paralelo**. Cada agente devuelve datos y
+  conclusion, no relata el proceso. Lo que se decide y por que -> `memory/hechos/` (S6).
 
 ### Como cierra el lead cada tanda (formato obligatorio)
 
-El cuerpo del reporte es prosa: qué pasó, qué se encontró, qué se decidió. Pero **al final, SIEMPRE
-estos bloques, en este orden, legibles sin leer el resto**. Sin ellos, el dueño relee todo para
-saber si le preguntaron algo, qué decidiste solo, o qué quedó colgando.
+El cuerpo es prosa; al final, SIEMPRE estos bloques, legibles sin leer el resto. Sin ellos el
+dueño tiene que releer todo para saber si le preguntaron algo o que decidiste solo.
 
 ```
 ## Decisiones            (defaults que tomé sin preguntar; si no decís nada, quedan)
@@ -115,19 +104,12 @@ saber si le preguntaron algo, qué decidiste solo, o qué quedó colgando.
 Build: `scripts/harness/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
 ```
 
-Reglas:
-- **Decisiones**: los defaults que tomaste solo (Regla 4). Se listan para que el dueño pueda
-  revertir; **silencio = quedan**. Si no tomaste ninguno no trivial, omití el bloque.
-- **Preguntas**: solo lo que necesita una decisión del dueño (producto, riesgo, plata,
-  autorización). Cada una marcada **[bloquea]** (frena el avance) o **[no bloquea]** (seguí con el
-  Default). Ante un default razonable NO la conviertas en pregunta: decidila, ponela en Decisiones y
-  seguí. Una pregunta ya respondida **no reaparece**; una que sigue viva se marca **(sigue abierta)**.
-- **Proximas tareas**: los cabos de **esta tanda**, en **dos subgrupos** para ver de un golpe quien
-  hace que: **`### Tareas tuyas`** (lo que depende del dueño) y **`### Tareas IA`** (lo que hago yo).
-  Un subgrupo vacio se omite. NO es `FEATURES.json` (estado global del build): cerrá con un
-  puntero de una línea, no lo re-listes. Lo que deba sobrevivir la sesión va a `work/PROGRESO.md`.
-- **Silencio = procedo** con los defaults (Decisiones) y las **Tareas IA**.
-- Los bloques van **al final**, después de la prosa.
+Reglas: **Decisiones** son los defaults que tomaste solo, listados para que el dueño pueda
+revertir -silencio = quedan-. **Preguntas** es solo lo que necesita una decision del dueño
+(producto, riesgo, plata, autorizacion), cada una marcada [bloquea] o [no bloquea]; ante un default
+razonable no preguntes, decidi y ponelo en Decisiones. **Proximas tareas** son los cabos de ESTA
+tanda en dos subgrupos -tuyas / IA-, no el ledger: cerra con un puntero de una linea. Lo que deba
+sobrevivir la sesion va a `work/PROGRESO.md`. Los bloques van al final, despues de la prosa.
 
 ### Modos: escala la ceremonia a la tarea
 La disciplina cuesta; aplicala según el riesgo/tamaño. El **lead elige el modo** al empezar.
@@ -154,35 +136,25 @@ queda corto: la sobre-ingeniería y el overhead dejan de ser un problema.
   ahí, `git worktree remove ../wt`. La rama y sus commits persisten; el árbol activo no se toca.
 - Cerrá el worktree cuando termines (`git worktree remove`); se auto-limpia si no cambió nada.
 
-### Protocolo de sesión y progreso (builds largos multi-sesión)
+### Protocolo de sesion y progreso (builds largos multi-sesion)
 
-El estado durable vive en ARCHIVOS, no en la sesión: un agente nuevo retoma leyéndolos, sin
-necesitar el chat vivo. Trabajá **una feature a la vez**, nunca "todo de una".
+El estado durable vive en ARCHIVOS, no en la sesion: un agente nuevo retoma leyendolos, sin
+necesitar el chat vivo. Trabaja **una feature a la vez**, nunca "todo de una".
 
-**Al arrancar** (checklist del lead):
+**Al arrancar** (el lead): `git log -5`, leer `work/PROGRESO.md` y `memory/MEMORY.md`, correr
+`node harness.js features` para elegir la de mayor prioridad INCOMPLETA, y `scripts/smoke.sh` para
+confirmar que la app vive. Si el smoke falla, se arregla el entorno antes de empezar.
 
-1. `pwd` + `git log -5` (qué se hizo).
-2. Leé `work/PROGRESO.md` y `memory/MEMORY.md` (estado, próximo paso, gotchas).
-3. `scripts/harness/features.sh` (avance del ledger); elegí la feature de mayor prioridad INCOMPLETA.
-4. `scripts/smoke.sh` (app viva + flujo mínimo). Si falla, arreglá el entorno primero.
-5. Recién ahí empezás, con esa única feature.
+**Al cerrar cada feature:** el verifier la prueba E2E y recien ahi marca `passes: true`. Commit a
+`main` por feature (politica de builds largos; el default del harness -commitear solo cuando el
+dueño lo pide- queda para proyectos chicos). Se actualiza `work/PROGRESO.md` y, si algo durable
+aparecio, `memory/hechos/`. El repo queda main-ready. La compuerta es `node harness.js cierre`.
 
-**Al cerrar cada feature:**
-
-- El verifier la prueba E2E; recién ahí marca `passes: true` en `FEATURES.json`.
-- **Commit a `main` por feature** con mensaje descriptivo (ej. `feat: pago (#13 passes)`): la
-  historia de git es la red de revert. (Política para builds largos; el default del harness
-  —commit solo cuando el dueño pide— queda para proyectos chicos.)
-- Actualizá `work/PROGRESO.md` (qué cambió, qué queda, gotchas) y `memory/MEMORY.md` si algo durable.
-- Dejá el repo main-ready (sin bugs conocidos).
-
-**`FEATURES.json` = ledger del build** (evita "declarar victoria antes de tiempo" y permite
-retomar sin el chat vivo): cada feature con `id`, categoría, descripción, `pasos` de verificación
-y `passes` (booleano); todo arranca en `passes:false`. El implementer/verifier SOLO cambian
-`passes`; NUNCA borran ni editan la descripción o los pasos (el ledger es el contrato de "qué
-falta"). El SDD (`openspec/changes/<id>/`) es el diseño de cada cambio; el ledger es el estado
-global del build. El spell NO lee JSON (ignorePaths trae `*.json`), así que las descripciones no
-dan falsos positivos.
+**`FEATURES.json` = ledger del build**: evita declarar victoria antes de tiempo y permite retomar
+sin el chat. Cada feature con `id`, categoria, descripcion, `pasos` de verificacion y `passes`,
+todo arrancando en `false`. El implementer y el verifier SOLO cambian `passes`: nunca borran ni
+editan descripcion o pasos, porque el ledger es el contrato de "que falta". El SDD
+(`openspec/changes/<id>/`) es el diseño de cada cambio; el ledger es el estado global.
 
 ## 5. Dónde vive cada cosa
 
@@ -191,71 +163,55 @@ dan falsos positivos.
 | `AGENTS.md` | este contrato (cómo trabajamos). |
 | `project.yml` | datos del proyecto (qué es, stack, comandos, convenciones, links). |
 | `.claude/agents/` | definición de los roles (lead/implementer/verifier). |
-| `work/` | salida de cada tarea: plan, hallazgos, veredictos. Efímero pero versionado. |
-| `memory/MEMORY.md` | memoria persistente entre sesiones. Índice de hechos durables. |
+| `work/` | salida de cada tarea: plan, hallazgos, veredictos. Efimero y NO versionado (`.gitignore`); solo `work/PROGRESO.md` se versiona. |
+| `memory/hechos/` | un hecho durable por archivo; `memory/MEMORY.md` es solo el indice. |
 | `memory/playbooks/` | best practices por disciplina (ui/backend/db/lead). Crecen con el uso. |
 | `skills/` | skills cargadas por necesidad + `REGISTRY.md` (sdd, tdd, judgment-day). |
 | `openspec/` | specs vivientes (`specs/`) y cambios (`changes/<id>/`) del flujo SDD. |
 | `docs/` | docs externas convertidas a markdown (markitdown). |
 | `scripts/` | las herramientas, agrupadas por uso (`calidad/`, `harness/`, `docs/`, `lib/`). Ver `scripts/README.md`. |
-| `metrics/` | costo por tarea (`metricas.sh`) y contador de uso de tools. Salida, no fuente. |
+| `metrics/` | costo por tarea (`node harness.js metricas`) y contador de uso. Salida, no fuente. |
 
-## 6. Memoria (`memory/MEMORY.md`)
+## 6. Memoria (`memory/hechos/`, indexada en `memory/MEMORY.md`)
 
-Una línea por hecho durable: decisión de diseño, gotcha, dato no obvio del proyecto.
-NO guardes lo que el código/git ya dice. Formato:
+Un hecho durable (decision de diseño, gotcha, dato no obvio del proyecto) por archivo en
+`memory/hechos/<slug>.md`, con frontmatter `name`, `description`, `type` (decision/gotcha/
+referencia) y `area`. `memory/MEMORY.md` es solo el INDICE: una linea con link + gancho por
+hecho, sin contenido. NO guardes lo que el codigo o `git log` ya responden.
 
-```
-- [titulo] (archivo/area) - el hecho en una linea. Por que importa.
-```
+Enlaza hechos relacionados con `[[nombre-del-hecho]]` (sin `.md`). Lo que mas vale son los
+**gotchas**: lo que hace perder horas persiguiendo la causa equivocada.
 
-Antes de guardar, revisa si ya existe algo parecido y actualízalo en vez de duplicar.
+Antes de guardar, revisa si ya existe un hecho parecido y actualizalo en vez de duplicar.
+`node harness.js check` bloquea si el frontmatter, los links del indice o los `[[wikilinks]]`
+quedan inconsistentes; `doctor` da el mismo diagnostico sin bloquear.
 
 ## 7. Herramientas (según el rol, no todas para todos)
 
 **Base (siempre):** leer, editar, correr comandos (build/test/lint). Con esto se hace el
 90% del trabajo. No agregues más sin necesidad real.
 
-**Verificación (el verifier, las 3 obligatorias):** opera la app real, ahí aparecen los
-bugs que el build no ve.
-- **chrome-devtools MCP** - recorrer flujos a mano (login, pulsar, formularios).
-- **Playwright** - specs e2e deterministas (la regresión que el equipo cura, fija lo conocido).
-- **TestSprite** (MCP) - genera y corre tests con IA: cobertura amplia + exploratorio,
-  descubre casos que no pensaste. Necesita API key (testsprite.com). Setup en `init.sh`.
+**Herramientas externas** (verificacion en navegador, docs de librerias al dia, grafo de codigo,
+conversion de PDF/Word a markdown): el catalogo con el cuando y el por que de cada una vive en
+`docs/herramientas.md`. Aca solo el criterio: se suma una cuando hay necesidad real, no por si
+acaso; un agente con 30 tools elige peor que uno con 8.
 
-**Docs de librerías al día:** **Context7** - docs y APIs actualizadas de cada paquete (no
-las que el modelo recuerda, que están viejas). Setup: `npx ctx7 setup --claude`. Usalo al
-trabajar con una librería para no escribir contra una API deprecada.
+**Puerta de entrada:** `node harness.js <tool> [argumentos]`, desde la raiz. Sin argumentos lista
+las tools por area; `node harness.js <tool> --help` da la ayuda de cada una. Despacha a `.js` y a
+`.sh`, y registra uso y duracion en `metrics/`.
 
-**Docs externas:** **markitdown** (liviano) - convierte PDF/Word/Excel/PPT/imágenes a
-markdown: `markitdown entrada.pdf > docs/entrada.md`. El agente lee el `.md`, no el binario.
+**La compuerta es `node harness.js check`**: tests, presupuesto, ascii, ortografia, estructura del
+harness y secretos, en paralelo. Sale != 0 si alguno falla, que es lo que la vuelve compuerta y no
+un chequeo opcional. Sueltas: `test`, `spell`, `ascii`, `presupuesto` (tope Y crecimiento de los
+documentos de arranque), `doctor` (informativo), `check-dep` (antes de sumar una dependencia).
 
-**Scripts del harness** (`scripts/`):
-- `check-dep.sh <npm|pypi|nuget> <pkg>` - última estable + deprecación + vulns (OSV). Antes
-  de agregar cualquier paquete.
-- `check.sh` - el implementer lo corre **al terminar** cada tarea: format, lint, build,
-  secretos (gitleaks), audit de deps y **ortografía** (spell, informativo). No atado a ningún commit.
-- `doctor.sh` - audita la salud del harness (placeholders sin llenar, registry desincronizado,
-  playbooks vacíos/viejos). Córrelo cada tanto para que los docs no se pudran.
-- `adopt.sh` - autodetecta stack/comandos de un proyecto existente (skill `adopt`).
-- `strip-comments.sh [--check|--write] <dir>` - quita comentarios con AST (.py tokenize,
-  .ts/.tsx compilador TS), preservando docstrings/strings/regex/directivas (skill `migrate`).
-- `ascii.sh [--check|--fix] <dir>` - prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
-- `spell.sh [globs]` - ortografía es+en (cspell + dict es-es de Espania). Jerga/voseo en `cspell.json`.
-- `skill-sync.sh` - regenera `skills/REGISTRY.md`.
-
-**Entender el código (obligatorio):** **codebase-memory-mcp** - grafo del código (símbolos,
-llamadas, impacto, rutas HTTP), 120x menos tokens que grep/read masivo. Es la forma
-**por defecto** de explorar antes de tocar. Trae 14 tools, pero **no satura**: Claude Code
-las deja **diferidas** (no entran en el contexto de cada turno; el agente busca la que
-necesita y recién ahí carga su schema). Mandatory + deferred = código entendido sin
-inflar la superficie de tools (Regla 6). Lo instala `init.sh`. **Dónde rinde:** brilla en
-**backend/lógica** (quién llama a esto, impacto de un cambio, data-flow, rutas HTTP, dead code).
-En trabajo **de frontend/CSS/componentes puro**, `grep`/`Explore` suele ser más directo; no
-fuerces el grafo ahí. Indexá el backend; en front, usalo solo si necesitás rastrear llamadas.
+**Del harness:** `cierre` (la compuerta del cierre de sesion), `control-negativo` (rompe cada
+compuerta a proposito y exige rojo: un gate verde no prueba que mire, prueba que no encontro nada),
+`metricas`, `tool-usage`, `buscar` (que dijimos sobre esto, sin abrir un archivo), `features` (el
+ledger) y `skill-sync`. Sueltos, en bash: `adopt.sh`, `strip-comments.sh`, `smoke.sh`.
 
 **Skills** (`skills/`): conocimiento que se carga **por necesidad**, no siempre. Índice en
-`skills/REGISTRY.md` (lo regenera `scripts/harness/skill-sync.sh`). Base: `sdd` (loop controlado),
+`skills/REGISTRY.md` (lo regenera `node harness.js skill-sync`). Base: `sdd` (loop controlado),
 `tdd` (test primero), `judgment-day` (dos jueces + orquestador para lo riesgoso). Agregá las
 tuyas como `skills/<nombre>.md` con frontmatter `name:` y `when:`.
 
@@ -263,40 +219,31 @@ tuyas como `skills/<nombre>.md` con frontmatter `name:` y `when:`.
 implementar/boilerplate; fuerte (Opus) para diseño, juicio y el lead. Está en el `model:` de
 cada rol.
 
-**Memoria entre sesiones/agentes:** `memory/MEMORY.md` + playbooks. Para memoria compartida
-más rica entre sesiones y compañeros, **Engram** (MCP) es una buena opción.
-
 ## 8. Convenciones del proyecto
 
-- **Marca autoria al modificar un artefacto existente cuyo round-trip borra el "quien lo toco".**
-  Cuando exportar/importar o regenerar un artefacto pisa el metadato de "ultimo modificado por"
-  (tipico en herramientas low-code como paginas APEX, o en config generada), deja un **comentario de
-  autoria** en cada componente que agregues o cambies. Preferi el **campo comment propio del
-  componente** cuando exista (muchas herramientas dan uno por tipo, ej. APEX: `p_process_comment`,
-  `p_button_comment`, `p_branch_comment`): sobrevive al round-trip y no ensucia el codigo. Cae al
-  comentario inline solo cuando el cambio vive dentro de un blob sin comment propio. Sin esto, el
-  siguiente export/regen borra el rastro de que el cambio fue tuyo. Mismo principio que marcar con un
-  comentario las lineas que tocas de un objeto que no creaste.
+- **Si el round-trip de una herramienta borra "quien lo toco", deja la autoria adentro del
+  artefacto.** Pasa con low-code y con config generada: exportar y reimportar pisa el metadato.
+  Usa el campo de comentario propio del componente cuando exista; el comentario inline es el
+  ultimo recurso.
 - {{CONVENTION_1}}  (ej: ASCII en código; sin comentarios; estilo de commits...)
 - {{CONVENTION_2}}
 - Mira `project.yml` -> `conventions` para la lista completa.
 
 ## 9. Seguridad (guardrails, no opcional)
 
-- **Secretos:** nunca en código ni en git. Van en `.env` (fuera de git). `check.sh` escanea
-  con gitleaks; si salta, parás.
+- **Secretos:** nunca en codigo ni en git. Van en `.env`, fuera de git. `node harness.js check`
+  escanea con gitleaks y no es opcional: si salta, paras.
 - **Infra mínima:** least privilege. Nada publica puertos al host salvo el proxy/gateway;
   los servicios hablan por red interna. Sin credenciales por defecto. Rotá si se filtró.
-- **Dependencias:** solo las que necesitás, en su última estable, sin deprecados ni vulns
-  (Regla 8 + `check-dep.sh`). Auditá el árbol cada tanto (`check.sh` lo hace).
+- **Dependencias:** solo las necesarias, en su ultima estable, sin deprecados ni vulns
+  (Regla 8 + `node harness.js check-dep`).
 - **Entradas no confiables:** valida/sanitizá. No ejecutes ni interpoles input crudo.
 
 ## 10. Antes de cerrar una tarea (checklist del verifier)
 
-- [ ] build OK - [ ] test OK - [ ] lint OK
-- [ ] **probado en el navegador** (chrome/Playwright) el flujo real, si hay UI
+- [ ] build, test y lint OK; el flujo real probado en el navegador si hay UI
 - [ ] endpoint/API probado con datos reales, si hay backend
 - [ ] hace exactamente lo pedido (ni de más ni de menos)
 - [ ] `work/<tarea>.md` actualizado con lo hecho y cómo se verificó
-- [ ] `memory/MEMORY.md` actualizado si surgió algo durable
+- [ ] `memory/hechos/` actualizado si surgio algo durable
 - [ ] reporte al humano: qué cambió, cómo se probó, qué quedó pendiente

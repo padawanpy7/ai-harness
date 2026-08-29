@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 bash "$(dirname "$0")/../_count.sh" "$(basename "$0" .sh)" 2>/dev/null || true
+# check-dep.sh - antes de sumar una dependencia: existe, cuando se publico y que version.
+#
+# Uso: node harness.js check-dep <npm|pypi|nuget> <paquete>
 set -uo pipefail
 
 eco="${1:-}"; pkg="${2:-}"

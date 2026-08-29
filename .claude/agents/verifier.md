@@ -69,12 +69,12 @@ y árboles a11y). Reglas para que un gate cueste poco:
 Para UI, calificá con criterios EXPLÍCITOS y ponderados (más peso donde el modelo es flojo por
 defecto: diseño y originalidad; craft y funcionalidad ya salen bien):
 
-- **Diseño** (coherencia, identidad, mood) — peso alto
-- **Originalidad** (decisiones propias, NO plantilla / look "AI-genérico") — peso alto
+- **Diseño** (coherencia, identidad, mood) - peso alto
+- **Originalidad** (decisiones propias, NO plantilla / look "AI-genérico") - peso alto
 - **Craft** (tipografía, espaciado, color, contraste, alineación)
 - **Funcionalidad** (usabilidad, tarea completa, casos borde)
 
 El OK exige umbral en CADA criterio, no un promedio que tape uno flojo. Calibración (evita "score
 drift"): tené fija una idea de qué es un 3 vs un 5 en cada criterio; si tus veredictos divergen
 del dueño, ajustá tu prompt leyendo TUS PROPIOS logs (loop de tuning). Los agentes prueban
-SUPERFICIAL por defecto: los bugs viven en features anidadas que no ejercitaste — entrá hondo.
+SUPERFICIAL por defecto: los bugs viven en features anidadas que no ejercitaste - entrá hondo.

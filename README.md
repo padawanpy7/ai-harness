@@ -52,11 +52,11 @@ metrics/              Salida de las metricas: costo por tarea y contador de uso 
 ### Scripts (agrupados por uso, detalle en [`scripts/README.md`](scripts/README.md))
 
 **`calidad/`** - lo que se corre al terminar:
-- `check.sh` - el paraguas: format, lint, build, secretos, audit y ortografia. Bloqueante.
+- `node harness.js check` - la compuerta: tests, presupuesto, ascii, ortografia, estructura y secretos. Bloqueante.
 - `check-dep.sh` - ultima version estable + deprecacion + vulnerabilidades (OSV) antes de un paquete.
-- `doctor.sh` - audita la salud del harness (placeholders, registry, playbooks viejos).
-- `ascii.sh` - pasa la prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
-- `spell.sh` - ortografia es+en (cspell + dict es-es). Por cada palabra: fixea el typo; si el
+- `node harness.js doctor` - audita la salud del harness (registry, playbooks viejos, memory/hechos/). Informativo.
+- `node harness.js ascii` - pasa la prosa a ASCII (em/en dash, comillas, flechas), mantiene acentos.
+- `node harness.js spell` - ortografia es+en (cspell + dict es-es). Por cada palabra: fixea el typo; si el
   dict no la trae, usa un sinonimo; solo si no hay (nombre propio/jerga) va a `cspell.json (words)`.
 
 **`harness/`** - el harness mirandose a si mismo:
@@ -89,7 +89,7 @@ bash scripts/adopt.sh              # autodetecta stack y comandos -> project.yml
 # y al agente:
 "revisa el proyecto y completa el harness para seguir el desarrollo (skill adopt)"
 ./init.sh                          # deja las tools operativas (codebase-memory, markitdown, MCPs)
-bash scripts/calidad/doctor.sh             # confirma que quedo sano
+node harness.js doctor                    # confirma que quedo sano
 ```
 
 El agente infiere convenciones, **carga los playbooks desde el código real** (sistema de
@@ -101,7 +101,7 @@ checks), usa el skill `migrate` (baseline -> adopt -> limpiar -> verify, sin rom
 
 No todo paga el mismo proceso. El lead elige: **quick** (fix trivial, sin SDD ni compuerta),
 **standard** (feature: SDD + TDD + verifier), **critical** (riesgo: + judgment-day). Asi lo
-trivial es rapido y lo riesgoso va con todo. `scripts/calidad/doctor.sh` mantiene los docs sin pudrir.
+trivial es rapido y lo riesgoso va con todo. `node harness.js doctor` mantiene los docs sin pudrir.
 
 ## Herramientas externas
 

@@ -84,7 +84,7 @@ omitirlo: eso se arregla corriendo el spec, no borrando la linea.
 - **El manual es UN documento**: no se parte en "manual" + "guia de pruebas", porque apenas se
   separan uno de los dos queda viejo. La evidencia si va aparte, pero **nadie la escribe**: sale de
   la corrida.
-- **Antes de cerrar**: `bash scripts/calidad/spell.sh <archivo>` y `bash scripts/calidad/ascii.sh
+- **Antes de cerrar**: `node harness.js spell <archivo>` y `node harness.js ascii
   --check openspec/changes/<ID>/entrega/`. El spell es informativo (los nombres propios y la jerga
   van a saltar); el ascii **si** se corrige.
 - **Al final**: generar los PDF y commitear **solo los `.md`**.

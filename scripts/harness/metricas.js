@@ -14,19 +14,18 @@
 // Escribe el resultado en el repo PRINCIPAL (main), no en el worktree del ticket: es informacion
 // de TODOS los tickets y tiene que vivir en un solo lugar.
 //
-// Uso: bash scripts/harness/metricas.sh [--dias N] [--ticket CLAVE] [--salida RUTA] [--json]
+// Uso: node harness.js metricas [--dias N] [--ticket CLAVE] [--salida RUTA] [--json]
 
 const fs = require('fs')
-const os = require('os')
 const path = require('path')
 const { execFileSync } = require('child_process')
 const { agregar, reporte, resumenUso } = require('../lib/metricas-core')
+const { transcripts: transcriptsDe, RAIZ_PROYECTOS: PROYECTOS } = require('../lib/transcripts')
 
 const RAIZ = path.join(__dirname, '..', '..')
-const PROYECTOS = path.join(os.homedir(), '.claude', 'projects')
 
 function ayuda() {
-  console.log(`Uso: bash scripts/harness/metricas.sh [--dias N] [--ticket CLAVE] [--salida RUTA] [--json]
+  console.log(`Uso: node harness.js metricas [--dias N] [--ticket CLAVE] [--salida RUTA] [--json]
 
   --dias N      solo los ultimos N dias (default: todo)
   --ticket X    solo ese ticket
@@ -48,15 +47,21 @@ function args(argv) {
   return a
 }
 
+// La caminata del directorio vive en lib/transcripts.js (compartida con buscar.js). Aca se pide
+// sin conSubagentes: metricas mide el arbol entero de tools por ticket, sin distinguir quien
+// llamo a cada una, asi que sumar los transcripts de los agentes duplicaria tiempo ya contado en
+// la sesion que los lanzo.
 function* transcripts() {
-  if (!fs.existsSync(PROYECTOS)) return
-  for (const proyecto of fs.readdirSync(PROYECTOS)) {
-    const dir = path.join(PROYECTOS, proyecto)
-    if (!fs.statSync(dir).isDirectory()) continue
-    for (const f of fs.readdirSync(dir)) {
-      if (f.endsWith('.jsonl')) yield path.join(dir, f)
-    }
-  }
+  for (const t of transcriptsDe({ raiz: PROYECTOS })) yield t.archivo
+}
+
+// El texto con que volvio una tool. Viene como string o como lista de bloques; se recorta porque
+// lo unico que se le pregunta es si arranca con el acuse de un lanzamiento asincrono (ver
+// ES_LANZAMIENTO en metricas-core.js).
+function textoDeResultado(b) {
+  const c = b.content
+  const t = Array.isArray(c) ? c.map((x) => (x && x.text) || '').join(' ') : c
+  return String(t || '').slice(0, 120)
 }
 
 // Normaliza un transcript a los eventos que entiende el core. Una linea rota no corta la corrida:
@@ -87,8 +92,16 @@ function eventosDe(archivo, corte) {
     const contenido = j.message && j.message.content
     if (Array.isArray(contenido)) {
       for (const b of contenido) {
-        if (b.type === 'tool_use') salida.push({ tipo: 'tool', ts, ticket, sesion, tool: b.name, id: b.id })
-        if (b.type === 'tool_result') salida.push({ tipo: 'result', ts, ticket, sesion, id: b.tool_use_id })
+        // `subagent_type` solo esta en las llamadas a un agente; para el resto queda undefined y
+        // el core lo ignora. `command` es el texto de un Bash; se usa para agrupar por FORMA de
+        // comando (ver familiaDeComando en metricas-core.js).
+        if (b.type === 'tool_use') {
+          salida.push({ tipo: 'tool', ts, ticket, sesion, tool: b.name, id: b.id,
+            agente: (b.input || {}).subagent_type, comando: (b.input || {}).command })
+        }
+        if (b.type === 'tool_result') {
+          salida.push({ tipo: 'result', ts, ticket, sesion, id: b.tool_use_id, resultado: textoDeResultado(b) })
+        }
       }
     }
   }
