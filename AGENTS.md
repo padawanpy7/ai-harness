@@ -7,8 +7,7 @@
 
 ## 1. Proyecto (completar)
 
-- **Nombre**: {{PROJECT_NAME}}
-- **Qué es**: {{ONE_LINER}}
+- **Nombre**: {{PROJECT_NAME}} - {{ONE_LINER}}
 - **Stack**: {{STACK}}
 - **Comandos**: build `{{BUILD}}` - test `{{TEST}}` - run `{{RUN}}` - lint `{{LINT}}`
 - **Detalle largo**: ver `project.yml` (no lo dupliques acá).
@@ -188,8 +187,7 @@ quedan inconsistentes; `doctor` da el mismo diagnostico sin bloquear.
 
 ## 7. Herramientas (según el rol, no todas para todos)
 
-**Base (siempre):** leer, editar, correr comandos (build/test/lint). Con esto se hace el
-90% del trabajo. No agregues más sin necesidad real.
+**Base (siempre):** leer, editar, correr comandos (build/test/lint): con eso se hace el 90%.
 
 **Herramientas externas** (verificacion en navegador, docs de librerias al dia, grafo de codigo,
 conversion de PDF/Word a markdown): el catalogo con el cuando y el por que de cada una vive en
@@ -210,14 +208,16 @@ compuerta a proposito y exige rojo: un gate verde no prueba que mire, prueba que
 `metricas`, `tool-usage`, `buscar` (que dijimos sobre esto, sin abrir un archivo), `features` (el
 ledger) y `skill-sync`. Sueltos, en bash: `adopt.sh`, `strip-comments.sh`, `smoke.sh`.
 
+**El por que de todo esto** -que el harness es un LOOP, no una lista de pasos- vive en
+`docs/el-loop-del-harness.md`: no hace falta para ejecutar, si para diseñar uno nuevo.
+
 **Skills** (`skills/`): conocimiento que se carga **por necesidad**, no siempre. Índice en
 `skills/REGISTRY.md` (lo regenera `node harness.js skill-sync`). Base: `sdd` (loop controlado),
 `tdd` (test primero), `judgment-day` (dos jueces + orquestador para lo riesgoso). Agregá las
 tuyas como `skills/<nombre>.md` con frontmatter `name:` y `when:`.
 
-**Multi-model** (ahorra 50-70%): el modelo justo por fase. Barato (Sonnet/Codex/Gemini) para
-implementar/boilerplate; fuerte (Opus) para diseño, juicio y el lead. Está en el `model:` de
-cada rol.
+**Multi-model** (ahorra 50-70%): el modelo justo por fase -barato para implementar, fuerte para
+diseño y juicio-. Esta en el `model:` de cada rol.
 
 ## 8. Convenciones del proyecto
 

@@ -5,6 +5,11 @@ work/*
 **/work/shots/
 docs/*
 !docs/.gitkeep
+# Los docs del HARNESS se escriben a mano y SI se versionan. La regla de arriba es para lo
+# convertido desde afuera (PDF/docx re-descargables), no para esto: un doc del harness que no
+# se versiona se pierde sin dejar rastro, y peor, deja apuntando al vacio a quien lo cite.
+!docs/el-loop-del-harness.md
+!docs/herramientas.md
 !docs/flow.svg
 !docs/flow.html
 

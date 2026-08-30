@@ -20,3 +20,15 @@ useDefault = true
 # paths = [
 #   '''vendor/[a-z-]+(\.min)?\.js''',
 # ]
+
+# El test del detector de secretos literales necesita, por construccion, strings con forma de
+# credencial: es lo que prueba. Sin este allowlist el gate se marca a si mismo y obliga a
+# desactivarlo entero, que es como se pierden los gates de verdad.
+#
+# Acotado a ESE archivo a proposito: no a scripts/lib/, no a *.test.js. Un allowlist ancho apaga
+# el gate en silencio para todo lo que crezca despues adentro.
+[[allowlists]]
+description = "fixtures del test de secretos-literales: secretos falsos, son el caso de prueba"
+paths = [
+  '''scripts/lib/secretos-literales\.test\.js''',
+]

@@ -37,4 +37,21 @@ Formato de cada entrada:
     reemplazo en `.js`. Los devolvio `git restore`; el gate de referencias muertas del `cierre`
     caza justo eso.
 
+## 2026-08-30 - gate de secretos literales y el doc del loop
+
+- Hecho: `secretos-literales` (detector propio: literal no vacio, no plantilla, 8+ chars bajo
+  clave sensible en .json/.env/.yml) entra como septimo gate de `check`. Portado
+  `docs/el-loop-del-harness.md`. `control-negativo` cubre ahora el gate nuevo.
+- Verificado: 175 tests, check --todos verde 7/7, control-negativo 10/10 en rojo.
+- Pendiente / proximo: `gitleaks-rango` NO se porto (optimiza el escaneo de HISTORIA; este gate
+  mira el arbol de trabajo). `docs/auditoria-harness.md` tampoco: es una auditoria fechada del
+  repo de origen, con evidencia en ruta:linea de ese proyecto.
+- Gotchas / decisiones:
+  - **`docs/` estaba gitignoreado y `AGENTS.md` ya apuntaba ahi.** El catalogo de herramientas
+    que saque de AGENTS.md ayer nunca se commiteo: el puntero apuntaba al vacio para cualquiera
+    que clonara. Ahora los docs del harness tienen su excepcion en `.gitignore`.
+  - **El test del detector dispara a gitleaks**: sus fixtures son secretos falsos por diseño.
+    Allowlist acotado a ESE archivo, no a `*.test.js`, para no apagar el gate en lo que crezca
+    despues. Y el cebo del control negativo se ARMA en pedazos, para no necesitar otro allowlist.
+
 <!-- La primera entrada real del proyecto va arriba de esta linea. -->

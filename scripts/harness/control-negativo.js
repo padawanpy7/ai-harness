@@ -48,7 +48,8 @@ if (sucios) {
   process.exit(1)
 }
 
-const tool = (...args) => spawnSync(process.execPath, [p('harness.js'), ...args],
+const ENTRADA = 'harness.js'
+const tool = (...args) => spawnSync(process.execPath, [p(ENTRADA), ...args],
   { cwd: RAIZ, encoding: 'utf8' }).status
 
 const casos = []
@@ -83,10 +84,28 @@ try {
     // Se le cambia la FECHA a la entrada de hoy: el dia sigue teniendo commits pero se queda sin
     // entrada, que es exactamente el agujero que el chequeo tiene que cazar.
     fs.writeFileSync(p('work/PROGRESO.md'), progreso.replace(`## ${hoy}`, '## 2026-01-01'))
-    const salida = spawnSync(process.execPath, [p('harness.js'), 'cierre'], { cwd: RAIZ, encoding: 'utf8' })
+    const salida = spawnSync(process.execPath, [p(ENTRADA), 'cierre'], { cwd: RAIZ, encoding: 'utf8' })
     const texto = (salida.stdout || '') + (salida.stderr || '')
     caso('un dia con commits y sin entrada lo pone ROJO', /dia\/s con trabajo y sin entrada/.test(texto))
     caso('y nombra el dia que falta', texto.includes(hoy))
+  }
+  console.log('==> secretos: un literal bajo una clave sensible')
+  // Archivo aparte, no una VICTIMA: no existe en el repo, asi que se borra en vez de restaurarse.
+  const cebo = p('control-negativo-secreto.json')
+  try {
+    // El valor se ARMA en pedazos a proposito: si estuviera escrito entero, el gate de gitleaks
+    // marcaria este mismo archivo y habria que agregarle un allowlist. Ensanchar allowlists para
+    // acomodar a los propios controles es exactamente como se apagan los gates sin querer.
+    const falsa = ['Xk92', 'mQr4', 'TzBv', '7Ld0'].join('')
+    fs.writeFileSync(cebo, `{\n  "PASSWORD": "${falsa}",\n  "token": "{{plantilla}}"\n}\n`)
+    const r = spawnSync(process.execPath, [p(ENTRADA), 'check', 'control-negativo-secreto.json'],
+      { cwd: RAIZ, encoding: 'utf8' })
+    const texto = (r.stdout || '') + (r.stderr || '')
+    caso('una contrasena literal en un .json lo pone ROJO', r.status === 1)
+    caso('y nombra la clave, no solo el archivo', /PASSWORD/.test(texto))
+    caso('un valor de plantilla {{...}} NO se marca', !/"token"/.test(texto))
+  } finally {
+    fs.rmSync(cebo, { force: true })
   }
 } finally {
   for (const [rel, texto] of original) fs.writeFileSync(p(rel), texto)

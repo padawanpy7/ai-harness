@@ -20,6 +20,7 @@ const fs = require('fs')
 const path = require('path')
 const { spawn, spawnSync, execFileSync } = require('child_process')
 const core = require('../lib/check-core')
+const secretosLiterales = require('../lib/secretos-literales')
 const { registro } = require('../lib/skill-sync-core')
 
 const RAIZ = process.cwd()
@@ -40,6 +41,16 @@ const SERIE = args.includes('--serie')
 const RUTAS = args.filter((a) => !a.startsWith('--'))
 
 const CAPACIDAD = 64 * 1024 * 1024
+
+// Sin alcance (--todos) el gate mira todos los archivos de config VERSIONADOS. `git ls-files`
+// y no un walk del disco: asi no entra node_modules ni nada gitignoreado, que es justo donde un
+// .env local legitimo daria un falso positivo en cada corrida.
+function listarVersionados() {
+  try {
+    return execFileSync('git', ['ls-files'], { encoding: 'utf8', cwd: RAIZ, maxBuffer: CAPACIDAD })
+      .split('\n').filter(Boolean)
+  } catch { return [] }
+}
 
 function gitPorcelanoRaw() {
   // SIN trim: ver el comentario largo en check-core.js. execFileSync no toca la salida.
@@ -169,9 +180,35 @@ function armarGates() {
       args: ['dir', '--no-banner', '--redact', '--config', '.gitleaks.toml', '.'],
       juzgar: juzgarGitleaks,
     }
-    : { nombre: 'secretos', roto: 'gitleaks no esta instalado. sudo pacman -S --needed gitleaks' })
+    : { nombre: 'secretos', roto: 'gitleaks no esta instalado. instalalo: https://github.com/gitleaks/gitleaks' })
+
+  // Complementa a gitleaks, que con sus reglas por defecto NO ve un literal cualquiera bajo una
+  // clave que suena a credencial: en bf-db-workspace eso dejo pasar una contrasena de produccion
+  // versionada. Acotado a los archivos de config del alcance: si no cambio ninguno, no hay nada
+  // nuevo que mirar.
+  const litArchivos = alcance.archivos
+    ? core.conExtension(alcance.archivos, secretosLiterales.EXTENSIONES)
+    : listarVersionados().filter((f) =>
+      secretosLiterales.EXTENSIONES.some((e) => f.toLowerCase().endsWith(e)))
+  gates.push({
+    nombre: 'secretos (config literal)',
+    instant: true,
+    saltea: alcance.archivos && !litArchivos.length ? 'ningun archivo de config cambio' : null,
+    ...juzgarSecretosLiterales(litArchivos),
+  })
 
   return gates
+}
+
+// Un literal no vacio, que no sea plantilla y de largo razonable, bajo una clave sensible.
+function juzgarSecretosLiterales(archivos) {
+  const conContenido = (archivos || []).filter((f) => fs.existsSync(f))
+    .map((ruta) => ({ ruta, contenido: fs.readFileSync(ruta, 'utf8') }))
+  const hallazgos = secretosLiterales.hallazgos(conContenido)
+  if (!hallazgos.length) return { status: 0, salida: '' }
+  const salida = hallazgos.map((h) =>
+    `${h.archivo}:${h.linea} clave "${h.clave}": valor literal (no vacio, no plantilla) - posible secreto versionado`).join('\n')
+  return { status: 1, salida }
 }
 
 // --- correrlos --------------------------------------------------------------------------------
