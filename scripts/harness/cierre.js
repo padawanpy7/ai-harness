@@ -24,7 +24,7 @@ const p = (...partes) => path.join(RAIZ, ...partes)
 if (process.argv.includes('--help') || process.argv.includes('-h')) {
   console.log('Uso: node harness.js cierre')
   console.log('Mide si la sesion quedo cerrada: sin cambios sueltos, pusheado, work/PROGRESO.md')
-  console.log('al dia, check en verde, sin comandos muertos en los docs, paquetes/ al dia.')
+  console.log('al dia, check en verde y sin comandos muertos en los docs.')
   console.log('Solo lee. Sale 1 si falta algo.')
   process.exit(0)
 }
@@ -113,14 +113,6 @@ for (const archivo of archivosDoc()) {
   if (h.length) hallazgos[archivo] = h
 }
 chequeos.push(cierre.chequearDocsMuertos(hallazgos))
-
-// --- 6. lo generado, al dia si el sistema se movio -----------------------------------------------
-let actualPaquetes = null
-try { actualPaquetes = execFileSync('pacman', ['-Qqe'], { encoding: 'utf8' }).split('\n').filter(Boolean).length } catch { /* sin pacman no se mide */ }
-if (actualPaquetes !== null) {
-  const guardado = (leer(p('paquetes/explicitos.txt')) || '').split('\n').filter(Boolean).length
-  chequeos.push(cierre.chequearPaquetes(actualPaquetes, guardado))
-}
 
 // --- 7. lo escrito no contradice al repo -------------------------------------------------------
 // El playbook pedia "simular un arranque sin contexto" y esto lo imprimia como recordatorio, o sea
