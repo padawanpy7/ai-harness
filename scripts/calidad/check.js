@@ -22,6 +22,7 @@ const { spawn, spawnSync, execFileSync } = require('child_process')
 const core = require('../lib/check-core')
 const secretosLiterales = require('../lib/secretos-literales')
 const { registro } = require('../lib/skill-sync-core')
+const { descubrir: descubrirSkills } = require('../lib/skills-descubrir')
 
 const RAIZ = process.cwd()
 const args = process.argv.slice(2)
@@ -95,13 +96,10 @@ function datosEstructura() {
   }))
   const memoriaTexto = leer(path.join(RAIZ, 'memory/MEMORY.md')) || ''
 
+  // El descubrimiento es compartido con `skill-sync` a proposito: cuando cada uno tenia el suyo,
+  // el gate pedia regenerar un REGISTRY que ya estaba regenerado.
   const dirSkills = path.join(RAIZ, 'skills')
-  let skills = []
-  if (fs.existsSync(dirSkills)) {
-    skills = fs.readdirSync(dirSkills).filter((f) => f.endsWith('.md') && f !== 'REGISTRY.md')
-      .map((base) => ({ base, texto: leer(path.join(dirSkills, base)) || '' }))
-  }
-  const registryEsperado = registro(skills)
+  const registryEsperado = registro(descubrirSkills(RAIZ))
   const registryActual = leer(path.join(dirSkills, 'REGISTRY.md'))
 
   return { hechos, memoriaTexto, registryActual, registryEsperado }

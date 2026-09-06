@@ -9,10 +9,13 @@ function campo(texto, clave) {
   return m ? m[1].trim() : ''
 }
 
+// `when` y `description` son la misma idea con dos nombres segun el harness (Claude Code usa
+// `description`). Se aceptan los dos: buscar solo uno deja la columna vacia y el indice deja de
+// servir para lo unico que sirve, que es decidir si cargar la skill.
 function fila(skill) {
   const nombre = campo(skill.texto, 'name') || skill.base.replace(/\.md$/, '')
-  const cuando = campo(skill.texto, 'when')
-  return `| [${nombre}](${skill.base}) | ${cuando} |`
+  const cuando = campo(skill.texto, 'when') || campo(skill.texto, 'description')
+  return `| [${nombre}](${skill.enlace || skill.base}) | ${cuando} |`
 }
 
 function registro(skills) {
