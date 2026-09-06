@@ -42,8 +42,8 @@ quien cierra sepa que ahi no verifico una maquina.
 
 ## 2. Las seis salidas, en capas
 
-Lo que ninguno de nuestros repos tiene todavia: la regla de parada actual solo cubre el **exito**.
-Un loop necesita salir por seis puertas, no por una.
+La regla de parada de `HECHO_CUANDO.md` solo cubre el **exito**. Un loop necesita salir por seis
+puertas, no por una.
 
 | Salida | Cuando |
 |---|---|
@@ -53,6 +53,15 @@ Un loop necesita salir por seis puertas, no por una.
 | **Limite de permisos** | antes de tocar produccion, ampliar permisos, borrar datos o leer secretos |
 | **Presupuesto agotado** | tokens, tiempo, plata o agentes en paralelo |
 | **Evidencia desconectada** | el agente no puede explicar el proximo paso desde lo observado |
+
+**Lo mide `node harness.js loop`**, que no instrumenta nada nuevo: lee `metrics/tool-runs.log`, que el
+harness ya escribe en cada corrida. Contesta cuantas vueltas van, si los ultimos fallos son EL
+MISMO, y cuanto se gasto; despues nombra el estado. La ventana por defecto es la vuelta ACTUAL
+-desde el ultimo `cierre` en verde-, no el dia: un dia con seis tareas son seis loops, no uno.
+
+Dos de las seis salidas NO se miden a proposito. El **limite de permisos** es una decision de
+politica (que se puede tocar) y la **evidencia desconectada** es un juicio sobre el razonamiento
+del agente: un numero inventado para ellas daria una falsa sensacion de cobertura.
 
 **Deteccion de no-progreso:** se compara la *firma del fallo* con la anterior; si se repite dos
 veces, se escala en vez de reintentar con el mismo enfoque. Reintentar lo mismo esperando otro

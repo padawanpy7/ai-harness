@@ -19,9 +19,13 @@ Formato de cada entrada:
   plantilla `openspec/plantillas/HECHO_CUANDO.md`. Ademas `skill-sync` unificado.
 - Verificado: 192 tests, check --todos verde 7/7, y `aceptacion` probado EN ROJO con un ticket de
   prueba de dos criterios: pasa el que devuelve 0 y falla el que devuelve 1, nombrandolo.
+- Hecho tambien: `node harness.js loop` mide tres de las seis salidas leyendo el log que el
+  harness ya escribe (`metrics/tool-runs.log`): vueltas, mismo fallo repetido y gasto. Nombra el
+  estado terminal. 210 tests.
 - Pendiente / proximo:
-  1. Las seis salidas y los cuatro estados estan DOCUMENTADOS pero no medidos: `aceptacion` solo
-     corre la salida por exito. Tope de iteraciones, presupuesto y no-progreso no tienen tool.
+  1. Dos salidas siguen sin medirse A PROPOSITO: limite de permisos es una decision de politica y
+     evidencia desconectada es un juicio sobre el razonamiento. Un numero inventado para ellas
+     daria falsa cobertura.
   2. `bf` e `infra` tienen `gaps`, `fallos` y `rama-drift` sin traer.
 - Gotchas / decisiones:
   - **Verification y stopping rule no son lo mismo**, y confundirlas es de donde sale el modo de

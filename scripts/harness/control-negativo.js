@@ -83,8 +83,11 @@ try {
   } else {
     // Se le cambia la FECHA a la entrada de hoy: el dia sigue teniendo commits pero se queda sin
     // entrada, que es exactamente el agujero que el chequeo tiene que cazar.
-    fs.writeFileSync(p('work/PROGRESO.md'), progreso.replace(`## ${hoy}`, '## 2026-01-01'))
-    const salida = spawnSync(process.execPath, [p(ENTRADA), 'cierre'], { cwd: RAIZ, encoding: 'utf8' })
+    // TODAS las ocurrencias, no la primera: un dia puede tener dos entradas ("06 -" y "06 (b) -")
+    // y dejar una con la fecha de hoy tapa el hueco que este control tiene que abrir. El control
+    // daba verde por su propio bug, que es exactamente lo que viene a evitar.
+    fs.writeFileSync(p('work/PROGRESO.md'), progreso.split(`## ${hoy}`).join('## 2026-01-01'))
+    const salida = spawnSync(process.execPath, [p('harness.js'), 'cierre'], { cwd: RAIZ, encoding: 'utf8' })
     const texto = (salida.stdout || '') + (salida.stderr || '')
     caso('un dia con commits y sin entrada lo pone ROJO', /dia\/s con trabajo y sin entrada/.test(texto))
     caso('y nombra el dia que falta', texto.includes(hoy))
@@ -107,6 +110,24 @@ try {
   } finally {
     fs.rmSync(cebo, { force: true })
   }
+  console.log('==> loop: las salidas que NO son el exito')
+  // Sobre el core puro: no hay forma de fabricar 2 fallos reales en el log sin ensuciarlo, y un
+  // control que deja basura en metrics/ es peor que el hueco que cubre.
+  const loop = require(p('scripts/lib/loop-core'))
+  const malo = { tool: 'check', args: '--todos', exit: 1, ms: 100 }
+  const bueno = { tool: 'check', args: '', exit: 0, ms: 100 }
+  caso('dos fallos con la misma causa -> BLOQUEADO',
+    loop.evaluar({ corridas: [malo, malo] }).estado === loop.ESTADOS.BLOQUEADO)
+  caso('un exito entre medio NO cuenta como fallo repetido',
+    loop.evaluar({ corridas: [malo, bueno, malo] }).estado !== loop.ESTADOS.BLOQUEADO)
+  caso('pasarse del presupuesto -> CORTADO, aunque la aceptacion pase',
+    loop.evaluar({ corridas: [bueno], aceptacionOk: true, presupuesto: { ms: 1 } }).estado
+      === loop.ESTADOS.PRESUPUESTO)
+  caso('sin regla de parada NO se declara verificado',
+    loop.evaluar({ corridas: [bueno], aceptacionOk: null }).estado === loop.ESTADOS.REVISION)
+  caso('con la regla de parada en verde SI se verifica',
+    loop.evaluar({ corridas: [bueno], aceptacionOk: true }).estado === loop.ESTADOS.VERIFICADO)
+
 } finally {
   for (const [rel, texto] of original) fs.writeFileSync(p(rel), texto)
   console.log('\n(archivos restaurados)')
