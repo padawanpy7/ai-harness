@@ -148,6 +148,16 @@ if (argv.includes('--listar')) {
   process.exit(parseado.problemas.length ? 1 : 0)
 }
 
+// El shell con el que se corre cada criterio. En Windows se busca un sh de verdad (Git Bash o
+// WSL) antes de caer a cmd.exe, porque los criterios se escriben en sintaxis sh.
+const SHELL = (() => {
+  if (process.platform !== 'win32') return true
+  for (const cand of ['C:\\Program Files\\Git\\bin\\bash.exe', 'bash.exe', 'sh.exe']) {
+    if (!spawnSync(cand, ['-c', 'exit 0'], { encoding: 'utf8' }).error) return cand
+  }
+  return true
+})()
+
 const DIR_REL = path.posix.join('openspec', 'changes', CLAVE)
 const expandir = (cmd) => cmd.split('$TICKET_DIR').join(DIR_REL).split('$TICKET').join(CLAVE)
 
@@ -158,7 +168,11 @@ for (const c of parseado.criterios) {
   process.stderr.write(`  ... ${c.titulo}`.padEnd(78).slice(0, 78) + '\r')
   const r = spawnSync(expandir(c.comando), {
     cwd: RAIZ,
-    shell: true,
+    // `shell: true` en Windows es cmd.exe, que no entiende comillas simples, `!` ni los pipes de
+    // sh: un criterio escrito para sh queda en ROJO SIN HABER CORRIDO. Un falso rojo es tan malo
+    // como un falso verde -manda a arreglar algo que no esta roto- y ademas no se distingue de un
+    // criterio que si fallo. Portado de bf (HN-ACEPTACION-FALSO-ROJO).
+    shell: SHELL,
     encoding: 'utf8',
     env: { ...process.env, TICKET: CLAVE, TICKET_DIR: DIR_REL },
   })

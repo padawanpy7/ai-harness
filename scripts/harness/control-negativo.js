@@ -110,6 +110,18 @@ try {
   } finally {
     fs.rmSync(cebo, { force: true })
   }
+  console.log('==> arranque en frio: un pendiente que ya se hizo')
+  {
+    const prog = original.get('work/PROGRESO.md')
+    // Se le mete un pendiente que reclama algo que YA existe: es el error real del 29/08.
+    fs.writeFileSync(p('work/PROGRESO.md'),
+      prog.replace('- Pendiente / proximo:',
+        '- Pendiente / proximo:\n  0. Falta traer `scripts/harness/loop.js`.', 1))
+    caso('un pendiente que reclama algo ya existente lo pone ROJO', tool('arranque-frio') === 1)
+    fs.writeFileSync(p('work/PROGRESO.md'), prog)
+    caso('restaurado, vuelve a verde', tool('arranque-frio') === 0)
+  }
+
   console.log('==> loop: las salidas que NO son el exito')
   // Sobre el core puro: no hay forma de fabricar 2 fallos reales en el log sin ensuciarlo, y un
   // control que deja basura en metrics/ es peor que el hueco que cubre.
