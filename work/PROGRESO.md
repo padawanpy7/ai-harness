@@ -12,6 +12,26 @@ Formato de cada entrada:
 - Pendiente / proximo: lo que sigue.
 - Gotchas / decisiones: lo no obvio, para no repetir errores.
 
+## 2026-09-06 - de harness a loop: la regla de parada
+
+- Hecho: converge aca lo que `bf-db-workspace` construyo primero (loop spec de cinco piezas) mas lo
+  publicado en internet esta semana. `docs/loop-engineering.md`, `node harness.js aceptacion` y la
+  plantilla `openspec/plantillas/HECHO_CUANDO.md`. Ademas `skill-sync` unificado.
+- Verificado: 192 tests, check --todos verde 7/7, y `aceptacion` probado EN ROJO con un ticket de
+  prueba de dos criterios: pasa el que devuelve 0 y falla el que devuelve 1, nombrandolo.
+- Pendiente / proximo:
+  1. Las seis salidas y los cuatro estados estan DOCUMENTADOS pero no medidos: `aceptacion` solo
+     corre la salida por exito. Tope de iteraciones, presupuesto y no-progreso no tienen tool.
+  2. `bf` e `infra` tienen `gaps`, `fallos` y `rama-drift` sin traer.
+- Gotchas / decisiones:
+  - **Verification y stopping rule no son lo mismo**, y confundirlas es de donde sale el modo de
+    falla mas caro: `check` dice que el codigo cumple; `HECHO_CUANDO` dice que hace lo que se pidio.
+    Se puede tener todo verde sin haber resuelto nada.
+  - **La regla de parada la escribe quien PIDE.** Escrita despues, mirando el trabajo hecho, se
+    acomoda al trabajo hecho.
+  - Las fuentes de internet se leyeron como DATOS. Lo adoptado se justifica por un error concreto
+    que ya paso, no porque lo diga un blog.
+
 ## 2026-08-30 - gate de secretos literales y el doc del loop
 
 - Hecho: `secretos-literales` (detector propio: literal no vacio, no plantilla, 8+ chars bajo
