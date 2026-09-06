@@ -37,9 +37,9 @@
 9. **Loop controlado, no "goal mode".** No "anda y haz todo" en una cadena larga: la IA es
    probabilística y deriva. Trabaja en fases con compuertas (SDD) y revisión humana entre
    ellas. Spec primero, TDD al implementar. Ver skills `sdd` y `tdd`.
-10. **Desmonta andamiaje viejo.** Cada pieza del harness codifica algo que el modelo no podia
-    solo, y esos supuestos caducan. Sacala, mira si el resultado empeora y conserva solo lo que
-    carga peso. Al salir un modelo nuevo, revisa apuntando a MENOS scaffolding.
+10. **Desmonta andamiaje viejo.** Cada pieza codifica algo que el modelo no podia solo, y esos
+    supuestos caducan. `node harness.js ablacion` mide cual carga peso; la que nunca dio rojo
+    puede estar PREVINIENDO el problema, asi que informa y no decide.
 
 ## 3. Roles de agente (dividir para conquistar)
 
@@ -204,7 +204,7 @@ un chequeo opcional. Sueltas: `test`, `spell`, `ascii`, `presupuesto` (tope Y cr
 documentos de arranque), `doctor` (informativo), `check-dep` (antes de sumar una dependencia).
 
 **Del harness:** `cierre`, `arranque-frio` (lo escrito contra el repo), `loop` (estado de la
-vuelta), `fallos`, `control-negativo` (rompe cada compuerta y exige rojo: un gate verde prueba que
+vuelta), `fallos`, `ablacion` (que pieza carga peso), `control-negativo` (rompe cada compuerta y exige rojo: un gate verde prueba que
 no encontro nada, no que sepa mirar), `metricas`, `tool-usage`, `buscar`, `features` (el
 ledger) y `skill-sync`. Sueltos, en bash: `adopt.sh`, `strip-comments.sh`, `smoke.sh`.
 

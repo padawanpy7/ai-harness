@@ -12,6 +12,24 @@ Formato de cada entrada:
 - Pendiente / proximo: lo que sigue.
 - Gotchas / decisiones: lo no obvio, para no repetir errores.
 
+## 2026-09-06 (b) - la Regla 10 deja de ser una intencion
+
+- Hecho: `node harness.js ablacion` mide que pieza del harness carga peso y cual nunca encontro
+  nada, sobre `metrics/tool-runs.log`. Es la ficha `HN-ABLACION-DEL-ANDAMIAJE` de bf: la Regla 10
+  estaba escrita desde el dia uno y nunca se habia podido ejecutar porque no habia con que medir.
+  Ademas `arranque-frio`, `loop` y `fallos`.
+- Verificado: 256 tests, `check --todos` verde, 22/22 en `control-negativo`.
+- Pendiente / proximo:
+  1. `ablacion` mide costo y hallazgos, NO el experimento de sacar la pieza y ver si empeora. Eso
+     necesita un conjunto de tareas de prueba.
+- Gotchas / decisiones:
+  - **Informa, no decide, y no es cortesia.** Un gate que nunca dio rojo puede ser (1) que su
+    problema ya no ocurre, (2) que lo PREVIENE -nadie escribe lo que sabe que sera rechazado- o
+    (3) que este roto. Los datos no separan los tres; el (3) lo contesta `control-negativo`.
+  - **Lo que la pieza HACE manda sobre lo que DICE.** La primera version clasifico a `check` -la
+    compuerta principal- como "informativa", porque en una linea suelta comenta que `doctor` lo
+    es. Un falso negativo ahi saca del analisis justo a la pieza que mas importa medir.
+
 ## 2026-09-06 - de harness a loop: la regla de parada
 
 - Hecho: converge aca lo que `bf-db-workspace` construyo primero (loop spec de cinco piezas) mas lo

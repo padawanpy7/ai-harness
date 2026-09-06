@@ -122,6 +122,22 @@ try {
     caso('restaurado, vuelve a verde', tool('arranque-frio') === 0)
   }
 
+  console.log('==> ablacion: distinguir la pieza que carga peso de la que no')
+  {
+    const abl = require(p('scripts/lib/ablacion-core'))
+    const mucho = (tool, exit) => Array.from({ length: 20 }, () => ({ tool, exit, ms: 100 }))
+    const conHallazgos = abl.medir([...mucho('util', 1), ...mucho('inutil', 0)])
+    const vUtil = abl.veredicto(conHallazgos.find((f) => f.tool === 'util'))
+    const vInutil = abl.veredicto(conHallazgos.find((f) => f.tool === 'inutil'))
+    caso('un gate que atajo algo se marca como que carga peso', vUtil.estado === 'carga peso')
+    caso('un gate que nunca atajo nada se marca para mirar', vInutil.estado.toLowerCase() === 'mirar')
+    // Lo que la pieza HACE manda sobre lo que DICE: con `check` paso al reves y quedo fuera.
+    caso('la compuerta principal NO se clasifica como informativa',
+      abl.esGate(fs.readFileSync(p('scripts/calidad/check.js'), 'utf8')) === true)
+    caso('una tool de bash que sale con 1 se reconoce como gate',
+      abl.esGate(fs.readFileSync(p('scripts/sistema/impresora.sh'), 'utf8')) === true)
+  }
+
   console.log('==> loop: las salidas que NO son el exito')
   // Sobre el core puro: no hay forma de fabricar 2 fallos reales en el log sin ensuciarlo, y un
   // control que deja basura en metrics/ es peor que el hueco que cubre.
