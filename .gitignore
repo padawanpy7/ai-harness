@@ -10,6 +10,7 @@ docs/*
 # se versiona se pierde sin dejar rastro, y peor, deja apuntando al vacio a quien lo cite.
 !docs/el-loop-del-harness.md
 !docs/herramientas.md
+!docs/loop-engineering.md
 !docs/flow.svg
 !docs/flow.html
 

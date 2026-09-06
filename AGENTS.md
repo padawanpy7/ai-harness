@@ -208,8 +208,8 @@ compuerta a proposito y exige rojo: un gate verde no prueba que mire, prueba que
 `metricas`, `tool-usage`, `buscar` (que dijimos sobre esto, sin abrir un archivo), `features` (el
 ledger) y `skill-sync`. Sueltos, en bash: `adopt.sh`, `strip-comments.sh`, `smoke.sh`.
 
-**El por que de todo esto** -que el harness es un LOOP, no una lista de pasos- vive en
-`docs/el-loop-del-harness.md`: no hace falta para ejecutar, si para diseñar uno nuevo.
+**El loop** (`docs/loop-engineering.md`): trigger, goal, verification, **stopping rule**, memory.
+La que falta siempre es la parada: la escribe quien PIDE, es un COMANDO, y va en `HECHO_CUANDO.md`.
 
 **Skills** (`skills/`): conocimiento que se carga **por necesidad**, no siempre. Índice en
 `skills/REGISTRY.md` (lo regenera `node harness.js skill-sync`). Base: `sdd` (loop controlado),
