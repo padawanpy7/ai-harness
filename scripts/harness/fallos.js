@@ -18,6 +18,8 @@
 const fs = require('fs')
 const path = require('path')
 const core = require('../lib/fallos-core')
+// Hora LOCAL, no UTC: git y las bitacoras se escriben en local (scripts/lib/fecha-local.js).
+const fechaLocal = require('../lib/fecha-local')
 
 const RAIZ = process.cwd()
 const LOG = path.join(RAIZ, 'metrics', 'tool-runs.log')
@@ -67,7 +69,7 @@ function desdeCuando() {
   if (argv.includes('--todos')) return null
   const dias = Number(tomar('--dias', 30))
   const d = new Date(Date.now() - (Number.isFinite(dias) ? dias : 30) * 86400000)
-  return d.toISOString().slice(0, 10)
+  return fechaLocal.hoy(d)
 }
 
 const desde = desdeCuando()

@@ -28,6 +28,8 @@ const fs = require('fs')
 const path = require('path')
 const { spawnSync } = require('child_process')
 const core = require('../lib/aceptacion-core')
+// Hora LOCAL, no UTC: git y las bitacoras se escriben en local (scripts/lib/fecha-local.js).
+const fechaLocal = require('../lib/fecha-local')
 
 const RAIZ = process.cwd()
 const argv = process.argv.slice(2)
@@ -189,7 +191,7 @@ function rondasRojasDeHoy(clave) {
   try {
     const log = path.join(RAIZ, 'metrics', 'tool-runs.log')
     if (!fs.existsSync(log)) return 0
-    const hoy = new Date().toISOString().slice(0, 10)
+    const hoy = fechaLocal.hoy()
     const nombrado = new RegExp(`(^|\\s)${clave}(\\s|$)`, 'i')
     let n = 0
     for (const linea of fs.readFileSync(log, 'utf8').split('\n')) {

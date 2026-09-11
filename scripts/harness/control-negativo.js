@@ -16,6 +16,7 @@
 // previo, por eso se niega a arrancar con esos archivos sucios.
 
 const fs = require('fs')
+const fechaLocal = require('../lib/fecha-local')
 const path = require('path')
 const { execFileSync, spawnSync } = require('child_process')
 
@@ -77,7 +78,7 @@ try {
 
   console.log('==> cierre: cada dia con commits necesita su entrada')
   const progreso = original.get('work/PROGRESO.md')
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = fechaLocal.hoy()
   if (!progreso.includes(`## ${hoy}`)) {
     caso(`(salteado: la bitacora no tiene entrada de hoy ${hoy}, nada que romper)`, true)
   } else {

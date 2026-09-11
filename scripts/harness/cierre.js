@@ -15,6 +15,8 @@ const path = require('path')
 const { execFileSync, spawnSync } = require('child_process')
 
 const core = require('../lib/check-core')
+// Hora LOCAL, no UTC: git y las bitacoras se escriben en local (scripts/lib/fecha-local.js).
+const fechaLocal = require('../lib/fecha-local')
 const cierre = require('../lib/cierre-core')
 const { descubrirTools } = require('../lib/tools-registro')
 
@@ -54,7 +56,7 @@ const rutaProgreso = p('work/PROGRESO.md')
 const existeProgreso = fs.existsSync(rutaProgreso)
 const textoProgreso = existeProgreso ? (leer(rutaProgreso) || '') : ''
 const fechasProgreso = [...textoProgreso.matchAll(/^##\s+(\d{4}-\d{2}-\d{2})/gm)].map((m) => m[1])
-const HOY = new Date().toISOString().slice(0, 10)
+const HOY = fechaLocal.hoy()
 chequeos.push(cierre.chequearProgreso(existeProgreso, fechasProgreso, HOY))
 
 // --- 3b. ningun dia trabajado se quedo sin entrada ---------------------------------------------

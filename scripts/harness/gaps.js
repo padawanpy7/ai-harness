@@ -18,6 +18,8 @@
 const fs = require('fs')
 const path = require('path')
 const fallos = require('../lib/fallos-core')
+// Hora LOCAL, no UTC: git y las bitacoras se escriben en local (scripts/lib/fecha-local.js).
+const fechaLocal = require('../lib/fecha-local')
 const core = require('../lib/gaps-core')
 
 const RAIZ = process.cwd()
@@ -37,7 +39,7 @@ const dias = Number(valorDe('--dias')) || 30
 
 const leer = (r) => { try { return fs.readFileSync(path.join(RAIZ, r), 'utf8') } catch { return '' } }
 
-const desde = new Date(Date.now() - dias * 864e5).toISOString().slice(0, 10)
+const desde = fechaLocal.haceDias(dias)
 const { filas, rotas } = fallos.parsear(leer('metrics/tool-runs.log'))
 const agrupado = fallos.agrupar({ filas, rotas }, { minimo, desde })
 
