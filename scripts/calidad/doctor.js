@@ -45,7 +45,7 @@ function chequearPlaceholders() {
 // Compara contra skill-sync-core.js directo (requerido, no un subproceso) y, si esta
 // desincronizado, regenera el archivo: mismo efecto que doctor.sh, que lo arreglaba al pasar.
 function chequearRegistry() {
-  if (!fs.existsSync(p('scripts/harness/skill-sync.js'))) return false
+  if (!fs.existsSync(p('scripts/loop/skill-sync.js'))) return false
   const dir = p('skills')
   const salida = path.join(dir, 'REGISTRY.md')
   let skills = []

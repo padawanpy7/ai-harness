@@ -19,7 +19,7 @@ test('descubre tools .js y .sh en distintas areas', () => {
   const raiz = raizDeMentira([
     'scripts/sistema/salud.sh',
     'scripts/calidad/doctor.sh',
-    'scripts/harness/skill-sync.js',
+    'scripts/loop/skill-sync.js',
   ])
   const tools = descubrirTools(raiz)
   assert.deepEqual([...tools.keys()].sort(), ['doctor', 'salud', 'skill-sync'])
@@ -70,7 +70,7 @@ test('sin scripts/ no explota: devuelve un mapa vacio', () => {
 
 test('areaDe devuelve la carpeta padre de la ruta', () => {
   assert.equal(areaDe('/repo/scripts/sistema/salud.sh'), 'sistema')
-  assert.equal(areaDe('/repo/scripts/harness/skill-sync.js'), 'harness')
+  assert.equal(areaDe('/repo/scripts/loop/skill-sync.js'), 'loop')
 })
 
 test('debeContarUso: .sh no cuenta en harness.js (ya se cuenta sola via _count.sh)', () => {
@@ -78,5 +78,5 @@ test('debeContarUso: .sh no cuenta en harness.js (ya se cuenta sola via _count.s
 })
 
 test('debeContarUso: .js si cuenta en harness.js (es su unico punto de registro)', () => {
-  assert.equal(debeContarUso('/repo/scripts/harness/skill-sync.js'), true)
+  assert.equal(debeContarUso('/repo/scripts/loop/skill-sync.js'), true)
 })

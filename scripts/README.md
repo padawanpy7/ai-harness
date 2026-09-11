@@ -5,7 +5,7 @@ Las herramientas del harness, agrupadas por para que sirven. Cada una responde a
 | Carpeta | Que hay |
 |---|---|
 | `calidad/` | lo que se corre al terminar: `check` (el paraguas), `check-dep`, `spell`, `ascii`, `doctor`. |
-| `harness/` | el harness mirandose a si mismo: `features` (el ledger), `metricas` (tiempo y tokens por tarea), `tool-usage` (que tools se usan), `skill-sync` (regenera el registry). |
+| `loop/` | el loop mirandose a si mismo: `cierre` (compuerta del cierre), `arranque-frio` (lo escrito contra el repo), `loop` (estado de la vuelta), `aceptacion` (la regla de parada), `ablacion` (que pieza carga peso), `fallos` y `gaps`, `control-negativo` (rompe cada compuerta y exige rojo), mas `features`, `metricas`, `tool-usage` y `skill-sync`. Se llamaba `harness/`: el nombre siguio al enfoque. |
 | `docs/` | `md-a-pdf`: pasa un `.md` a PDF para mandarselo a alguien de afuera. |
 | `lib/` | **librerias**: logica pura que se importa, sin `argv` ni prints. Se testea con `node --test` al lado (`*.test.js`). Nadie las ejecuta. |
 | raiz | `adopt` (onboarding brownfield), `smoke` (app viva), `served-fresh` (lo servido es lo ultimo), `strip-comments`. |

@@ -10,10 +10,10 @@ const ENTRADA = `## 2026-09-06 - una tanda
 
 - Hecho: cosas.
 - Pendiente / proximo:
-  1. Falta traer \`scripts/harness/loop.js\` desde el otro repo.
+  1. Falta traer \`scripts/loop/loop.js\` desde el otro repo.
   2. Sin empezar: subir lo generico a la plantilla.
 - Gotchas / decisiones:
-  - algo que no es pendiente y cita \`scripts/harness/otro.js\`
+  - algo que no es pendiente y cita \`scripts/loop/otro.js\`
 `
 
 // --- extraer pendientes ------------------------------------------------------------------------

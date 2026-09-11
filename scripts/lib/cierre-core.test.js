@@ -73,13 +73,13 @@ test('check roto FALTA y trae la cola de la salida', () => {
 
 // --- extraccion de rutas ---------------------------------------------------------------------
 test('extrae una ruta simple de scripts/', () => {
-  assert.deepStrictEqual(c.extraerRutas('ver scripts/harness/cierre.js para el detalle'),
-    ['scripts/harness/cierre.js'])
+  assert.deepStrictEqual(c.extraerRutas('ver scripts/loop/cierre.js para el detalle'),
+    ['scripts/loop/cierre.js'])
 })
 
 test('recorta puntuacion final de la oracion', () => {
-  assert.deepStrictEqual(c.extraerRutas('Generado por scripts/harness/skill-sync.js. No lo edites'),
-    ['scripts/harness/skill-sync.js'])
+  assert.deepStrictEqual(c.extraerRutas('Generado por scripts/loop/skill-sync.js. No lo edites'),
+    ['scripts/loop/skill-sync.js'])
 })
 
 test('un glob se recorta a la carpeta', () => {
@@ -105,9 +105,9 @@ test('no confunde una flag con el nombre de una tool', () => {
 
 // --- referencias muertas -----------------------------------------------------------------------
 test('una ruta que no existe se marca muerta', () => {
-  const r = c.referenciasMuertas('ver scripts/harness/no-existe.sh', () => false, () => true)
+  const r = c.referenciasMuertas('ver scripts/loop/no-existe.sh', () => false, () => true)
   assert.strictEqual(r.length, 1)
-  assert.strictEqual(r[0].fragmento, 'scripts/harness/no-existe.sh')
+  assert.strictEqual(r[0].fragmento, 'scripts/loop/no-existe.sh')
 })
 
 test('una tool que no existe se marca muerta', () => {
@@ -117,7 +117,7 @@ test('una tool que no existe se marca muerta', () => {
 })
 
 test('si todo existe, no hay muertas', () => {
-  const r = c.referenciasMuertas('ver scripts/harness/cierre.js y node harness.js check', () => true, () => true)
+  const r = c.referenciasMuertas('ver scripts/loop/cierre.js y node harness.js check', () => true, () => true)
   assert.deepStrictEqual(r, [])
 })
 

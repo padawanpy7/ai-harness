@@ -59,7 +59,7 @@ metrics/              Salida de las metricas: costo por tarea y contador de uso 
 - `node harness.js spell` - ortografia es+en (cspell + dict es-es). Por cada palabra: fixea el typo; si el
   dict no la trae, usa un sinonimo; solo si no hay (nombre propio/jerga) va a `cspell.json (words)`.
 
-**`harness/`** - el harness mirandose a si mismo:
+**`loop/`** - el loop mirandose a si mismo:
 - `features.sh` - avance del ledger `FEATURES.json`.
 - `metricas.sh` - **cuanto costo cada tarea**: tiempo y tokens, leidos de los transcripts que
   Claude Code ya escribe. Responde "que tarea tomo demasiado y por que" (ranking de herramientas)

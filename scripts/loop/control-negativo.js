@@ -117,7 +117,7 @@ try {
     // Se le mete un pendiente que reclama algo que YA existe: es el error real del 29/08.
     fs.writeFileSync(p('work/PROGRESO.md'),
       prog.replace('- Pendiente / proximo:',
-        '- Pendiente / proximo:\n  0. Falta traer `scripts/harness/loop.js`.', 1))
+        '- Pendiente / proximo:\n  0. Falta traer `scripts/loop/loop.js`.', 1))
     caso('un pendiente que reclama algo ya existente lo pone ROJO', tool('arranque-frio') === 1)
     fs.writeFileSync(p('work/PROGRESO.md'), prog)
     caso('restaurado, vuelve a verde', tool('arranque-frio') === 0)

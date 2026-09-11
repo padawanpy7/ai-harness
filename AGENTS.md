@@ -100,7 +100,7 @@ dueño tiene que releer todo para saber si le preguntaron algo o que decidiste s
 - <lo que depende del dueño>
 ### Tareas IA
 - <lo que hago yo (agente)>
-Build: `scripts/harness/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
+Build: `scripts/loop/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
 ```
 
 Reglas: **Decisiones** son los defaults que tomaste solo, listados para que el dueño pueda
@@ -168,7 +168,7 @@ editan descripcion o pasos, porque el ledger es el contrato de "que falta". El S
 | `skills/` | skills cargadas por necesidad + `REGISTRY.md` (sdd, tdd, judgment-day). |
 | `openspec/` | specs vivientes (`specs/`) y cambios (`changes/<id>/`) del flujo SDD. |
 | `docs/` | docs externas convertidas a markdown (markitdown). |
-| `scripts/` | las herramientas, agrupadas por uso (`calidad/`, `harness/`, `docs/`, `lib/`). Ver `scripts/README.md`. |
+| `scripts/` | las herramientas, agrupadas por uso (`calidad/`, `loop/`, `docs/`, `lib/`). Ver `scripts/README.md`. |
 | `metrics/` | costo por tarea (`node harness.js metricas`) y contador de uso. Salida, no fuente. |
 
 ## 6. Memoria (`memory/hechos/`, indexada en `memory/MEMORY.md`)
