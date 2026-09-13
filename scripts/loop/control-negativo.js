@@ -68,7 +68,16 @@ try {
   fs.writeFileSync(p('AGENTS.md'), original.get('AGENTS.md') + '\n- una\n- seccion\n- que\n- no\n- va\n- aca\n')
   caso('+6 lineas en AGENTS.md lo pone ROJO', tool('presupuesto') === 1)
   caso('el rojo del presupuesto llega hasta check', tool('check') === 1)
-  caso('--reorg lo deja pasar (mover secciones no es crecer)', tool('presupuesto', '--reorg') === 0)
+  // Se mira la SECCION de crecimiento, no el exit code: `--reorg` saltea el gate de crecimiento,
+  // no el del tope absoluto. En un repo cuyo AGENTS.md ya esta en el tope -ai-harness, 250/250- las
+  // seis lineas de arriba rompen el tope y el rojo es CORRECTO; leyendo el exit code, el caso lo
+  // acusaba a `--reorg` de no andar.
+  {
+    const r = spawnSync(process.execPath, [p(ENTRADA), 'presupuesto', '--reorg'],
+      { cwd: RAIZ, encoding: 'utf8' })
+    caso('--reorg NO mide el crecimiento (mover secciones no es crecer)',
+      /crecimiento: no medido/.test(r.stdout || ''))
+  }
 
   fs.writeFileSync(p('AGENTS.md'), original.get('AGENTS.md').split('\n').slice(0, -40).join('\n'))
   caso('podar 40 lineas NUNCA falla', tool('presupuesto') === 0)
@@ -115,9 +124,13 @@ try {
   {
     const prog = original.get('work/PROGRESO.md')
     // Se le mete un pendiente que reclama algo que YA existe: es el error real del 29/08.
+    //
+    // La entrada se AGREGA entera en vez de inyectarse en el bloque de pendientes que ya haya: no
+    // todas las bitacoras tienen ese bloque -la de tesis-psicopedagogia no-, y ahi el reemplazo no
+    // hacia nada, el pendiente falso nunca entraba y la compuerta daba verde sin haber mirado.
     fs.writeFileSync(p('work/PROGRESO.md'),
-      prog.replace('- Pendiente / proximo:',
-        '- Pendiente / proximo:\n  0. Falta traer `scripts/loop/loop.js`.', 1))
+      prog + '\n## 2026-01-01 - control negativo\n\n- Pendiente / proximo:\n' +
+        '  0. Falta traer `scripts/loop/vuelta.js`.\n')
     caso('un pendiente que reclama algo ya existente lo pone ROJO', tool('arranque-frio') === 1)
     fs.writeFileSync(p('work/PROGRESO.md'), prog)
     caso('restaurado, vuelve a verde', tool('arranque-frio') === 0)
@@ -135,27 +148,31 @@ try {
     // Lo que la pieza HACE manda sobre lo que DICE: con `check` paso al reves y quedo fuera.
     caso('la compuerta principal NO se clasifica como informativa',
       abl.esGate(fs.readFileSync(p('scripts/calidad/check.js'), 'utf8')) === true)
+    // El bash va SINTETICO, no leyendo un .sh del repo: el 11/09 este caso se promovio a la
+    // plantilla apuntando a `scripts/sistema/impresora.sh`, que solo existe en el repo de sistema,
+    // y dejo `control-negativo` crasheando alla. Lo que se prueba es la REGLA -un script que sale
+    // con 1 es un gate-, y eso no necesita un archivo particular de ningun repo.
     caso('una tool de bash que sale con 1 se reconoce como gate',
-      abl.esGate(fs.readFileSync(p('scripts/sistema/impresora.sh'), 'utf8')) === true)
+      abl.esGate('#!/usr/bin/env bash\nif [ -z "$1" ]; then echo falta; exit 1; fi\n') === true)
   }
 
-  console.log('==> loop: las salidas que NO son el exito')
+  console.log('==> vuelta: las salidas que NO son el exito')
   // Sobre el core puro: no hay forma de fabricar 2 fallos reales en el log sin ensuciarlo, y un
   // control que deja basura en metrics/ es peor que el hueco que cubre.
-  const loop = require(p('scripts/lib/loop-core'))
+  const vuelta = require(p('scripts/lib/vuelta-core'))
   const malo = { tool: 'check', args: '--todos', exit: 1, ms: 100 }
   const bueno = { tool: 'check', args: '', exit: 0, ms: 100 }
   caso('dos fallos con la misma causa -> BLOQUEADO',
-    loop.evaluar({ corridas: [malo, malo] }).estado === loop.ESTADOS.BLOQUEADO)
+    vuelta.evaluar({ corridas: [malo, malo] }).estado === vuelta.ESTADOS.BLOQUEADO)
   caso('un exito entre medio NO cuenta como fallo repetido',
-    loop.evaluar({ corridas: [malo, bueno, malo] }).estado !== loop.ESTADOS.BLOQUEADO)
+    vuelta.evaluar({ corridas: [malo, bueno, malo] }).estado !== vuelta.ESTADOS.BLOQUEADO)
   caso('pasarse del presupuesto -> CORTADO, aunque la aceptacion pase',
-    loop.evaluar({ corridas: [bueno], aceptacionOk: true, presupuesto: { ms: 1 } }).estado
-      === loop.ESTADOS.PRESUPUESTO)
+    vuelta.evaluar({ corridas: [bueno], aceptacionOk: true, presupuesto: { ms: 1 } }).estado
+      === vuelta.ESTADOS.PRESUPUESTO)
   caso('sin regla de parada NO se declara verificado',
-    loop.evaluar({ corridas: [bueno], aceptacionOk: null }).estado === loop.ESTADOS.REVISION)
+    vuelta.evaluar({ corridas: [bueno], aceptacionOk: null }).estado === vuelta.ESTADOS.REVISION)
   caso('con la regla de parada en verde SI se verifica',
-    loop.evaluar({ corridas: [bueno], aceptacionOk: true }).estado === loop.ESTADOS.VERIFICADO)
+    vuelta.evaluar({ corridas: [bueno], aceptacionOk: true }).estado === vuelta.ESTADOS.VERIFICADO)
 
 } finally {
   for (const [rel, texto] of original) fs.writeFileSync(p(rel), texto)

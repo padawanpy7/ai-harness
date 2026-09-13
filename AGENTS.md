@@ -203,7 +203,7 @@ harness y secretos, en paralelo. Sale != 0 si alguno falla, que es lo que la vue
 un chequeo opcional. Sueltas: `test`, `spell`, `ascii`, `presupuesto` (tope Y crecimiento de los
 documentos de arranque), `doctor` (informativo), `check-dep` (antes de sumar una dependencia).
 
-**Del harness:** `cierre`, `arranque-frio` (lo escrito contra el repo), `loop` (estado de la
+**Del harness:** `cierre`, `arranque-frio` (lo escrito contra el repo), `vuelta` (estado de la
 vuelta), `fallos`, `ablacion` (que pieza carga peso), `control-negativo` (rompe cada compuerta y exige rojo: un gate verde prueba que
 no encontro nada, no que sepa mirar), `metricas`, `tool-usage`, `buscar`, `features` (el
 ledger) y `skill-sync`. Sueltos, en bash: `adopt.sh`, `strip-comments.sh`, `smoke.sh`.

@@ -1,4 +1,4 @@
-// loop-core.js - las salidas de un loop que NO son el exito, decididas sobre datos ya recolectados.
+// vuelta-core.js - las salidas de un loop que NO son el exito, decididas sobre datos ya recolectados.
 // Puro: recibe corridas ya parseadas, no lee disco ni imprime.
 //
 // Por que existe: `aceptacion` cubre la salida por EXITO -la regla de parada del ticket-, que es

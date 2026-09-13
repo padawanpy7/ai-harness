@@ -54,7 +54,7 @@ puertas, no por una.
 | **Presupuesto agotado** | tokens, tiempo, plata o agentes en paralelo |
 | **Evidencia desconectada** | el agente no puede explicar el proximo paso desde lo observado |
 
-**Lo mide `node harness.js loop`**, que no instrumenta nada nuevo: lee `metrics/tool-runs.log`, que el
+**Lo mide `node harness.js vuelta`**, que no instrumenta nada nuevo: lee `metrics/tool-runs.log`, que el
 harness ya escribe en cada corrida. Contesta cuantas vueltas van, si los ultimos fallos son EL
 MISMO, y cuanto se gasto; despues nombra el estado. La ventana por defecto es la vuelta ACTUAL
 -desde el ultimo `cierre` en verde-, no el dia: un dia con seis tareas son seis loops, no uno.

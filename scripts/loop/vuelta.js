@@ -1,6 +1,6 @@
-// loop.js - en que estado esta la vuelta actual, y por que puerta deberia salir.
+// vuelta.js - en que estado esta la vuelta actual, y por que puerta deberia salir.
 //
-// Uso: node harness.js loop [--ticket <CLAVE>] [--desde <N>] [--json]
+// Uso: node harness.js vuelta [--ticket <CLAVE>] [--desde <N>] [--json]
 //   --desde <N>   mira las ultimas N corridas (por defecto, desde el ultimo cierre en verde)
 //
 // Por que existe: `aceptacion` cubre la salida por EXITO, que es una de seis. Las otras estaban
@@ -16,13 +16,13 @@
 const fs = require('fs')
 const path = require('path')
 const { spawnSync } = require('child_process')
-const core = require('../lib/loop-core')
+const core = require('../lib/vuelta-core')
 
 const RAIZ = process.cwd()
 const argv = process.argv.slice(2)
 
 if (argv.includes('--help') || argv.includes('-h')) {
-  console.log('Uso: node harness.js loop [--ticket <CLAVE>] [--desde <N>] [--json]')
+  console.log('Uso: node harness.js vuelta [--ticket <CLAVE>] [--desde <N>] [--json]')
   console.log('  dice en que estado esta la vuelta: cuantas van, si se repite el mismo fallo,')
   console.log('  cuanto se gasto, y por que puerta deberia salir.')
   console.log('  --desde <N>  las ultimas N corridas (por defecto, desde el ultimo cierre)')

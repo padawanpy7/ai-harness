@@ -1,7 +1,7 @@
 const { test } = require('node:test')
 const assert = require('node:assert')
 
-const l = require('./loop-core')
+const l = require('./vuelta-core')
 
 const ok = (tool, args = '') => ({ tool, args, exit: 0, ms: 100 })
 const mal = (tool, args = '', exit = 1) => ({ tool, args, exit, ms: 100 })
