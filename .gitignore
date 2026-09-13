@@ -37,3 +37,9 @@ metrics/por-ticket.md
 # Paquete de entrega: los .md se versionan, lo generado no (ver skills/manual-entrega.md).
 openspec/changes/**/entrega/*.pdf
 openspec/changes/**/entrega/capturas/
+
+# Los transcripts archivados por `traza --archivar` NO se versionan: son el log COMPLETO de
+# una sesion -todo lo que se escribio y se leyo- y este repo se pushea. Se archivan para que
+# sobrevivan a la limpieza de Temp, que es local; el reporte se regenera de ellos cuando haga
+# falta.
+metrics/transcripts/

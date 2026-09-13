@@ -41,4 +41,44 @@ function* transcripts({ raiz = RAIZ_PROYECTOS, soloProyectos = null, conSubagent
   }
 }
 
-module.exports = { RAIZ_PROYECTOS, transcripts }
+
+// --- Rutas de UNA sesion concreta -------------------------------------------------------------
+//
+// Lo de arriba ENUMERA lo que hay; esto RESUELVE donde deberia estar un archivo puntual, que es lo
+// que necesita `traza` para seguir el arbol de delegacion. Traido de infra/bf el 13/09.
+//
+// Tres ubicaciones, verificadas contra sesiones reales el 09/09/2026:
+//   - el transcript de la sesion:              <PROYECTOS>/<carpeta>/<sesion>.jsonl
+//   - el transcript de un subagente (VIVE):    <PROYECTOS>/<carpeta>/<sesion>/subagents/agent-<id>.jsonl
+//   - el mismo subagente, en Temp (se limpia): <tmp>/claude/<carpeta>/<sesion>/tasks/<id>.output
+//
+// La carpeta sale de la ruta del repo con separadores Y PUNTOS cambiados por guiones: es como
+// Claude Code nombra la carpeta del proyecto. EL PUNTO ENTRA, y no es cosmetico: salio al llevar
+// `traza` al repo de infra, que vive en una ruta con un punto en el medio. Sin convertirlo, la tool
+// buscaba una carpeta que no existe y contestaba "no encontre transcripts". Un falso negativo, o
+// sea la misma familia de fallo que la tool viene a evitar.
+
+function carpetaDelProyecto(raiz) {
+  return String(raiz).replace(/[:\\/.]/g, '-')
+}
+
+function dirDeSesiones(raiz) {
+  return path.join(RAIZ_PROYECTOS, carpetaDelProyecto(raiz))
+}
+
+function rutaSesion(raiz, sesionId) {
+  return path.join(dirDeSesiones(raiz), `${sesionId}.jsonl`)
+}
+
+function rutaSubagente(raiz, sesionId, agentId) {
+  return path.join(dirDeSesiones(raiz), sesionId, 'subagents', `agent-${agentId}.jsonl`)
+}
+
+function rutaSubagenteTemp(raiz, sesionId, agentId) {
+  return path.join(os.tmpdir(), 'claude', carpetaDelProyecto(raiz), sesionId, 'tasks', `${agentId}.output`)
+}
+
+module.exports = {
+  RAIZ_PROYECTOS, transcripts,
+  carpetaDelProyecto, dirDeSesiones, rutaSesion, rutaSubagente, rutaSubagenteTemp,
+}
