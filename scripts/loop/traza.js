@@ -3,8 +3,8 @@
 // escriben solos. Toda la logica de parseo vive en
 // scripts/lib/traza-core.js (puro); esto SOLO lee archivos, llama al core y formatea.
 //
-// Uso: node bf.js traza [--ticket X] [--sesion UUID] [--json] [--vista arbol|timeline|rebotes]
-//      node bf.js traza --archivar [--sesion UUID]   copia los transcripts de subagente a
+// Uso: node harness.js traza [--ticket X] [--sesion UUID] [--json] [--vista arbol|timeline|rebotes]
+//      node harness.js traza --archivar [--sesion UUID]   copia los transcripts de subagente a
 //        metrics/transcripts/<sesion>/ antes de que Temp los limpie. El REPORTE no se guarda
 //        (decision del dueño, 09/09): solo el insumo, porque con el insumo la traza se
 //        reconstruye identica y guardar los dos es tener dos fuentes que pueden divergir.
