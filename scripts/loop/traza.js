@@ -1,6 +1,6 @@
-// traza.js - CLI de `node bf.js traza`: reconstruye el arbol de delegacion de una sesion (o un
-// ticket) con el costo de cada nodo. NO instrumenta nada nuevo: lee lo que Claude Code y bf.js ya
-// escriben solos (jira/META/design-traza.md). Toda la logica de parseo vive en
+// traza.js - CLI de `node harness.js traza`: reconstruye el arbol de delegacion de una sesion (o un
+// ticket) con el costo de cada nodo. NO instrumenta nada nuevo: lee lo que Claude Code y harness.js ya
+// escriben solos. Toda la logica de parseo vive en
 // scripts/lib/traza-core.js (puro); esto SOLO lee archivos, llama al core y formatea.
 //
 // Uso: node bf.js traza [--ticket X] [--sesion UUID] [--json] [--vista arbol|timeline|rebotes]
