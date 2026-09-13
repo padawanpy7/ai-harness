@@ -60,7 +60,7 @@ metrics/              Salida de las metricas: costo por tarea y contador de uso 
   dict no la trae, usa un sinonimo; solo si no hay (nombre propio/jerga) va a `cspell.json (words)`.
 
 **`loop/`** - el loop mirandose a si mismo:
-- `features.sh` - avance del ledger `FEATURES.json`.
+- `features.js` - avance del ledger `FEATURES.json`.
 - `metricas.sh` - **cuanto costo cada tarea**: tiempo y tokens, leidos de los transcripts que
   Claude Code ya escribe. Responde "que tarea tomo demasiado y por que" (ranking de herramientas)
   y "hubo mucho a mano?" (tokens por llamada: si es alto, quiza merece ser una tool).

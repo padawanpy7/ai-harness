@@ -1,6 +1,10 @@
 work/*
 !work/.gitkeep
 !work/PROGRESO.md
+# La bitacora archivada por mes: es la CONTINUACION de PROGRESO.md, que la apunta. Sin esto
+# el puntero queda apuntando a archivos que no existen fuera de este disco.
+!work/progreso/
+!work/progreso/*.md
 # screenshots/artefactos efimeros del verifier (tambien cuando corre con cwd de un subdir)
 **/work/shots/
 docs/*

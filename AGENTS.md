@@ -100,7 +100,7 @@ dueño tiene que releer todo para saber si le preguntaron algo o que decidiste s
 - <lo que depende del dueño>
 ### Tareas IA
 - <lo que hago yo (agente)>
-Build: `scripts/loop/features.sh` (N/M)   <- puntero al estado global, NO re-listar el ledger
+Build: `node harness.js features` (N/M)   <- puntero al estado global, NO re-listar el ledger
 ```
 
 Reglas: **Decisiones** son los defaults que tomaste solo, listados para que el dueño pueda
